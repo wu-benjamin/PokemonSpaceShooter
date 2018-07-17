@@ -69,6 +69,10 @@ public class Enemy extends Character {
         }
     }
 
+    public void setToShow(BufferedImage toShow) {
+        this.toShow = toShow;
+    }
+
     @Override
     public BufferedImage getToShow() {
         return toShow;
@@ -195,18 +199,18 @@ public class Enemy extends Character {
     class ImageTask extends TimerTask {
         @Override
         public void run() {
-            double scale = height / toShow.getHeight();
+            double scale = e.getHeight() / toShow.getHeight();
             int orgHeight = (int) (toShow.getHeight() * scale);
             int orgWidth = (int) (toShow.getWidth() * scale);
-            if (toShow == image1) {
-                toShow = image2;
+            if (e.getToShow().equals(e.getImage1())) {
+                e.setToShow(e.getImage2());
             } else {
-                toShow = image1;
+                e.setToShow(e.getImage1());
             }
-            width = (int) (toShow.getWidth() * scale);
-            height = (int) (toShow.getHeight() * scale);
-            e.setX(e.getX() + (orgWidth - width) / 2);
-            e.setY(e.getY() + (orgHeight - height) / 2);
+            e.setWidth((int) (toShow.getWidth() * scale));
+            e.setHeight((int) (toShow.getHeight() * scale));
+            e.setX(e.getX() + (orgWidth - e.getWidth()) / 2);
+            e.setY(e.getY() + (orgHeight - e.getHeight()) / 2);
         }
     }
 }

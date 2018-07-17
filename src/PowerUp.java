@@ -17,6 +17,19 @@ public class PowerUp extends GameObject {
     private String desc;
     private PowerUp pow;
     private static int POWER_UP_SIZE = 50;
+    private static BufferedImage bomb;
+    private static BufferedImage candy;
+    private static BufferedImage berry;
+    static {
+        try {
+            URL resource = Pokemon.class.getResource("/Resources/PowerUps/TM.png" );
+            bomb = ImageIO.read(new File(resource.toURI()));
+            resource = Pokemon.class.getResource("/Resources/PowerUps/RareCandy.png");
+            candy = ImageIO.read(new File(resource.toURI()));
+            resource = Pokemon.class.getResource("/Resources/PowerUps/OranBerry.png");
+            berry = ImageIO.read(new File(resource.toURI()));
+        } catch (Exception e) { }
+    }
 
     public PowerUp(int x, int y, int width, int height, Color color, String desc, ControlPanel control) {
         super(x, y, width, height, color);
@@ -24,22 +37,13 @@ public class PowerUp extends GameObject {
         this.control = control;
         this.desc = desc;
         ControlPanel.toAdd.add(this);
-        // Better to have class with images so multiple reads are not required
-        try {
-            if (desc.equals("Bomb")) {
-                // Does massive damage to on screen Pokemon
-                URL resource = Pokemon.class.getResource("/Resources/PowerUps/TM.png" );
-                this.image = ImageIO.read(new File(resource.toURI()));
-            } else if (desc.equals("RareCandy")){
-                // Increases projectile size (Increase in projectile damage to be implemented)
-                URL resource = Pokemon.class.getResource("/Resources/PowerUps/RareCandy.png");
-                this.image = ImageIO.read(new File(resource.toURI()));
-            } else {
-                // Heals the player
-                URL resource = Pokemon.class.getResource("/Resources/PowerUps/OranBerry.png");
-                this.image = ImageIO.read(new File(resource.toURI()));
-            }
-        } catch (Exception e) { }
+        if (desc.equals("Bomb")) {
+            image = bomb;
+        } else if (desc.equals("RareCandy")) {
+            image = candy;
+        } else {
+            image = berry;
+        }
         this.pow = this;
         timer();
     }

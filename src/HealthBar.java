@@ -9,12 +9,22 @@ public class HealthBar extends GameObject {
     private Rectangle2D square;
     private Character c;
     private ControlPanel control;
+    private static Font font;
+    private double scale;
+    static {
+        try {
+            font = Font.createFont(Font.TRUETYPE_FONT, ControlPanel.getFontFile()).deriveFont(15f);
+        } catch (Exception e) {
+
+        }
+    }
 
     public HealthBar(int x, int y, int width, int height, Color color, Character c, ControlPanel control) {
         super(x, y, width, height, color);
         square = new Rectangle2D.Double(x, y, width, height);
         this.c = c;
         this.control = control;
+        this.scale = c.getHeight() / c.getToShow().getHeight();
         ControlPanel.toAdd.add(this);
     }
 
@@ -31,41 +41,22 @@ public class HealthBar extends GameObject {
     }
 
     public void paintComponent(Graphics2D g2) {
+        int avgWidth = (int) (scale * ((double) c.getImage1().getWidth() + (double) c.getImage2().getWidth()) / (double) 2);
+        int avgHeight = (int) (scale * ((double) c.getImage1().getHeight() + (double) c.getImage2().getHeight()) / (double) 2);
         // Draws red of health bar
-        if (c.getToShow().equals(c.getImage1())) {
-            square.setFrame(this.getX(), this.getY() + c.getHeight(), this.getWidth(), 15);
-        } else {
-            // Prevents health bar jumping around when Pokemon animation sprite changes (keeps x and y of bar fixed to that of image1 of the Pokemon)
-            double scale = c.getHeight() / c.getToShow().getHeight();
-            square.setFrame(this.getX() + scale * (c.getImage2().getWidth() - c.getImage1().getWidth()) / 2, this.getY() - scale * (c.getImage2().getHeight() - c.getImage1().getHeight()) / 2 + c.getHeight(), c.getImage1().getWidth() * scale, 15);
-        }
+        square.setFrame(this.getX() + (c.getWidth() - avgWidth) / 2, this.getY() + (c.getHeight() + avgHeight) / 2, avgWidth, 15);
         g2.setColor(noHealth);
         g2.fill(square);
         g2.draw(square);
         // Draws green bar on top
-        if (c.getToShow().equals(c.getImage1())) {
-            square.setFrame(this.getX(), this.getY() + c.getHeight(), this.getWidth() * (double) c.getHitPoints() / (double) c.getMaxHitPoints(), 15);
-        } else {
-            double scale = c.getHeight() / c.getToShow().getHeight();
-            square.setFrame(this.getX() + scale * (c.getImage2().getWidth() - c.getImage1().getWidth()) / 2, this.getY() - scale * (c.getImage2().getHeight() - c.getImage1().getHeight()) / 2 + c.getHeight(), c.getImage1().getWidth() * scale * (double) c.getHitPoints() / (double) c.getMaxHitPoints(), 15);
-        }
+        square.setFrame(this.getX() + (c.getWidth() - avgWidth) / 2, this.getY() + (c.getHeight() + avgHeight) / 2, avgWidth * (double) c.getHitPoints() / (double) c.getMaxHitPoints(), 15);
         g2.setColor(yesHealth);
         g2.fill(square);
         g2.draw(square);
-        try {
-            Font font = Font.createFont(Font.TRUETYPE_FONT, ControlPanel.getFontFile()).deriveFont(15f);
-            g2.setFont(font);
-        } catch (IOException e) {
-        } catch (FontFormatException e) {
-        }
+        g2.setFont(font);
         g2.setColor(Color.BLACK);
         int currentHealth = Math.max(c.getHitPoints(), 0);
         // Displays numerical health value of Pokemon
-        if (c.getToShow().equals(c.getImage1())) {
-            g2.drawString(Integer.toString(currentHealth), this.getX() , this.getY() + c.getHeight() + 15);
-        } else {
-            double scale = c.getHeight() / c.getToShow().getHeight();
-            g2.drawString(Integer.toString(currentHealth), (int) (this.getX() + scale * (c.getImage2().getWidth() - c.getImage1().getWidth()) / 2),  (int) (this.getY() - scale * (c.getImage2().getHeight() - c.getImage1().getHeight()) / 2) + c.getHeight() + 15);
-        }
+        g2.drawString(Integer.toString(currentHealth), this.getX() + (c.getWidth() - avgWidth) / 2, this.getY() + (c.getHeight() + avgHeight) / 2 + 15);
     }
 }

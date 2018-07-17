@@ -9,6 +9,14 @@ public class Counter extends GameObject {
     private Rectangle2D square;
     private Color color;
     private ControlPanel control;
+    private static Font font;
+
+    static {
+        try {
+            font = Font.createFont(Font.TRUETYPE_FONT, ControlPanel.getFontFile()).deriveFont(50f);
+        } catch (Exception e) {
+        }
+    }
 
     public Counter(int x, int y, int width, int height, Color color, String desc, ControlPanel control) {
         super(x, y, width, height, color);
@@ -30,13 +38,7 @@ public class Counter extends GameObject {
             g2.fill(square);
             g2.draw(square);
             g2.setColor(ControlPanel.TEXT);
-            try {
-                Font font = Font.createFont(Font.TRUETYPE_FONT, ControlPanel.getFontFile()).deriveFont(50f);
-                g2.setFont(font);
-                //FontMetrics metrics = g2.getFontMetrics(font);
-            } catch (IOException e) {
-            } catch (FontFormatException e) {
-            }
+            g2.setFont(font);
         }
         switch (desc) {
             case "Score: ":

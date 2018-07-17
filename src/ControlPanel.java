@@ -36,7 +36,7 @@ public class ControlPanel extends JPanel implements Runnable {
     private int currentNumberOfEnemies;
     private boolean bossFight;
     static Enemy boss;
-    static int FRAME_RATE = 45;
+    static int FRAME_RATE = 30;
 
     static Pokemon player;
 
@@ -188,14 +188,14 @@ public class ControlPanel extends JPanel implements Runnable {
 
     private static void setUp(ControlPanel control) {
         // Beings looping music (Context sensitive music to be implemented at a later date)
-        try {
+        /*try {
             URL resource = Pokemon.class.getResource("/Resources/Sound/102 - palette town theme.4.wav");
             AudioInputStream audioIn = javax.sound.sampled.AudioSystem.getAudioInputStream(new File(resource.toURI()));
             Clip music = javax.sound.sampled.AudioSystem.getClip();
             music.open(audioIn);
             music.loop(Clip.LOOP_CONTINUOUSLY);
         } catch (Exception e) {
-        }
+        }*/
         // Chooses a random Pokemon as the player character
         int random = rand.nextInt(151);
         player = Pokemon.values()[random];
