@@ -105,13 +105,17 @@ public class ControlPanel extends JPanel implements Runnable {
                 int i = rand.nextInt(151);
                 if (currentNumberOfEnemies < maxNumberOfEnemies && Enemy.enemies.size() <= 5) {
                     if (rand.nextInt(1000) < 15) {
-                        toAdd.add(new Enemy(rand.nextInt(width - Pokemon.values()[i].getWidth() * 3), -200, Pokemon.values()[i].getWidth() * 3, Pokemon.values()[i].getHeight() * 3, TRANSPARENT, Pokemon.values()[i], this, false));
+                        toAdd.add(new Enemy(rand.nextInt(width - Pokemon.values()[i].getWidth() * 3), -200,
+                                Pokemon.values()[i].getWidth() * 3, Pokemon.values()[i].getHeight() * 3,
+                                TRANSPARENT, Pokemon.values()[i], this, false));
                         currentNumberOfEnemies++;
                     }
                     // Randomly generates a boss at the end of the level
                 } else if (currentNumberOfEnemies == maxNumberOfEnemies && Enemy.enemies.size() == 0) {
                     Background.setMove(false);
-                    this.boss = new Enemy(width / 2 - Pokemon.values()[i].getWidth() * 9 / 2, -700, Pokemon.values()[i].getWidth() * 9, Pokemon.values()[i].getHeight() * 9, TRANSPARENT, Pokemon.values()[i], this, true);
+                    this.boss = new Enemy(width / 2 - Pokemon.values()[i].getWidth() * 9 / 2, -700,
+                            Pokemon.values()[i].getWidth() * 7, Pokemon.values()[i].getHeight() * 7,
+                            TRANSPARENT, Pokemon.values()[i], this, true);
                     toAdd.add(boss);
                     currentNumberOfEnemies++;
                     bossFight = true;
@@ -188,14 +192,14 @@ public class ControlPanel extends JPanel implements Runnable {
 
     private static void setUp(ControlPanel control) {
         // Beings looping music (Context sensitive music to be implemented at a later date)
-        /*try {
+        try {
             URL resource = Pokemon.class.getResource("/Resources/Sound/102 - palette town theme.4.wav");
             AudioInputStream audioIn = javax.sound.sampled.AudioSystem.getAudioInputStream(new File(resource.toURI()));
             Clip music = javax.sound.sampled.AudioSystem.getClip();
             music.open(audioIn);
             music.loop(Clip.LOOP_CONTINUOUSLY);
         } catch (Exception e) {
-        }*/
+        }
         // Chooses a random Pokemon as the player character
         int random = rand.nextInt(151);
         player = Pokemon.values()[random];

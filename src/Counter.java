@@ -42,7 +42,7 @@ public class Counter extends GameObject {
         }
         switch (desc) {
             case "Score: ":
-                g2.drawString(desc + control.getScore() * 100, this.getX() + 20, this.getY() + 50);
+                g2.drawString(desc + control.getScore(), this.getX() + 20, this.getY() + 50);
                 break;
             case "Z-Move: ":
                 g2.drawString(desc + control.getBombs(), this.getX() + 20, this.getY() + 50);

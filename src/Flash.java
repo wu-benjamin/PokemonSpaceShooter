@@ -56,7 +56,7 @@ public class Flash extends GameObject {
 
     public void timer() {
         TimerTask opaqueTask = new OpaqueTask();
-        timer.schedule(opaqueTask, 0, 2);
+        timer.schedule(opaqueTask, 0, 5);
     }
 
     class OpaqueTask extends TimerTask {

@@ -14,6 +14,7 @@ public abstract class Character extends GameObject {
     protected Type type2;
     private int hitPoints;
     private int maxHitPoints;
+    private Pokemon p;
 
     public Character(int x, int y, int width, int height, Color color, Pokemon p, ControlPanel control) {
         super(x, y, width, height, color);
@@ -22,6 +23,11 @@ public abstract class Character extends GameObject {
         this.attack = p.getAttack();
         this.type1 = p.getType1();
         this.type2 = p.getType2();
+        this.p = p;
+    }
+
+    public Pokemon getPokemon() {
+        return p;
     }
 
     public int getHitPoints() {
@@ -60,5 +66,9 @@ public abstract class Character extends GameObject {
 
     public Rectangle2D getObj() {
         return square;
+    }
+
+    public boolean getIsBoss() {
+        return false;
     }
 }

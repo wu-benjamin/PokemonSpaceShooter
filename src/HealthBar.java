@@ -24,7 +24,15 @@ public class HealthBar extends GameObject {
         square = new Rectangle2D.Double(x, y, width, height);
         this.c = c;
         this.control = control;
-        this.scale = c.getHeight() / c.getToShow().getHeight();
+        if (c.getImage1().equals(c.getPokemon().getBack1()) || c.getImage1().equals(c.getPokemon().getBack2())) {
+            this.scale = 4;
+        } else {
+            if (c.getIsBoss()) {
+                this.scale = 7;
+            } else {
+                this.scale = 3;
+            }
+        }
         ControlPanel.toAdd.add(this);
     }
 
@@ -41,15 +49,15 @@ public class HealthBar extends GameObject {
     }
 
     public void paintComponent(Graphics2D g2) {
-        int avgWidth = (int) (scale * ((double) c.getImage1().getWidth() + (double) c.getImage2().getWidth()) / (double) 2);
-        int avgHeight = (int) (scale * ((double) c.getImage1().getHeight() + (double) c.getImage2().getHeight()) / (double) 2);
+        int avgWidth = (int) (scale * ((double) c.getImage1().getWidth() + (double) c.getImage2().getWidth()) / (double) 2 + 0.5);
+        int maxHeight = (int) (scale * (double) Math.max(c.getImage1().getHeight(), c.getImage2().getHeight()));
         // Draws red of health bar
-        square.setFrame(this.getX() + (c.getWidth() - avgWidth) / 2, this.getY() + (c.getHeight() + avgHeight) / 2, avgWidth, 15);
+        square.setFrame(this.getX() + (c.getWidth() - avgWidth) / 2, this.getY() + maxHeight / 2 + c.getHeight() / 2, avgWidth, 15);
         g2.setColor(noHealth);
         g2.fill(square);
         g2.draw(square);
         // Draws green bar on top
-        square.setFrame(this.getX() + (c.getWidth() - avgWidth) / 2, this.getY() + (c.getHeight() + avgHeight) / 2, avgWidth * (double) c.getHitPoints() / (double) c.getMaxHitPoints(), 15);
+        square.setFrame(this.getX() + (c.getWidth() - avgWidth) / 2, this.getY() + maxHeight / 2 + c.getHeight() / 2, avgWidth * (double) c.getHitPoints() / (double) c.getMaxHitPoints(), 15);
         g2.setColor(yesHealth);
         g2.fill(square);
         g2.draw(square);
@@ -57,6 +65,6 @@ public class HealthBar extends GameObject {
         g2.setColor(Color.BLACK);
         int currentHealth = Math.max(c.getHitPoints(), 0);
         // Displays numerical health value of Pokemon
-        g2.drawString(Integer.toString(currentHealth), this.getX() + (c.getWidth() - avgWidth) / 2, this.getY() + (c.getHeight() + avgHeight) / 2 + 15);
+        g2.drawString(Integer.toString(currentHealth), this.getX() + (c.getWidth() - avgWidth) / 2, this.getY() + maxHeight / 2 + c.getHeight() / 2 + 15);
     }
 }

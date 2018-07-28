@@ -43,8 +43,6 @@ public class Enemy extends Character {
             this.setHitPoints(p.getHitPoints());
         }
         this.setMaxHitPoints(this.getHitPoints());
-        this.height = height;
-        this.width = width;
         this.square = new Rectangle2D.Double(x, y, this.width, this.height);
         toShow = image1;
         timer();
@@ -99,7 +97,7 @@ public class Enemy extends Character {
         if (ControlPanel.rand.nextInt(1000) < ControlPanel.RECRUIT_RATE) {
             ControlPanel.unlockedPokemon[e.p.getIndex()] = true;
         }
-        control.incrementScore(1);
+        control.incrementScore(100);
         ControlPanel.toRemove.add(e.health);
         e.health = null;
         this.health = null;
@@ -120,7 +118,7 @@ public class Enemy extends Character {
                 }
             }
         } else {
-            System.out.print("You win! You scored: " + control.getScore() * 100);
+            System.out.print("You win! You scored: " + control.getScore());
             System.exit(0);
             control.setBossFight(false);
         }
@@ -131,7 +129,7 @@ public class Enemy extends Character {
         g2.setColor(color);
         g2.fill(square);
         g2.draw(square);
-        g2.drawImage(toShow, this.getX(), this.getY(), width, height, control);
+        g2.drawImage(toShow, this.getX(), this.getY(), this.getWidth(), this.getHeight(), control);
     }
 
     public int getHeight() {
@@ -140,6 +138,11 @@ public class Enemy extends Character {
 
     public int getWidth() {
         return width;
+    }
+
+    @Override
+    public boolean getIsBoss() {
+        return isBoss;
     }
 
     public void timer() {
@@ -188,7 +191,7 @@ public class Enemy extends Character {
             if (Projectile.enemyProjectiles.size() <= 15) {
                 try {
                     ControlPanel.toAdd.add(new Projectile(e.getX() + e.getWidth() / 2 - attack.getProjectileSize() / 2,
-                            e.getY() + height, attack.getProjectileSize(), color, attack, control, true, X_COMPONENT, Y_COMPONENT));
+                            e.getY() + e.getHeight(), attack.getProjectileSize(), color, attack, control, true, X_COMPONENT, Y_COMPONENT));
                 } catch (NullPointerException e) {
                 }
             }
@@ -199,16 +202,16 @@ public class Enemy extends Character {
     class ImageTask extends TimerTask {
         @Override
         public void run() {
-            double scale = e.getHeight() / toShow.getHeight();
-            int orgHeight = (int) (toShow.getHeight() * scale);
-            int orgWidth = (int) (toShow.getWidth() * scale);
+            double scale = e.getHeight() / e.getToShow().getHeight();
+            int orgHeight = e.getHeight();
+            int orgWidth = e.getWidth();
             if (e.getToShow().equals(e.getImage1())) {
                 e.setToShow(e.getImage2());
             } else {
                 e.setToShow(e.getImage1());
             }
-            e.setWidth((int) (toShow.getWidth() * scale));
-            e.setHeight((int) (toShow.getHeight() * scale));
+            e.setWidth((int) (e.getToShow().getWidth() * scale));
+            e.setHeight((int) (e.getToShow().getHeight() * scale));
             e.setX(e.getX() + (orgWidth - e.getWidth()) / 2);
             e.setY(e.getY() + (orgHeight - e.getHeight()) / 2);
         }

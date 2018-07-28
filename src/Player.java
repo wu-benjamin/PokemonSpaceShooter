@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -23,8 +24,6 @@ public class Player extends Character {
     private final int BOMB_DAMAGE = 300;
     private static int bossWall;
     private HealthBar health;
-    private int height;
-    private int width;
 
     public Player(int x, int y, int width, int height, Color color, Pokemon p, ControlPanel control) {
         super(x, y, width, height, color, p, control);
@@ -32,8 +31,6 @@ public class Player extends Character {
         this.player = this;
         this.image1 = p.getBack1();
         this.image2 = p.getBack2();
-        this.width = width;
-        this.height = height;
         this.setHitPoints(p.getHitPoints() * 2);
         this.setMaxHitPoints(this.getHitPoints());
         this.p = p;
@@ -124,20 +121,21 @@ public class Player extends Character {
         }
 
         // Bounds player within game boards
-        if (this.getX() > ControlPanel.width - width) {
-            this.setX(ControlPanel.width - width);
+        if (this.getX() > ControlPanel.width - this.getWidth()) {
+            this.setX(ControlPanel.width - this.getWidth());
         } if (this.getX() < 0) {
             this.setX(0);
-        } if (this.getY() > ControlPanel.height - height) {
-            this.setY(ControlPanel.height - height - 15);
+        } if (this.getY() > ControlPanel.height - this.getHeight()) {
+            this.setY(ControlPanel.height - this.getHeight());
         } if (this.getY() < 0) {
             this.setY(0);
         }
 
         // Fires normal projectile based on player Pokemon species
         if ((panel.input.isKeyDown(KeyEvent.VK_SPACE) || panel.input.isButtonDown(MouseEvent.BUTTON1)) && attackDelay == false) {
-            ControlPanel.toAdd.add(new Projectile(this.getX() + width / 2 - p.getAttack().getProjectileSize() / 2, this.getY(),
-                    (int) (p.getAttack().getProjectileSize() * ((double) control.getPower() + 2) / 2), this.getColor(), p.getAttack(), control, false, xComponent, yComponent));
+            ControlPanel.toAdd.add(new Projectile(this.getX() + this.getWidth() / 2 - ((int) (p.getAttack().getProjectileSize() *
+                    ((double) control.getPower() + 2) / 2)) / 2, this.getY(), (int) (p.getAttack().getProjectileSize() *
+                    ((double) control.getPower() + 2) / 2), this.getColor(), p.getAttack(), control, false, xComponent, yComponent));
             attackDelay = true;
             TimerTask projectileTask = new MyProjectileTask();
             timer.schedule(projectileTask, (int) projectileDelay);
@@ -164,11 +162,11 @@ public class Player extends Character {
     }
 
     public void paintComponent(Graphics2D g2) {
-        square.setFrame(this.getX(), this.getY(), width, height);
-        g2.setColor(this.getColor());
+        square.setFrame(this.getX(), this.getY(), this.getWidth(), this.getHeight());
+        g2.setColor(color);
         g2.fill(square);
         g2.draw(square);
-        g2.drawImage(toShow, this.getX(), this.getY(), width, height, control);
+        g2.drawImage(toShow, this.getX(), this.getY(), this.getWidth(), this.getHeight(), control);
     }
 
     // Creates special bomb projectile
@@ -200,6 +198,10 @@ public class Player extends Character {
         return image2;
     }
 
+    public void setToShow(BufferedImage toShow) {
+        this.toShow = toShow;
+    }
+
     public void timer() {
         TimerTask imageTask = new MyImageTask();
         timer.schedule(imageTask, 0, 500);
@@ -225,19 +227,18 @@ public class Player extends Character {
     class MyImageTask extends TimerTask {
         @Override
         public void run() {
-            double scale = height / toShow.getHeight();
-            int orgHeight = (int) (toShow.getHeight() * scale);
-            int orgWidth = (int) (toShow.getWidth() * scale);
-            if (toShow == image1) {
-                toShow = image2;
+            double scale = player.getHeight() / player.getToShow().getHeight();
+            int orgHeight = player.getHeight();
+            int orgWidth = player.getWidth();
+            if (player.getToShow().equals(player.getImage1())) {
+                player.setToShow(player.getImage2());
             } else {
-                toShow = image1;
+                player.setToShow(player.getImage1());
             }
-            width = (int) (toShow.getWidth() * scale);
-            height = (int) (toShow.getHeight() * scale);
-            player.setX(player.getX() + (orgWidth - width) / 2);
-            player.setY(player.getY() + (orgHeight - height) / 2);
+            player.setWidth((int) (player.getToShow().getWidth() * scale));
+            player.setHeight((int) (player.getToShow().getHeight() * scale));
+            player.setX(player.getX() + (orgWidth - player.getWidth()) / 2);
+            player.setY(player.getY() + (orgHeight - player.getHeight()) / 2);
         }
     }
 }
-

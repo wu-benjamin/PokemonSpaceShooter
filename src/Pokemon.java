@@ -189,8 +189,8 @@ public enum Pokemon {
             this.back1 = ImageIO.read(new File(resource3.toURI()));
             this.back2 = ImageIO.read(new File(resource4.toURI()));
         } catch (Exception e) { }
-        this.width = front1.getWidth();
-        this.height = front1.getHeight();
+        this.width = (back1.getWidth() + back2.getWidth() + front1.getWidth() + front2.getWidth()) / 4;
+        this.height = (back1.getHeight() + back2.getHeight() + front1.getHeight() + front2.getHeight()) / 4;
         this.type1 = type1;
         this.type2 = type2;
         this.attack = attack;
