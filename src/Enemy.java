@@ -12,20 +12,19 @@ import java.util.TimerTask;
 public class Enemy extends Character {
 
     static ArrayList<Enemy> enemies = new ArrayList<Enemy>();
-    private BufferedImage image1;
-    private BufferedImage image2;
-    private BufferedImage toShow;
-    private Attack attack;
-    private Enemy e;
-    private final int X_COMPONENT = 0;
-    private final int Y_COMPONENT = 3;
-    private Timer timer = new Timer();
-    private HealthBar health;
-    private boolean isBoss;
-    private int time;
-    private Pokemon p;
+    protected BufferedImage image1;
+    protected BufferedImage image2;
+    protected BufferedImage toShow;
+    protected Attack attack;
+    protected Enemy e;
+    protected final int X_COMPONENT = 0;
+    protected final int Y_COMPONENT = 3;
+    protected Timer timer = new Timer();
+    protected HealthBar health;
+    protected int time;
+    protected Pokemon p;
 
-    public Enemy(int x, int y, int width, int height, Color color, Pokemon p, ControlPanel control, boolean isBoss) {
+    public Enemy(int x, int y, int width, int height, Color color, Pokemon p, ControlPanel control) {
         super(x, y, width, height, color, p, control);
         this.color = color;
         this.control = control;
@@ -35,20 +34,13 @@ public class Enemy extends Character {
         this.type1 = p.getType1();
         this.type2 = p.getType2();
         this.p = p;
-        if (isBoss) {
-            this.setHitPoints(p.getHitPoints() * 15); // Boss is more powerful
-            ControlPanel.toAdd.add(new Counter(ControlPanel.width / 2 - 225, ControlPanel.height / 2 - 55, 450,
-                    85, ControlPanel.TEXT, "Boss", control));
-        } else {
-            this.setHitPoints(p.getHitPoints());
-        }
+        this.setHitPoints(p.getHitPoints());
         this.setMaxHitPoints(this.getHitPoints());
         this.square = new Rectangle2D.Double(x, y, this.width, this.height);
         toShow = image1;
         timer();
         enemies.add(this);
         this.e = this;
-        this.isBoss = isBoss;
         this.health = new HealthBar(x, y + this.getHeight(), this.getWidth(), 15, color, this, control);
         ControlPanel.toAdd.add(health);
     }
@@ -106,21 +98,15 @@ public class Enemy extends Character {
         ControlPanel.toRemove.add(e);
         enemies.remove(e);
         // Drops powerups
-        if (!isBoss) {
-            if (ControlPanel.rand.nextInt(1000) < ControlPanel.POWER_UP_DROP_RATE) {
-                int random = ControlPanel.rand.nextInt(100);
-                if (random < 25) {
-                    new PowerUp(e.getX() + e.getWidth() / 2 - PowerUp.getSize() / 2, e.getY() + e.getHeight() / 2 - PowerUp.getSize() / 2, PowerUp.getSize(), PowerUp.getSize(), ControlPanel.TRANSPARENT, "Bomb", control);
-                } else if (random < 50 && control.getPower() < 5) {
-                    new PowerUp(e.getX() + e.getWidth() / 2 - PowerUp.getSize() / 2, e.getY() + e.getHeight() / 2 - PowerUp.getSize() / 2, PowerUp.getSize(), PowerUp.getSize(), ControlPanel.TRANSPARENT, "RareCandy", control);
-                } else if (random < 100) {
-                    new PowerUp(e.getX() + e.getWidth() / 2 - PowerUp.getSize() / 2, e.getY() + e.getHeight() / 2 - PowerUp.getSize() / 2, PowerUp.getSize(), PowerUp.getSize(), ControlPanel.TRANSPARENT, "OranBerry", control);
-                }
+        if (ControlPanel.rand.nextInt(1000) < ControlPanel.POWER_UP_DROP_RATE) {
+            int random = ControlPanel.rand.nextInt(100);
+            if (random < 25) {
+                new PowerUp(e.getX() + e.getWidth() / 2 - PowerUp.getSize() / 2, e.getY() + e.getHeight() / 2 - PowerUp.getSize() / 2, PowerUp.getSize(), PowerUp.getSize(), ControlPanel.TRANSPARENT, "Bomb", control);
+            } else if (random < 50 && control.getPower() < 5) {
+                new PowerUp(e.getX() + e.getWidth() / 2 - PowerUp.getSize() / 2, e.getY() + e.getHeight() / 2 - PowerUp.getSize() / 2, PowerUp.getSize(), PowerUp.getSize(), ControlPanel.TRANSPARENT, "RareCandy", control);
+            } else if (random < 100) {
+                new PowerUp(e.getX() + e.getWidth() / 2 - PowerUp.getSize() / 2, e.getY() + e.getHeight() / 2 - PowerUp.getSize() / 2, PowerUp.getSize(), PowerUp.getSize(), ControlPanel.TRANSPARENT, "OranBerry", control);
             }
-        } else {
-            System.out.print("You win! You scored: " + control.getScore());
-            System.exit(0);
-            control.setBossFight(false);
         }
     }
 
@@ -139,12 +125,6 @@ public class Enemy extends Character {
     public int getWidth() {
         return width;
     }
-
-    @Override
-    public boolean getIsBoss() {
-        return isBoss;
-    }
-
     public void timer() {
         TimerTask attackTask = new AttackTask();
         TimerTask moveTask = new MoveTask();
@@ -153,6 +133,7 @@ public class Enemy extends Character {
         timer.schedule(moveTask, 0, 1000 / ControlPanel.FRAME_RATE);
         timer.schedule(imageTask, 0, 300);
     }
+
 
     // Ensures players can at least damage the opponent regardless of type effectiveness
     public void takeDamage(int damage, Type type) {
@@ -167,17 +148,8 @@ public class Enemy extends Character {
         @Override
         public void run() {
             try {
-                if (!isBoss) {
-                    e.setX(e.getX() + X_COMPONENT);
-                    e.setY(e.getY() + Y_COMPONENT);
-                } else {
-                    if (e.getY() < 0) {
-                        e.setY(e.getY() + 3);
-                    } else {
-                        time++;
-                        e.setX(e.getX() + (int) (3 * Math.cos((double) time / 90)));
-                    }
-                }
+                e.setX(e.getX() + X_COMPONENT);
+                e.setY(e.getY() + Y_COMPONENT);
             } catch (Exception e) {
 
             }

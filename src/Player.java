@@ -25,13 +25,13 @@ public class Player extends Character {
     private static int bossWall;
     private HealthBar health;
 
-    public Player(int x, int y, int width, int height, Color color, Pokemon p, ControlPanel control) {
+    Player(int x, int y, int width, int height, Color color, Pokemon p, ControlPanel control) {
         super(x, y, width, height, color, p, control);
         this.speed = p.getMovementSpeed();
         this.player = this;
         this.image1 = p.getBack1();
         this.image2 = p.getBack2();
-        this.setHitPoints(p.getHitPoints() * 2);
+        this.setHitPoints(p.getHitPoints() * ControlPanel.PLAYER_HEALTH_COEF);
         this.setMaxHitPoints(this.getHitPoints());
         this.p = p;
         this.projectileDelay = p.getAttack().getAttackDelay();

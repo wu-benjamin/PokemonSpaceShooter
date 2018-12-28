@@ -9,14 +9,14 @@ import java.util.*;
 
 public class ControlPanel extends JPanel implements Runnable {
 
-    static ArrayList<GameObject> objects = new ArrayList<GameObject>();
-    static ArrayList<GameObject> toAdd = new ArrayList<GameObject>();
-    static ArrayList<GameObject> toRemove = new ArrayList<GameObject>();
+    private static ArrayList<GameObject> objects = new ArrayList<>();
+    static ArrayList<GameObject> toAdd = new ArrayList<>();
+    static ArrayList<GameObject> toRemove = new ArrayList<>();
     static boolean[] unlockedPokemon = new boolean[Pokemon.values().length]; // Unlocking Pokemon to be added with main menu
     static boolean[] unlockedLocation = new boolean[Location.values().length]; // Unlocking Locations to be added with main menu
     static int[] highScores = new int[Location.values().length]; // High scores to be added with location selection
     private static boolean run = false;
-    protected static Input input = new Input();
+    static Input input = new Input();
     static int width;
     static int height;
     static Random rand = new Random();
@@ -30,13 +30,17 @@ public class ControlPanel extends JPanel implements Runnable {
     public static final Color TEXT_BACKGROUND = new Color(42, 117, 187, 200);
     public static final Color TEXT = new Color(255, 203, 5);
     private static JFrame frame = new JFrame("Pokemon Space Shooter");
-    private ControlPanel control;
     private static File fontFile;
     private int maxNumberOfEnemies = 25; // Temporary
     private int currentNumberOfEnemies;
     private boolean bossFight;
-    static Enemy boss;
+    static Boss boss;
     static int FRAME_RATE = 30;
+    public static final int BOSS_SCALE = 7;
+    public static final int ENEMY_SCALE = 3;
+    public static final int PLAYER_SCALE = 4;
+    public static final int PLAYER_HEALTH_COEF = 2;
+    public static final int BOSS_HEALTH_COEF = 15;
 
     static Pokemon player;
 
@@ -45,7 +49,6 @@ public class ControlPanel extends JPanel implements Runnable {
         this.addKeyListener(input);
         this.addMouseListener(input);
         this.addMouseMotionListener(input);
-        this.control = this;
         bossFight = false;
     }
 
@@ -105,17 +108,17 @@ public class ControlPanel extends JPanel implements Runnable {
                 int i = rand.nextInt(151);
                 if (currentNumberOfEnemies < maxNumberOfEnemies && Enemy.enemies.size() <= 5) {
                     if (rand.nextInt(1000) < 15) {
-                        toAdd.add(new Enemy(rand.nextInt(width - Pokemon.values()[i].getWidth() * 3), -200,
-                                Pokemon.values()[i].getWidth() * 3, Pokemon.values()[i].getHeight() * 3,
-                                TRANSPARENT, Pokemon.values()[i], this, false));
+                        toAdd.add(new Enemy(rand.nextInt(width - Pokemon.values()[i].getWidth() * ENEMY_SCALE), -200,
+                                Pokemon.values()[i].getWidth() * ENEMY_SCALE, Pokemon.values()[i].getHeight() * ENEMY_SCALE,
+                                TRANSPARENT, Pokemon.values()[i], this));
                         currentNumberOfEnemies++;
                     }
                     // Randomly generates a boss at the end of the level
                 } else if (currentNumberOfEnemies == maxNumberOfEnemies && Enemy.enemies.size() == 0) {
                     Background.setMove(false);
-                    this.boss = new Enemy(width / 2 - Pokemon.values()[i].getWidth() * 9 / 2, -700,
-                            Pokemon.values()[i].getWidth() * 7, Pokemon.values()[i].getHeight() * 7,
-                            TRANSPARENT, Pokemon.values()[i], this, true);
+                    this.boss = new Boss(width / 2 - Pokemon.values()[i].getWidth() * BOSS_SCALE / 2, -700,
+                            Pokemon.values()[i].getWidth() * BOSS_SCALE, Pokemon.values()[i].getHeight() * BOSS_SCALE,
+                            TRANSPARENT, Pokemon.values()[i], this);
                     toAdd.add(boss);
                     currentNumberOfEnemies++;
                     bossFight = true;
@@ -163,10 +166,11 @@ public class ControlPanel extends JPanel implements Runnable {
         setUp(control);
         frame.setVisible(true);
         frame.setSize(width, height);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setResizable(false);
         control.setPreferredSize(new Dimension(width, height));
         control.setFocusable(true);
+        control.setDoubleBuffered(true);
         frame.setBackground(Color.BLACK);
         frame.add(control);
         frame.pack();
@@ -206,7 +210,9 @@ public class ControlPanel extends JPanel implements Runnable {
         // Add background first so that it is bottom
         objects.add(new Background(0, -height, width + 25, height, TRANSPARENT,"Lake", control, true));
         objects.add(new Background(0, 0, width + 25, height, TRANSPARENT, "Lake", control, true));
-        objects.add(new Player(width / 2, height / 2, player.getWidth() * 4, player.getHeight() * 4, TRANSPARENT, player, control));
+        objects.add(new Player(width / 2 - player.getWidth() * PLAYER_SCALE / 2, height / 2 - player.getHeight() *
+                PLAYER_SCALE / 2, player.getWidth() * PLAYER_SCALE, player.getHeight() * PLAYER_SCALE,
+                TRANSPARENT, player, control));
         objects.add(new Counter(0, 0, 350, 70, TEXT, "Score: ", control));
         objects.add(new Counter(0, height - 60, 350, 70, TEXT, "Z-Move: ", control));
         objects.add(new Counter(width - 250, height - 60, 250, 70, TEXT, "Level: ", control));
@@ -323,7 +329,7 @@ class Input implements KeyListener, MouseListener, MouseMotionListener {
 
     public boolean keyUsed() {
         // Checks if any key is pressed
-        for (int i = 0; i < keys.length - 1; i ++) {
+        for (int i = 0; i < keys.length - 1; i++) {
             if (keys[i]) {
                 return true;
             }
@@ -349,16 +355,16 @@ class Input implements KeyListener, MouseListener, MouseMotionListener {
         mouseOnPanel = false;
     }
 
-    public boolean isKeyDown(int keyCode) {
+    boolean isKeyDown(int keyCode) {
         return keys[keyCode];
     }
 
-    public boolean isButtonDown(int buttonCode) {
+    boolean isButtonDown(int buttonCode) {
         return buttons[buttonCode];
     }
 
     // Checks if the mouse is on screen
-    public boolean isMouseOn() {
+    boolean isMouseOn() {
         return mouseOnPanel;
     }
 }

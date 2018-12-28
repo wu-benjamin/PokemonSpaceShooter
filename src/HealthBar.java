@@ -24,14 +24,12 @@ public class HealthBar extends GameObject {
         square = new Rectangle2D.Double(x, y, width, height);
         this.c = c;
         this.control = control;
-        if (c.getImage1().equals(c.getPokemon().getBack1()) || c.getImage1().equals(c.getPokemon().getBack2())) {
-            this.scale = 4;
+        if (c instanceof Player) {
+            this.scale = ControlPanel.PLAYER_SCALE;
+        } else if (c instanceof Boss) {
+            this.scale = ControlPanel.BOSS_SCALE;
         } else {
-            if (c.getIsBoss()) {
-                this.scale = 7;
-            } else {
-                this.scale = 3;
-            }
+            this.scale = ControlPanel.ENEMY_SCALE;
         }
         ControlPanel.toAdd.add(this);
     }

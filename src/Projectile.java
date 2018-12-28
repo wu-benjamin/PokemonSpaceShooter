@@ -131,7 +131,8 @@ public class Projectile extends GameObject {
 
     // Projectiles disappear if too far off screen
     public void update(ControlPanel panel) {
-        if (this.getX() < -300 || this.getX() > ControlPanel.width + 300 || this.getY() < -300 || this.getY() > ControlPanel.height) {
+        if (this.getX() < -300 || this.getX() > ControlPanel.width + 300 || this.getY() < -this.getHeight() ||
+                this.getY() > ControlPanel.height) {
             this.timer.cancel();
             this.timer.purge();
             if (!this.isOfEnemy) {
@@ -143,6 +144,7 @@ public class Projectile extends GameObject {
             this.p = null;
         }
         boolean hit = false;
+        // Attack enemies
         for (Enemy e : Enemy.enemies) {
             // Checks for hits
             if (checkCollision(e) && !this.isOfEnemy) {
@@ -168,8 +170,10 @@ public class Projectile extends GameObject {
             ControlPanel.toRemove.add(this);
             playerProjectiles.remove(this);
         }
+        // Attack player
         if (checkCollision(Player.getPlayer()) && this.isOfEnemy) {
-            Player.getPlayer().takeDamage((int) ((this.getAttack().getAttackDamage() * (Type.typeEffectiveness(Player.getPlayer().getType1(),
+            Player.getPlayer().takeDamage((int) ((this.getAttack().getAttackDamage() *
+                    (Type.typeEffectiveness(Player.getPlayer().getType1(),
                     Player.getPlayer().getType2(), this.getAttack().getType())) + 1) / 5));
             this.p = null;
             this.timer.cancel();
@@ -219,14 +223,14 @@ public class Projectile extends GameObject {
                         yComponent = attack.getProjectileSpeed();
                         break;
                     case "Radial":
-                        //ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), attack.getProjectileSize(), p.getColor() , attack, control, (int) (Math.cos(0) * attack.getProjectileSpeed()), (int) (Math.sin(0) * attack.getProjectileSpeed()), isOfEnemy));
-                        ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), attack.getProjectileSize(), p.getColor() , attack, control, (int) (Math.cos(Math.PI / 4) * attack.getProjectileSpeed()), (int) (Math.sin(Math.PI / 4) * attack.getProjectileSpeed()), isOfEnemy));
-                        ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), attack.getProjectileSize(), p.getColor() , attack, control, (int) (Math.cos(Math.PI / 2) * attack.getProjectileSpeed()), (int) (Math.sin(Math.PI / 2) * attack.getProjectileSpeed()), isOfEnemy));
-                        ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), attack.getProjectileSize(), p.getColor() , attack, control, (int) (Math.cos(3 * Math.PI / 4) * attack.getProjectileSpeed()), (int) (Math.sin(3 * Math.PI / 4) * attack.getProjectileSpeed()), isOfEnemy));
-                        //ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), attack.getProjectileSize(), p.getColor() , attack, control, (int) (Math.cos(Math.PI) * attack.getProjectileSpeed()), (int) (Math.sin(Math.PI) * attack.getProjectileSpeed()), isOfEnemy));
-                        //ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), attack.getProjectileSize(), p.getColor() , attack, control, (int) (Math.cos(5 * Math.PI / 4) * attack.getProjectileSpeed()), (int) (Math.sin(5 * Math.PI / 4) * attack.getProjectileSpeed()), isOfEnemy));
-                        //ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), attack.getProjectileSize(), p.getColor() , attack, control, (int) (Math.cos(3 * Math.PI / 2) * attack.getProjectileSpeed()), (int) (Math.sin(3 * Math.PI / 2) * attack.getProjectileSpeed()), isOfEnemy));
-                        //ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), attack.getProjectileSize(), p.getColor() , attack, control, (int) (Math.cos(7 * Math.PI / 4) * attack.getProjectileSpeed()), (int) (Math.sin(7 * Math.PI / 4) * attack.getProjectileSpeed()), isOfEnemy));
+                        //ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, (int) (Math.cos(0) * attack.getProjectileSpeed()), (int) (Math.sin(0) * attack.getProjectileSpeed()), isOfEnemy));
+                        ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, (int) (Math.cos(Math.PI / 4) * attack.getProjectileSpeed()), (int) (Math.sin(Math.PI / 4) * attack.getProjectileSpeed()), isOfEnemy));
+                        ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, (int) (Math.cos(Math.PI / 2) * attack.getProjectileSpeed()), (int) (Math.sin(Math.PI / 2) * attack.getProjectileSpeed()), isOfEnemy));
+                        ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, (int) (Math.cos(3 * Math.PI / 4) * attack.getProjectileSpeed()), (int) (Math.sin(3 * Math.PI / 4) * attack.getProjectileSpeed()), isOfEnemy));
+                        //ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, (int) (Math.cos(Math.PI) * attack.getProjectileSpeed()), (int) (Math.sin(Math.PI) * attack.getProjectileSpeed()), isOfEnemy));
+                        //ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, (int) (Math.cos(5 * Math.PI / 4) * attack.getProjectileSpeed()), (int) (Math.sin(5 * Math.PI / 4) * attack.getProjectileSpeed()), isOfEnemy));
+                        //ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, (int) (Math.cos(3 * Math.PI / 2) * attack.getProjectileSpeed()), (int) (Math.sin(3 * Math.PI / 2) * attack.getProjectileSpeed()), isOfEnemy));
+                        //ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, (int) (Math.cos(7 * Math.PI / 4) * attack.getProjectileSpeed()), (int) (Math.sin(7 * Math.PI / 4) * attack.getProjectileSpeed()), isOfEnemy));
                         ControlPanel.toRemove.add(p);
                         playerProjectiles.remove(p);
                         enemyProjectiles.remove(p);
@@ -238,14 +242,14 @@ public class Projectile extends GameObject {
                         xComponent = (int) (25 * Math.cos(time / 3));
                         break;
                     case "Boomerang":
-                        //ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), attack.getProjectileSize(), p.getColor() , attack, control, isOfEnemy, 0));
-                        //ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), attack.getProjectileSize(), p.getColor() , attack, control, isOfEnemy, 1));
-                        ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), attack.getProjectileSize(), p.getColor() , attack, control, isOfEnemy, 2));
-                        ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), attack.getProjectileSize(), p.getColor() , attack, control, isOfEnemy, 3));
-                        ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), attack.getProjectileSize(), p.getColor() , attack, control, isOfEnemy, 4));
-                        //ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), attack.getProjectileSize(), p.getColor() , attack, control, isOfEnemy, 5));
-                        //ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), attack.getProjectileSize(), p.getColor() , attack, control, isOfEnemy, 6));
-                        ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), attack.getProjectileSize(), p.getColor() , attack, control, isOfEnemy, 7));
+                        //ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, isOfEnemy, 0));
+                        //ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, isOfEnemy, 1));
+                        ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, isOfEnemy, 2));
+                        ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, isOfEnemy, 3));
+                        ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, isOfEnemy, 4));
+                        //ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, isOfEnemy, 5));
+                        //ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, isOfEnemy, 6));
+                        ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, isOfEnemy, 7));
                         ControlPanel.toRemove.add(p);
                         playerProjectiles.remove(p);
                         enemyProjectiles.remove(p);

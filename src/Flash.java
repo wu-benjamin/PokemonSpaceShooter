@@ -7,7 +7,6 @@ public class Flash extends GameObject {
 
     private Rectangle2D square;
     private int opaque = 0;
-    private int time;
     private Color color;
     private Timer timer = new Timer();
     private boolean isBomb;
@@ -16,7 +15,6 @@ public class Flash extends GameObject {
     public Flash(int x, int y, int width, int height, Color color, int time, boolean isBomb, Type type) {
         super(x, y, width, height, color);
         square = new Rectangle2D.Double(0, 0, ControlPanel.width + 100, ControlPanel.height + 100);
-        this.time = time;
         this.isBomb = isBomb;
         this.type = type;
         timer();
@@ -56,7 +54,7 @@ public class Flash extends GameObject {
 
     public void timer() {
         TimerTask opaqueTask = new OpaqueTask();
-        timer.schedule(opaqueTask, 0, 5);
+        timer.schedule(opaqueTask, 0, 3);
     }
 
     class OpaqueTask extends TimerTask {

@@ -7,16 +7,16 @@ import java.util.Timer;
 // Abstract Pokemon Character for methods shared by player and enemies such as health checks
 public abstract class Character extends GameObject {
 
-    protected Rectangle2D square;
-    protected ControlPanel control;
-    protected Attack attack;
-    protected Type type1;
-    protected Type type2;
+    Rectangle2D square;
+    ControlPanel control;
+    Attack attack;
+    Type type1;
+    Type type2;
     private int hitPoints;
     private int maxHitPoints;
     private Pokemon p;
 
-    public Character(int x, int y, int width, int height, Color color, Pokemon p, ControlPanel control) {
+    Character(int x, int y, int width, int height, Color color, Pokemon p, ControlPanel control) {
         super(x, y, width, height, color);
         this.square = new Rectangle2D.Double(x,y,width,height);
         this.control = control;
@@ -30,27 +30,27 @@ public abstract class Character extends GameObject {
         return p;
     }
 
-    public int getHitPoints() {
+    int getHitPoints() {
         return hitPoints;
     }
 
-    public void setHitPoints(int newHealth) {
+    void setHitPoints(int newHealth) {
         hitPoints = newHealth;
     }
 
-    public int getMaxHitPoints() {
+    int getMaxHitPoints() {
         return maxHitPoints;
     }
 
-    public void setMaxHitPoints(int newHealth) {
+    void setMaxHitPoints(int newHealth) {
         maxHitPoints = newHealth;
     }
 
-    public Type getType1() {
+    Type getType1() {
         return type1;
     }
 
-    public Type getType2() {
+    Type getType2() {
         return type2;
     }
 
