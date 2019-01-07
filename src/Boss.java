@@ -8,11 +8,9 @@ public class Boss extends Enemy {
         // Boss is more powerful
         this.setHitPoints(p.getHitPoints() * ControlPanel.BOSS_HEALTH_COEF);
         this.setMaxHitPoints(this.getHitPoints());
-        ControlPanel.toAdd.add(new Counter(ControlPanel.width / 2 - 225, ControlPanel.height / 2 - 55, 450,
-                85, ControlPanel.TEXT, "Boss", control));
     }
 
-    // Creates death animation and removes enemy when killed
+    // Ends stage when boss dies
     @Override
     public void enemyDeath(Enemy e, Type type) {
         new Flash(0, 0, ControlPanel.width, ControlPanel.height, ControlPanel.TRANSPARENT, 20, false, type);
@@ -28,12 +26,12 @@ public class Boss extends Enemy {
         e.timer.purge();
         ControlPanel.toRemove.add(e);
         enemies.remove(e);
-        // Drops powerups
         System.out.print("You win! You scored: " + control.getScore());
         System.exit(0);
         control.setBossFight(false);
     }
 
+    /*
     // Ensures players can at least damage the opponent regardless of type effectiveness
     public void takeDamage(int damage, Type type) {
         this.setHitPoints(this.getHitPoints() - Math.max(5, damage));
@@ -41,6 +39,7 @@ public class Boss extends Enemy {
             e.enemyDeath(e, type);
         }
     }
+    */
 
     @Override
     public void timer() {

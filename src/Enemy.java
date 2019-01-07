@@ -125,6 +125,7 @@ public class Enemy extends Character {
     public int getWidth() {
         return width;
     }
+
     public void timer() {
         TimerTask attackTask = new AttackTask();
         TimerTask moveTask = new MoveTask();

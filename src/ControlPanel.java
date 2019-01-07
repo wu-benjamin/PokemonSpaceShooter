@@ -41,8 +41,9 @@ public class ControlPanel extends JPanel implements Runnable {
     public static final int PLAYER_SCALE = 4;
     public static final int PLAYER_HEALTH_COEF = 2;
     public static final int BOSS_HEALTH_COEF = 15;
-
+    public static final int MENU_DELAY = 150;
     static Pokemon player;
+    static Location level;
 
     // Adds listeners
     public ControlPanel() {
@@ -104,11 +105,12 @@ public class ControlPanel extends JPanel implements Runnable {
                     Thread.sleep(1000 / FRAME_RATE);
                 } catch (Exception e) {
                 }
+                /*
                 // Randomly generates enemies
                 int i = rand.nextInt(151);
                 if (currentNumberOfEnemies < maxNumberOfEnemies && Enemy.enemies.size() <= 5) {
                     if (rand.nextInt(1000) < 15) {
-                        toAdd.add(new Enemy(rand.nextInt(width - Pokemon.values()[i].getWidth() * ENEMY_SCALE), -200,
+                        toAdd.add(new Enemy(rand.nextInt(width - Pokemon.values()[i].getWidth() * ENEMY_SCALE), Pokemon.values()[i].getHeight() * ENEMY_SCALE - 100,
                                 Pokemon.values()[i].getWidth() * ENEMY_SCALE, Pokemon.values()[i].getHeight() * ENEMY_SCALE,
                                 TRANSPARENT, Pokemon.values()[i], this));
                         currentNumberOfEnemies++;
@@ -116,7 +118,7 @@ public class ControlPanel extends JPanel implements Runnable {
                     // Randomly generates a boss at the end of the level
                 } else if (currentNumberOfEnemies == maxNumberOfEnemies && Enemy.enemies.size() == 0) {
                     Background.setMove(false);
-                    this.boss = new Boss(width / 2 - Pokemon.values()[i].getWidth() * BOSS_SCALE / 2, -700,
+                    this.boss = new Boss(width / 2 - Pokemon.values()[i].getWidth() * BOSS_SCALE / 2, Pokemon.values()[i].getHeight() * BOSS_SCALE - 200,
                             Pokemon.values()[i].getWidth() * BOSS_SCALE, Pokemon.values()[i].getHeight() * BOSS_SCALE,
                             TRANSPARENT, Pokemon.values()[i], this);
                     toAdd.add(boss);
@@ -124,6 +126,7 @@ public class ControlPanel extends JPanel implements Runnable {
                     bossFight = true;
                     Player.setBossWall(boss.getHeight() + 20);
                 }
+                */
                 for (GameObject j : toAdd) {
                     objects.add(j);
                 }
@@ -195,6 +198,13 @@ public class ControlPanel extends JPanel implements Runnable {
     }
 
     private static void setUp(ControlPanel control) {
+        try {
+            loadSave();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        objects.add(new TitleHUD(control));
+        /*
         // Beings looping music (Context sensitive music to be implemented at a later date)
         try {
             URL resource = Pokemon.class.getResource("/Resources/Sound/102 - palette town theme.4.wav");
@@ -213,9 +223,9 @@ public class ControlPanel extends JPanel implements Runnable {
         objects.add(new Player(width / 2 - player.getWidth() * PLAYER_SCALE / 2, height / 2 - player.getHeight() *
                 PLAYER_SCALE / 2, player.getWidth() * PLAYER_SCALE, player.getHeight() * PLAYER_SCALE,
                 TRANSPARENT, player, control));
-        objects.add(new Counter(0, 0, 350, 70, TEXT, "Score: ", control));
-        objects.add(new Counter(0, height - 60, 350, 70, TEXT, "Z-Move: ", control));
-        objects.add(new Counter(width - 250, height - 60, 250, 70, TEXT, "Level: ", control));
+        objects.add(new BossApproachHUD(control));
+        objects.add(new PlayingHUD(control));
+        */
     }
 
     // Reads save data (Will be useful when Pokemon are checked if unlocked and progress is tracked)
@@ -235,8 +245,8 @@ public class ControlPanel extends JPanel implements Runnable {
             for (int i = 0; i < highScores.length; i++) {
                 highScores[i] = Integer.parseInt(line[i]);
             }
-        } catch (FileNotFoundException e) {
-            // Creates new save file if no save file currently exists
+        } catch (Exception e) {
+            // Creates new save file if no save file currently exists or is corrupted
             unlockedLocation[0] = true;
             save();
         } finally {
