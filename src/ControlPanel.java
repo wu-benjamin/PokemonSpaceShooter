@@ -27,9 +27,10 @@ public class ControlPanel extends JPanel implements Runnable {
     public static final int POWER_UP_DROP_RATE = 500;
     public static final int RECRUIT_RATE = 25;
     public static final Color TRANSPARENT = new Color(0,0,0,0);
-    public static final Color TEXT_BACKGROUND = new Color(42, 117, 187, 200);
+    public static final Color TEXT_BACKGROUND = new Color(92, 167, 237, 150);
     public static final Color TEXT = new Color(255, 203, 5);
-    private static JFrame frame = new JFrame("Pokemon Space Shooter");
+    public static final Color TEXT_BORDER = new Color(42, 117, 187);
+    private static JFrame frame = new JFrame("Pokémon Space Shooter");
     private static File fontFile;
     private int maxNumberOfEnemies = 25; // Temporary
     private int currentNumberOfEnemies;
@@ -39,7 +40,7 @@ public class ControlPanel extends JPanel implements Runnable {
     public static final int BOSS_SCALE = 7;
     public static final int ENEMY_SCALE = 3;
     public static final int PLAYER_SCALE = 4;
-    public static final int PLAYER_HEALTH_COEF = 2;
+    public static final int PLAYER_HEALTH_COEF = 3;
     public static final int BOSS_HEALTH_COEF = 15;
     public static final int MENU_DELAY = 150;
     static Pokemon player;
@@ -162,8 +163,8 @@ public class ControlPanel extends JPanel implements Runnable {
     public static void main(String[] args) {
         // Dynamically sizes board
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        height = dim.height - 100;
-        width = dim.width - 100;
+        height = dim.height- 100;
+        width = dim.width;
         ControlPanel.loadFont();
         ControlPanel control = new ControlPanel();
         setUp(control);
@@ -181,6 +182,7 @@ public class ControlPanel extends JPanel implements Runnable {
         frame.addKeyListener(input);
         frame.addMouseListener(input);
         frame.addMouseMotionListener(input);
+        //frame.setAlwaysOnTop(true);
     }
 
     // Loads Pokemon font resource
@@ -257,7 +259,7 @@ public class ControlPanel extends JPanel implements Runnable {
         }
     }
 
-    private static void save() throws IOException {
+    public static void save() throws IOException {
         // Records progress
         FileWriter out = null;
         try {

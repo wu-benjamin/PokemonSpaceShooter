@@ -9,11 +9,14 @@ public class TitleHUD extends HUD {
         super(control);
     }
     public void paintComponent(Graphics2D g2) {
-        g2.setColor(ControlPanel.TEXT_BACKGROUND);
-        g2.fill3DRect(0, 0, ControlPanel.width, ControlPanel.height, false);
+        /*
+        Font currentFont = g2.getFont();
+        Font newFont = currentFont.deriveFont(currentFont.getSize() * 1.4F);
+        g2.setFont(newFont);
+        */
+        g2.drawImage(HUD.spaceBackground, 0, 0, ControlPanel.width, ControlPanel.height, control);
         g2.setColor(ControlPanel.TEXT);
-        g2.setFont(font);
-        g2.drawString("Pokemon, The Space Shooter", ControlPanel.width / 2 - 250, ControlPanel.height / 2 - 50);
+        drawCenteredString(g2, new Rectangle(0, 0, ControlPanel.width, ControlPanel.height), "Pokémon, The Space Shooter", font);
     }
 
     public boolean haveStarter() {
@@ -34,5 +37,6 @@ public class TitleHUD extends HUD {
             }
             ControlPanel.toRemove.add(this);
         }
+        return;
     }
 }

@@ -29,6 +29,7 @@ public enum Attack {
     private int projectileSize;
     private Type type;
     private BufferedImage attackImage;
+    private String attackName;
 
     Attack(Type type, String attack, String attackPath, int attackDamage, int attackDelay, int projectileSpeed, int projectileSize) {
         this.attackPath = attackPath;
@@ -37,6 +38,7 @@ public enum Attack {
         this.projectileSpeed = (int) (projectileSpeed * 1.5);
         this.projectileSize = projectileSize;
         this.type = type;
+        this.attackName = attack;
         URL resource = Pokemon.class.getResource("/Resources/Attacks/" + attack + ".png");
         try {
             this.attackImage = ImageIO.read(new File(resource.toURI()));
@@ -66,6 +68,10 @@ public enum Attack {
 
     public Type getType() {
         return type;
+    }
+
+    public String getAttackName() {
+        return attackName;
     }
 
     public BufferedImage getAttackImage() {

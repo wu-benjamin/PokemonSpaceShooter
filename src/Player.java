@@ -158,6 +158,8 @@ public class Player extends Character {
     // Game over
     public void death() {
         System.out.print("You lose! You scored: " + control.getScore() * 100);
+        timer.cancel();
+        timer.purge();
         System.exit(0);
     }
 

@@ -20,7 +20,7 @@ public class LevelSelectHUD extends HUD {
         }
         this.numberOfLevels = ControlPanel.unlockedLocation.length;
         try {
-            Thread.sleep(100);
+            Thread.sleep(ControlPanel.MENU_DELAY);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -58,15 +58,17 @@ public class LevelSelectHUD extends HUD {
     }
 
     public void paintComponent(Graphics2D g2) {
-        g2.setColor(ControlPanel.TEXT_BACKGROUND);
+        FontMetrics metrics = g2.getFontMetrics(font);
+        int lineHeight = metrics.getHeight();
+        g2.drawImage(Location.values()[level].getBackground(), 0, 0, ControlPanel.width, ControlPanel.height, control);
+        g2.setColor(new Color(0,0,0,150));
         g2.fill3DRect(0, 0, ControlPanel.width, ControlPanel.height, false);
         g2.setColor(ControlPanel.TEXT);
         g2.setFont(font);
-        g2.drawString(Location.values()[level].getLevelName(), ControlPanel.width / 2 - 100, ControlPanel.height / 2);
+        drawCenteredString(g2, new Rectangle(0,0,ControlPanel.width,ControlPanel.height), Location.values()[level].getLevelName(), font);
         if (!ControlPanel.unlockedLocation[level]) {
-            g2.drawString("LOCKED", 20, ControlPanel.height - 100);
+            drawCenteredString(g2, new Rectangle(20, ControlPanel.height - 20 - lineHeight, 200, lineHeight),"LOCKED", font);
         }
-        //g2.drawString("Pokemon, The Space Shooter", ControlPanel.width / 2 - 250, ControlPanel.height / 2 - 50);
     }
 
     public void update(ControlPanel panel) {
@@ -76,6 +78,7 @@ public class LevelSelectHUD extends HUD {
                 ControlPanel.level = Location.values()[level];
                 ControlPanel.toAdd.add(new PlayerSelectHUD(control));
                 ControlPanel.toRemove.add(this);
+                return;
             } else if (panel.input.isKeyDown(KeyEvent.VK_LEFT)) {
                 decrementLevel();
             } else if (panel.input.isKeyDown(KeyEvent.VK_RIGHT)) {

@@ -2,6 +2,7 @@ import javax.naming.ldap.Control;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -9,6 +10,11 @@ public class PlayerSelectHUD extends HUD {
 
     int player;
     int numberOfPokemon;
+    BufferedImage toShow;
+    int width;
+    int height;
+    int x;
+    int y;
     boolean delay = false;
     Timer timer = new Timer();
 
@@ -17,11 +23,18 @@ public class PlayerSelectHUD extends HUD {
         for (int i = 0; i < ControlPanel.unlockedPokemon.length; i++) {
             if (ControlPanel.unlockedPokemon[i]) {
                 this.player = i;
+                this.toShow = Pokemon.values()[player].getFront1();
+                this.width = this.toShow.getWidth() * DISPLAY_SCALE;
+                this.height = this.toShow.getHeight() * DISPLAY_SCALE;
+                this.x = ControlPanel.width / 2 - Pokemon.values()[player].getWidth() * DISPLAY_SCALE / 2;
+                this.y = ControlPanel.height / 3 - Pokemon.values()[player].getHeight() * DISPLAY_SCALE / 2;
             }
         }
         this.numberOfPokemon = ControlPanel.unlockedPokemon.length;
+        TimerTask imageTask = new MyImageTask();
+        timer.schedule(imageTask, 0, 300);
         try {
-            Thread.sleep(100);
+            Thread.sleep(ControlPanel.MENU_DELAY);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -58,18 +71,37 @@ public class PlayerSelectHUD extends HUD {
         */
     }
 
+    // Animates sprite
+    class MyImageTask extends TimerTask {
+        @Override
+        public void run() {
+            double scale = height / toShow.getHeight();
+            int orgHeight = height;
+            int orgWidth = width;
+            if (toShow.equals(Pokemon.values()[player].getFront1())) {
+                toShow = Pokemon.values()[player].getFront2();
+            } else {
+                toShow = Pokemon.values()[player].getFront1();
+            }
+            width = (int) (toShow.getWidth() * scale);
+            height = (int) (toShow.getHeight() * scale);
+            x = x + (orgWidth - width) / 2;
+            y = y + (orgHeight - height) / 2;
+        }
+    }
+
     public void paintComponent(Graphics2D g2) {
-        g2.setColor(ControlPanel.TEXT_BACKGROUND);
-        g2.fill3DRect(0, 0, ControlPanel.width, ControlPanel.height, false);
+        FontMetrics metrics = g2.getFontMetrics(font);
+        int lineHeight = metrics.getHeight();
+        g2.drawImage(HUD.spaceBackground, 0, 0, ControlPanel.width, ControlPanel.height, control);
         g2.setColor(ControlPanel.TEXT);
         g2.setFont(font);
-        g2.drawImage(Pokemon.values()[player].getFront1(), ControlPanel.width / 2 - Pokemon.values()[player].getWidth() * ControlPanel.PLAYER_SCALE / 2,
-                ControlPanel.height / 2 - Pokemon.values()[player].getHeight() * ControlPanel.PLAYER_SCALE / 2,
-                Pokemon.values()[player].getWidth() * ControlPanel.PLAYER_SCALE, Pokemon.values()[player].getHeight() * ControlPanel.PLAYER_SCALE, control);
+        g2.drawImage(toShow, x, y, width, height, control);
         if (!ControlPanel.unlockedPokemon[player]) {
-            g2.drawString("LOCKED", 20, ControlPanel.height - 100);
+            drawCenteredString(g2, new Rectangle(20, ControlPanel.height - 20 - lineHeight, 200, lineHeight),"LOCKED", font);
         }
-        //g2.drawString("Pokemon, The Space Shooter", ControlPanel.width / 2 - 250, ControlPanel.height / 2 - 50);
+        drawCenteredString(g2, new Rectangle(0,ControlPanel.height * 2 / 3, ControlPanel.width, ControlPanel.height / 3), Pokemon.values()[player].getName()
+        + "\n" + Pokemon.values()[player].getType1() + "\n" + Pokemon.values()[player].getType2() + "\n" + Pokemon.values()[player].getAttack().getAttackName(), font);
     }
 
     public void update(ControlPanel panel) {
@@ -78,7 +110,10 @@ public class PlayerSelectHUD extends HUD {
             if (ControlPanel.unlockedPokemon[player] && (panel.input.isKeyDown(KeyEvent.VK_SPACE) || panel.input.isButtonDown(MouseEvent.BUTTON1))) {
                 ControlPanel.player = Pokemon.values()[player];
                 ControlPanel.toAdd.add(new PlayingHUD(control));
+                timer.cancel();
+                timer.purge();
                 ControlPanel.toRemove.add(this);
+                return;
             } else if (panel.input.isKeyDown(KeyEvent.VK_LEFT)) {
                 decrementPlayer();
             } else if (panel.input.isKeyDown(KeyEvent.VK_RIGHT)) {
@@ -90,6 +125,8 @@ public class PlayerSelectHUD extends HUD {
                 delay = true;
                 TimerTask delayTask = new DelayTask();
                 timer.schedule(delayTask, ControlPanel.MENU_DELAY);
+                TimerTask imageTask = new MyImageTask();
+                timer.schedule(imageTask, 0);
             }
         }
     }
