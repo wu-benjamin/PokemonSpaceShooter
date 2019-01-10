@@ -20,16 +20,27 @@ public class PlayerSelectHUD extends HUD {
 
     public PlayerSelectHUD(ControlPanel control) {
         super(control);
-        for (int i = 0; i < ControlPanel.unlockedPokemon.length; i++) {
-            if (ControlPanel.unlockedPokemon[i]) {
-                this.player = i;
-                this.toShow = Pokemon.values()[player].getFront1();
-                this.width = this.toShow.getWidth() * DISPLAY_SCALE;
-                this.height = this.toShow.getHeight() * DISPLAY_SCALE;
-                this.x = ControlPanel.width / 2 - Pokemon.values()[player].getWidth() * DISPLAY_SCALE / 2;
-                this.y = ControlPanel.height / 3 - Pokemon.values()[player].getHeight() * DISPLAY_SCALE / 2;
+        if (ControlPanel.playerPokemon == null) {
+            for (int i = 0; i < ControlPanel.unlockedPokemon.length; i++) {
+                if (ControlPanel.unlockedPokemon[i]) {
+                    this.player = i;
+                    this.toShow = Pokemon.values()[player].getFront1();
+                    this.width = this.toShow.getWidth() * DISPLAY_SCALE;
+                    this.height = this.toShow.getHeight() * DISPLAY_SCALE;
+                    this.x = ControlPanel.width / 2 - Pokemon.values()[player].getWidth() * DISPLAY_SCALE / 2;
+                    this.y = ControlPanel.height / 3 - Pokemon.values()[player].getHeight() * DISPLAY_SCALE / 2;
+                    break;
+                }
             }
+        } else {
+            this.player = ControlPanel.playerPokemon.getIndex();
+            this.toShow = Pokemon.values()[player].getFront1();
+            this.width = this.toShow.getWidth() * DISPLAY_SCALE;
+            this.height = this.toShow.getHeight() * DISPLAY_SCALE;
+            this.x = ControlPanel.width / 2 - Pokemon.values()[player].getWidth() * DISPLAY_SCALE / 2;
+            this.y = ControlPanel.height / 3 - Pokemon.values()[player].getHeight() * DISPLAY_SCALE / 2;
         }
+
         this.numberOfPokemon = ControlPanel.unlockedPokemon.length;
         TimerTask imageTask = new MyImageTask();
         timer.schedule(imageTask, 0, 300);
@@ -107,16 +118,16 @@ public class PlayerSelectHUD extends HUD {
     public void update(ControlPanel panel) {
         if (!delay) {
             boolean changed = true;
-            if (ControlPanel.unlockedPokemon[player] && (panel.input.isKeyDown(KeyEvent.VK_SPACE) || panel.input.isButtonDown(MouseEvent.BUTTON1))) {
-                ControlPanel.player = Pokemon.values()[player];
+            if (ControlPanel.unlockedPokemon[player] && (ControlPanel.input.isKeyDown(KeyEvent.VK_SPACE) || ControlPanel.input.isButtonDown(MouseEvent.BUTTON1))) {
+                ControlPanel.playerPokemon = Pokemon.values()[player];
                 ControlPanel.toAdd.add(new PlayingHUD(control));
                 timer.cancel();
                 timer.purge();
                 ControlPanel.toRemove.add(this);
                 return;
-            } else if (panel.input.isKeyDown(KeyEvent.VK_LEFT)) {
+            } else if (ControlPanel.input.isKeyDown(KeyEvent.VK_LEFT)) {
                 decrementPlayer();
-            } else if (panel.input.isKeyDown(KeyEvent.VK_RIGHT)) {
+            } else if (ControlPanel.input.isKeyDown(KeyEvent.VK_RIGHT)) {
                 incrementPlayer();
             } else {
                 changed = false;

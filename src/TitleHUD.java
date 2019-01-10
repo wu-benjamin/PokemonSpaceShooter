@@ -29,7 +29,7 @@ public class TitleHUD extends HUD {
     }
 
     public void update(ControlPanel panel) {
-        if (panel.input.isKeyDown(KeyEvent.VK_SPACE) || panel.input.isButtonDown(MouseEvent.BUTTON1)) {
+        if (ControlPanel.input.isKeyDown(KeyEvent.VK_SPACE) || ControlPanel.input.isButtonDown(MouseEvent.BUTTON1)) {
             if (haveStarter()) {
                 ControlPanel.toAdd.add(new LevelSelectHUD(control));
             } else {

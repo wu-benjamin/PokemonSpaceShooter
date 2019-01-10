@@ -12,39 +12,60 @@ public class ControlPanel extends JPanel implements Runnable {
     private static ArrayList<GameObject> objects = new ArrayList<>();
     static ArrayList<GameObject> toAdd = new ArrayList<>();
     static ArrayList<GameObject> toRemove = new ArrayList<>();
-    static boolean[] unlockedPokemon = new boolean[Pokemon.values().length]; // Unlocking Pokemon to be added with main menu
-    static boolean[] unlockedLocation = new boolean[Location.values().length]; // Unlocking Locations to be added with main menu
-    static int[] highScores = new int[Location.values().length]; // High scores to be added with location selection
+    static ArrayList<Enemy> enemies = new ArrayList<>();
+    static ArrayList<Enemy> enemiesToAdd = new ArrayList<>();
+    static ArrayList<Enemy> enemiesToRemove = new ArrayList<>();
+    static ArrayList<Projectile> playerProjectiles = new ArrayList<>();
+    static ArrayList<Projectile> playerProjectilesToAdd = new ArrayList<>();
+    static ArrayList<Projectile> playerProjectilesToRemove = new ArrayList<>();
+    static ArrayList<Projectile> enemyProjectiles = new ArrayList<>();
+    static ArrayList<Projectile> enemyProjectilesToAdd = new ArrayList<>();
+    static ArrayList<Projectile> enemyProjectilesToRemove = new ArrayList<>();
+
     private static boolean run = false;
+
     static Input input = new Input();
     static int width;
     static int height;
+
     static Random rand = new Random();
-    private int score = 0;
-    private int bombs = 3;
-    private int power = 1;
+    private static int score = 0;
+    private static int bombs = 3;
+    private static int power = 1;
+    static boolean[] unlockedPokemon = new boolean[Pokemon.values().length]; // Unlocking Pokemon to be added with main menu
+    static boolean[] unlockedLocation = new boolean[Location.values().length]; // Unlocking Locations to be added with main menu
+    static int[] highScores = new int[Location.values().length]; // High scores to be added with location selection
+
+    // CONSTANTS
     // Probability out of 1000
+    public static final double SPAWN_PER_SECOND = 0.3;
     public static final int POWER_UP_DROP_RATE = 500;
     public static final int RECRUIT_RATE = 25;
     public static final Color TRANSPARENT = new Color(0,0,0,0);
     public static final Color TEXT_BACKGROUND = new Color(92, 167, 237, 150);
     public static final Color TEXT = new Color(255, 203, 5);
     public static final Color TEXT_BORDER = new Color(42, 117, 187);
-    private static JFrame frame = new JFrame("Pokémon Space Shooter");
-    private static File fontFile;
-    private int maxNumberOfEnemies = 25; // Temporary
-    private int currentNumberOfEnemies;
-    private boolean bossFight;
-    static Boss boss;
-    static int FRAME_RATE = 30;
+    public static final Color BACKGROUND_TINT = new Color(0,0,0,150);
+    public static final int SCORE_FOR_BOSS_KILL = 1000;
+    public static final int SCORE_FOR_ENEMY_KILL = 200;
+    public static final int FRAME_RATE = 30;
     public static final int BOSS_SCALE = 7;
     public static final int ENEMY_SCALE = 3;
     public static final int PLAYER_SCALE = 4;
     public static final int PLAYER_HEALTH_COEF = 3;
     public static final int BOSS_HEALTH_COEF = 15;
     public static final int MENU_DELAY = 150;
-    static Pokemon player;
-    static Location level;
+
+    private static JFrame frame = new JFrame("Pokémon Space Shooter");
+    private static File fontFile;
+
+    static Pokemon playerPokemon;
+    static Location location;
+    static Boss boss;
+
+    private boolean bossFight;
+    public static boolean dead = false;
+    public static boolean win = false;
 
     // Adds listeners
     public ControlPanel() {
@@ -60,13 +81,15 @@ public class ControlPanel extends JPanel implements Runnable {
         thread.start();
     }
 
-    public static void stop() {
-        objects.clear();
-        run = false;
+    public static void resetItems() {
+        score = 0;
+        bombs = 3;
+        power = 1;
     }
 
     public void incrementScore(int increase) {
         score += increase;
+        score = Math.min(score, 999999);
     }
 
     public int getScore() {
@@ -88,10 +111,12 @@ public class ControlPanel extends JPanel implements Runnable {
 
     public void incrementBombs() {
         bombs++;
+        bombs = Math.min(bombs, 99);
     }
 
     public void decrementBombs() {
         bombs--;
+        bombs = Math.max(bombs, 0);
     }
 
     public void run() {
@@ -102,40 +127,46 @@ public class ControlPanel extends JPanel implements Runnable {
                     i.update(this);
                     repaint();
                 }
+                for (Projectile p : playerProjectiles) {
+                    p.update(this);
+                    repaint();
+                }
+                for (Projectile p : enemyProjectiles) {
+                    p.update(this);
+                    repaint();
+                }
                 try {
                     Thread.sleep(1000 / FRAME_RATE);
                 } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                /*
-                // Randomly generates enemies
-                int i = rand.nextInt(151);
-                if (currentNumberOfEnemies < maxNumberOfEnemies && Enemy.enemies.size() <= 5) {
-                    if (rand.nextInt(1000) < 15) {
-                        toAdd.add(new Enemy(rand.nextInt(width - Pokemon.values()[i].getWidth() * ENEMY_SCALE), Pokemon.values()[i].getHeight() * ENEMY_SCALE - 100,
-                                Pokemon.values()[i].getWidth() * ENEMY_SCALE, Pokemon.values()[i].getHeight() * ENEMY_SCALE,
-                                TRANSPARENT, Pokemon.values()[i], this));
-                        currentNumberOfEnemies++;
-                    }
-                    // Randomly generates a boss at the end of the level
-                } else if (currentNumberOfEnemies == maxNumberOfEnemies && Enemy.enemies.size() == 0) {
-                    Background.setMove(false);
-                    this.boss = new Boss(width / 2 - Pokemon.values()[i].getWidth() * BOSS_SCALE / 2, Pokemon.values()[i].getHeight() * BOSS_SCALE - 200,
-                            Pokemon.values()[i].getWidth() * BOSS_SCALE, Pokemon.values()[i].getHeight() * BOSS_SCALE,
-                            TRANSPARENT, Pokemon.values()[i], this);
-                    toAdd.add(boss);
-                    currentNumberOfEnemies++;
-                    bossFight = true;
-                    Player.setBossWall(boss.getHeight() + 20);
-                }
-                */
                 for (GameObject j : toAdd) {
                     objects.add(j);
+                }
+                for (Enemy e : enemiesToAdd) {
+                    enemies.add(e);
+                }
+                for (Projectile p : playerProjectilesToAdd) {
+                    playerProjectiles.add(p);
+                }
+                for (Projectile p : enemyProjectilesToAdd) {
+                    enemyProjectiles.add(p);
                 }
                 // Making changes to objects ArrayList at once prevents ConcurrentModificationException
                 objects.removeAll(toRemove);
                 toRemove.clear();
                 toAdd.clear();
+                enemies.removeAll(enemiesToRemove);
+                enemiesToRemove.clear();
+                enemiesToAdd.clear();
+                playerProjectiles.removeAll(playerProjectilesToRemove);
+                playerProjectilesToRemove.clear();
+                playerProjectilesToAdd.clear();
+                enemyProjectiles.removeAll(enemyProjectilesToRemove);
+                enemyProjectilesToRemove.clear();
+                enemyProjectilesToAdd.clear();
             } catch (ConcurrentModificationException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -147,9 +178,30 @@ public class ControlPanel extends JPanel implements Runnable {
             for (GameObject i : objects) {
                 i.paintComponent(g2);
             }
+            for (Projectile p : playerProjectiles) {
+                p.paintComponent(g2);
+            }
+            for (Projectile p : enemyProjectiles) {
+                p.paintComponent(g2);
+            }
         } catch (ConcurrentModificationException e) {
-
+            // e.printStackTrace();
         }
+    }
+
+    public static void clear() {
+        objects.clear();
+        toAdd.clear();
+        toRemove.clear();
+        enemies.clear();
+        enemiesToAdd.clear();
+        enemiesToRemove.clear();
+        playerProjectiles.clear();
+        playerProjectilesToAdd.clear();
+        playerProjectilesToRemove.clear();
+        enemyProjectiles.clear();
+        enemyProjectilesToAdd.clear();
+        enemyProjectilesToRemove.clear();
     }
 
     public boolean getBossFight() {
@@ -206,28 +258,6 @@ public class ControlPanel extends JPanel implements Runnable {
             e.printStackTrace();
         }
         objects.add(new TitleHUD(control));
-        /*
-        // Beings looping music (Context sensitive music to be implemented at a later date)
-        try {
-            URL resource = Pokemon.class.getResource("/Resources/Sound/102 - palette town theme.4.wav");
-            AudioInputStream audioIn = javax.sound.sampled.AudioSystem.getAudioInputStream(new File(resource.toURI()));
-            Clip music = javax.sound.sampled.AudioSystem.getClip();
-            music.open(audioIn);
-            music.loop(Clip.LOOP_CONTINUOUSLY);
-        } catch (Exception e) {
-        }
-        // Chooses a random Pokemon as the player character
-        int random = rand.nextInt(151);
-        player = Pokemon.values()[random];
-        // Add background first so that it is bottom
-        objects.add(new Background(0, -height, width + 25, height, TRANSPARENT,"Lake", control, true));
-        objects.add(new Background(0, 0, width + 25, height, TRANSPARENT, "Lake", control, true));
-        objects.add(new Player(width / 2 - player.getWidth() * PLAYER_SCALE / 2, height / 2 - player.getHeight() *
-                PLAYER_SCALE / 2, player.getWidth() * PLAYER_SCALE, player.getHeight() * PLAYER_SCALE,
-                TRANSPARENT, player, control));
-        objects.add(new BossApproachHUD(control));
-        objects.add(new PlayingHUD(control));
-        */
     }
 
     // Reads save data (Will be useful when Pokemon are checked if unlocked and progress is tracked)

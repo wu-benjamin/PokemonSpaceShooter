@@ -78,7 +78,7 @@ public class PowerUp extends GameObject {
     }
 
     public boolean checkCollision(GameObject obj) {
-        return (square.intersects((Rectangle2D) obj.getObj()));
+        return (square.intersects(obj.getObj()));
     }
 
     public void paintComponent(Graphics2D g2) {

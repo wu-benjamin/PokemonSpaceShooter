@@ -197,7 +197,7 @@ public enum Pokemon {
         this.index = index;
         this.hitPoints = (int) Math.ceil((hitPoints + defense + special) / 3);
         this.attackPower = (attackPower + special) / 2;
-        this.movementSpeed = (double) (10 + speed / 40) * 1.5;
+        this.movementSpeed = (10 + speed / 40) * 1.5;
         this.attackSpeed = speed;
         // To use critChance, generate a number from 1 to 300 (inclusive)
         // and crit if it is less than criChance

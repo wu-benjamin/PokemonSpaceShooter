@@ -61,7 +61,7 @@ public class LevelSelectHUD extends HUD {
         FontMetrics metrics = g2.getFontMetrics(font);
         int lineHeight = metrics.getHeight();
         g2.drawImage(Location.values()[level].getBackground(), 0, 0, ControlPanel.width, ControlPanel.height, control);
-        g2.setColor(new Color(0,0,0,150));
+        g2.setColor(ControlPanel.BACKGROUND_TINT);
         g2.fill3DRect(0, 0, ControlPanel.width, ControlPanel.height, false);
         g2.setColor(ControlPanel.TEXT);
         g2.setFont(font);
@@ -74,14 +74,14 @@ public class LevelSelectHUD extends HUD {
     public void update(ControlPanel panel) {
         if (!delay) {
             boolean changed = true;
-            if (ControlPanel.unlockedLocation[level] && (panel.input.isKeyDown(KeyEvent.VK_SPACE) || panel.input.isButtonDown(MouseEvent.BUTTON1))) {
-                ControlPanel.level = Location.values()[level];
+            if (ControlPanel.unlockedLocation[level] && (ControlPanel.input.isKeyDown(KeyEvent.VK_SPACE) || ControlPanel.input.isButtonDown(MouseEvent.BUTTON1))) {
+                ControlPanel.location = Location.values()[level];
                 ControlPanel.toAdd.add(new PlayerSelectHUD(control));
                 ControlPanel.toRemove.add(this);
                 return;
-            } else if (panel.input.isKeyDown(KeyEvent.VK_LEFT)) {
+            } else if (ControlPanel.input.isKeyDown(KeyEvent.VK_LEFT)) {
                 decrementLevel();
-            } else if (panel.input.isKeyDown(KeyEvent.VK_RIGHT)) {
+            } else if (ControlPanel.input.isKeyDown(KeyEvent.VK_RIGHT)) {
                 incrementLevel();
             } else {
                 changed = false;

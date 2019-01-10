@@ -1,6 +1,5 @@
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
-import java.io.IOException;
 
 public class HealthBar extends GameObject {
 
@@ -8,22 +7,22 @@ public class HealthBar extends GameObject {
     private final Color noHealth = new Color(244, 66, 66, 240);
     private Rectangle2D square;
     private Character c;
-    private ControlPanel control;
+    // private ControlPanel control;
     private static Font font;
     private double scale;
     static {
         try {
             font = Font.createFont(Font.TRUETYPE_FONT, ControlPanel.getFontFile()).deriveFont(15f);
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
-    public HealthBar(int x, int y, int width, int height, Color color, Character c, ControlPanel control) {
+    HealthBar(int x, int y, int width, int height, Color color, Character c/*, ControlPanel control*/) {
         super(x, y, width, height, color);
         square = new Rectangle2D.Double(x, y, width, height);
         this.c = c;
-        this.control = control;
+        // this.control = control;
         if (c instanceof Player) {
             this.scale = ControlPanel.PLAYER_SCALE;
         } else if (c instanceof Boss) {

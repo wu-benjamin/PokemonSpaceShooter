@@ -18,28 +18,16 @@ public class Boss extends Enemy {
         if (ControlPanel.rand.nextInt(1000) < ControlPanel.RECRUIT_RATE) {
             ControlPanel.unlockedPokemon[e.p.getIndex()] = true;
         }
-        control.incrementScore(100);
+        ControlPanel.win = true;
+        control.incrementScore(ControlPanel.SCORE_FOR_BOSS_KILL);
         ControlPanel.toRemove.add(e.health);
         e.health = null;
         this.health = null;
         e.timer.cancel();
         e.timer.purge();
         ControlPanel.toRemove.add(e);
-        enemies.remove(e);
-        System.out.print("You win! You scored: " + control.getScore());
-        System.exit(0);
         control.setBossFight(false);
     }
-
-    /*
-    // Ensures players can at least damage the opponent regardless of type effectiveness
-    public void takeDamage(int damage, Type type) {
-        this.setHitPoints(this.getHitPoints() - Math.max(5, damage));
-        if (e.getHitPoints() <= 0) {
-            e.enemyDeath(e, type);
-        }
-    }
-    */
 
     @Override
     public void timer() {

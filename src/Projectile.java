@@ -9,6 +9,7 @@ import java.util.TimerTask;
 
 public class Projectile extends GameObject {
 
+    // Velocity of Pokemon (velocity is partly passed to projectile for linear projectiles)
     private int xComponentPokemon;
     private int yComponentPokemon;
     // Velocity components of attack
@@ -17,18 +18,14 @@ public class Projectile extends GameObject {
     private int boomerangNum;
     private Attack attack;
     private Rectangle2D square;
-    public boolean isOfEnemy;
+    private boolean isOfEnemy;
     private BufferedImage attackImage;
     private ControlPanel control;
-    static ArrayList<Projectile> playerProjectiles = new ArrayList<Projectile>();
-    static ArrayList<Projectile> enemyProjectiles = new ArrayList<Projectile>();
     private String attackPath;
     private Timer timer = new Timer();
     private Projectile p;
     private int time;
-    private int damage;
     private Type attackType;
-    private int rep;
     private double rawX;
     private double rawY;
 
@@ -36,7 +33,7 @@ public class Projectile extends GameObject {
     public Projectile(int x, int y, int size, Color color, Attack attack, ControlPanel control, boolean isOfEnemy, int xComponent, int yComponent) {
         super(x, y, size, size, color);
         this.isOfEnemy = isOfEnemy;
-        square = new Rectangle2D.Double(x, y, size, size);
+        this.square = new Rectangle2D.Double(x, y, size, size);
         this.attackType = attack.getType();
         this.attack = attack;
         this.xComponentPokemon = xComponent / 3;
@@ -45,9 +42,9 @@ public class Projectile extends GameObject {
         this.control = control;
         this.p = this;
         if (!isOfEnemy) {
-            playerProjectiles.add(this);
+            ControlPanel.playerProjectilesToAdd.add(this);
         } else {
-            enemyProjectiles.add(this);
+            ControlPanel.enemyProjectilesToAdd.add(this);
         }
         attackImage = attack.getAttackImage();
         this.time = 0;
@@ -60,7 +57,7 @@ public class Projectile extends GameObject {
     private Projectile(int x, int y, int size, Color color, Attack attack, ControlPanel control, int xComponent, int yComponent, boolean isOfEnemy) {
         super(x, y, size, size, color);
         this.isOfEnemy = isOfEnemy;
-        square = new Rectangle2D.Double(x, y, size, size);
+        this.square = new Rectangle2D.Double(x, y, size, size);
         this.attack = attack;
         this.xComponent = xComponent;
         this.yComponent = yComponent;
@@ -69,9 +66,9 @@ public class Projectile extends GameObject {
         this.control = control;
         this.p = this;
         if (!isOfEnemy) {
-            playerProjectiles.add(this);
+            ControlPanel.playerProjectilesToAdd.add(this);
         } else {
-            enemyProjectiles.add(this);
+            ControlPanel.enemyProjectilesToAdd.add(this);
         }
         attackImage = attack.getAttackImage();
         this.rawX = x;
@@ -83,43 +80,19 @@ public class Projectile extends GameObject {
     private Projectile(int x, int y, int size, Color color, Attack attack, ControlPanel control, boolean isOfEnemy, int boomerangNum) {
         super(x, y, size, size, color);
         this.isOfEnemy = isOfEnemy;
-        square = new Rectangle2D.Double(x, y, size, size);
+        this.square = new Rectangle2D.Double(x, y, size, size);
         this.attack = attack;
         this.attackType = attack.getType();
         this.attackPath = "Boomerangs";
         this.control = control;
         this.p = this;
         if (!isOfEnemy) {
-            playerProjectiles.add(this);
+            ControlPanel.playerProjectilesToAdd.add(this);
         } else {
-            enemyProjectiles.add(this);
+            ControlPanel.enemyProjectilesToAdd.add(this);
         }
         attackImage = attack.getAttackImage();
         this.boomerangNum = boomerangNum;
-        this.rawX = x;
-        this.rawY = y;
-        timer();
-    }
-
-    // Special bomb projectile
-    public Projectile(int damage, Type type, int rep) {
-        super(0, 0, ControlPanel.width + 20, ControlPanel.height + 20, ControlPanel.TRANSPARENT);
-        this.isOfEnemy = false;
-        square = new Rectangle2D.Double(0, 0, ControlPanel.width + 20, ControlPanel.height + 20);
-        this.control = control;
-        this.attackType = type;
-        this.p = this;
-        if (!isOfEnemy) {
-            playerProjectiles.add(this);
-        }
-        this.attackPath = "Bomb";
-        // Power is divided for multi-hit so total damage is equivalent to desired
-        this.damage = damage / 5;
-        this.rep = rep;
-        // 5 burst hits prevent enemies from dodging
-        if (rep < 5) {
-            ControlPanel.toAdd.add(new Projectile(damage, type, rep + 1));
-        }
         this.rawX = x;
         this.rawY = y;
         timer();
@@ -131,60 +104,56 @@ public class Projectile extends GameObject {
 
     // Projectiles disappear if too far off screen
     public void update(ControlPanel panel) {
-        if (this.getX() < -300 || this.getX() > ControlPanel.width + 300 || this.getY() < -this.getHeight() ||
-                this.getY() > ControlPanel.height) {
+        if (this.getX() < -500 || this.getX() > ControlPanel.width + 500 || this.getY() < -this.getHeight() - 500 ||
+                this.getY() > ControlPanel.height + 500) {
             this.timer.cancel();
             this.timer.purge();
             if (!this.isOfEnemy) {
-                playerProjectiles.remove(this);
+                ControlPanel.playerProjectilesToRemove.add(this);
             } else {
-                enemyProjectiles.remove(this);
+                ControlPanel.enemyProjectilesToRemove.add(this);
             }
             ControlPanel.toRemove.add(this);
             this.p = null;
-        }
-        boolean hit = false;
-        // Attack enemies
-        for (Enemy e : Enemy.enemies) {
-            // Checks for hits
-            if (checkCollision(e) && !this.isOfEnemy) {
-                if (this.attackPath.equals("Bomb")) {
-                    e.takeDamage((int) (damage * Type.typeEffectiveness(e.getType1(),
-                            e.getType2(), attackType) + 1), attackType);
-                    hit = true;
-                } else {
-                    e.takeDamage((int) ((this.getAttack().getAttackDamage() * (Type.typeEffectiveness(e.getType1(),
-                            e.getType2(), this.getAttack().getType())) + 1) / 5), attackType);
+        } else {
+            boolean hit = false;
+            // Attack enemies
+            for (Enemy e : ControlPanel.enemies) {
+                // Checks for hits
+                if (checkCollision(e) && !this.isOfEnemy) {
+                    e.takeDamage((int) (((double) this.getAttack().getAttackDamage() * (Type.typeEffectiveness(e.getType1(),
+                            e.getType2(), this.getAttack().getType())) + 1.0) * (1.0 + (double) control.getPower() / 10.0) / 5.0), attackType);
                     this.p = null;
                     this.timer.cancel();
                     this.timer.purge();
                     ControlPanel.toRemove.add(this);
-                    playerProjectiles.remove(this);
+                    ControlPanel.playerProjectilesToRemove.add(this);
+                    hit = true;
                 }
             }
-        }
-        if (hit) {
-            this.p = null;
-            this.timer.cancel();
-            this.timer.purge();
-            ControlPanel.toRemove.add(this);
-            playerProjectiles.remove(this);
-        }
-        // Attack player
-        if (checkCollision(Player.getPlayer()) && this.isOfEnemy) {
-            Player.getPlayer().takeDamage((int) ((this.getAttack().getAttackDamage() *
-                    (Type.typeEffectiveness(Player.getPlayer().getType1(),
-                    Player.getPlayer().getType2(), this.getAttack().getType())) + 1) / 5));
-            this.p = null;
-            this.timer.cancel();
-            this.timer.purge();
-            ControlPanel.toRemove.add(this);
-            enemyProjectiles.remove(this);
+            if (hit) {
+                this.p = null;
+                this.timer.cancel();
+                this.timer.purge();
+                ControlPanel.toRemove.add(this);
+                ControlPanel.playerProjectilesToRemove.add(this);
+            }
+            // Attack player
+            if (checkCollision(Player.getPlayer()) && this.isOfEnemy) {
+                Player.getPlayer().takeDamage((int) ((this.getAttack().getAttackDamage() *
+                        (Type.typeEffectiveness(Player.getPlayer().getType1(),
+                                Player.getPlayer().getType2(), this.getAttack().getType())) + 1) / 5));
+                this.p = null;
+                this.timer.cancel();
+                this.timer.purge();
+                ControlPanel.toRemove.add(this);
+                ControlPanel.enemyProjectilesToRemove.add(this);
+            }
         }
     }
 
     public boolean checkCollision(GameObject obj) {
-        return (square.intersects((Rectangle2D) obj.getObj()));
+        return (square.intersects(obj.getObj()));
     }
 
     public void paintComponent(Graphics2D g2) {
@@ -192,12 +161,10 @@ public class Projectile extends GameObject {
         g2.setColor(this.getColor());
         g2.fill(square);
         g2.draw(square);
-        if (!this.attackPath.equals("Bomb")) {
-            if (this.isOfEnemy) {
-                g2.drawImage(this.attackImage, this.getX(), this.getY()  + this.getHeight(), this.getWidth(), -this.getHeight(), control);
-            } else {
-                g2.drawImage(this.attackImage, this.getX(), this.getY(), this.getWidth(), this.getHeight(), control);
-            }
+        if (this.isOfEnemy) {
+            g2.drawImage(this.attackImage, this.getX(), this.getY()  + this.getHeight(), this.getWidth(), -this.getHeight(), control);
+        } else {
+            g2.drawImage(this.attackImage, this.getX(), this.getY(), this.getWidth(), this.getHeight(), control);
         }
     }
 
@@ -224,16 +191,15 @@ public class Projectile extends GameObject {
                         break;
                     case "Radial":
                         //ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, (int) (Math.cos(0) * attack.getProjectileSpeed()), (int) (Math.sin(0) * attack.getProjectileSpeed()), isOfEnemy));
-                        ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, (int) (Math.cos(Math.PI / 4) * attack.getProjectileSpeed()), (int) (Math.sin(Math.PI / 4) * attack.getProjectileSpeed()), isOfEnemy));
-                        ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, (int) (Math.cos(Math.PI / 2) * attack.getProjectileSpeed()), (int) (Math.sin(Math.PI / 2) * attack.getProjectileSpeed()), isOfEnemy));
-                        ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, (int) (Math.cos(3 * Math.PI / 4) * attack.getProjectileSpeed()), (int) (Math.sin(3 * Math.PI / 4) * attack.getProjectileSpeed()), isOfEnemy));
+                        new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, (int) (Math.cos(Math.PI / 4) * attack.getProjectileSpeed()), (int) (Math.sin(Math.PI / 4) * attack.getProjectileSpeed()), isOfEnemy);
+                        new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, (int) (Math.cos(Math.PI / 2) * attack.getProjectileSpeed()), (int) (Math.sin(Math.PI / 2) * attack.getProjectileSpeed()), isOfEnemy);
+                        new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, (int) (Math.cos(3 * Math.PI / 4) * attack.getProjectileSpeed()), (int) (Math.sin(3 * Math.PI / 4) * attack.getProjectileSpeed()), isOfEnemy);
                         //ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, (int) (Math.cos(Math.PI) * attack.getProjectileSpeed()), (int) (Math.sin(Math.PI) * attack.getProjectileSpeed()), isOfEnemy));
                         //ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, (int) (Math.cos(5 * Math.PI / 4) * attack.getProjectileSpeed()), (int) (Math.sin(5 * Math.PI / 4) * attack.getProjectileSpeed()), isOfEnemy));
                         //ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, (int) (Math.cos(3 * Math.PI / 2) * attack.getProjectileSpeed()), (int) (Math.sin(3 * Math.PI / 2) * attack.getProjectileSpeed()), isOfEnemy));
                         //ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, (int) (Math.cos(7 * Math.PI / 4) * attack.getProjectileSpeed()), (int) (Math.sin(7 * Math.PI / 4) * attack.getProjectileSpeed()), isOfEnemy));
-                        ControlPanel.toRemove.add(p);
-                        playerProjectiles.remove(p);
-                        enemyProjectiles.remove(p);
+                        ControlPanel.playerProjectilesToRemove.add(p);
+                        ControlPanel.enemyProjectilesToRemove.add(p);
                         timer.cancel();
                         timer.purge();
                         break;
@@ -244,15 +210,14 @@ public class Projectile extends GameObject {
                     case "Boomerang":
                         //ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, isOfEnemy, 0));
                         //ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, isOfEnemy, 1));
-                        ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, isOfEnemy, 2));
-                        ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, isOfEnemy, 3));
-                        ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, isOfEnemy, 4));
+                        new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, isOfEnemy, 2);
+                        new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, isOfEnemy, 3);
+                        new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, isOfEnemy, 4);
                         //ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, isOfEnemy, 5));
                         //ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, isOfEnemy, 6));
-                        ControlPanel.toAdd.add(new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, isOfEnemy, 7));
-                        ControlPanel.toRemove.add(p);
-                        playerProjectiles.remove(p);
-                        enemyProjectiles.remove(p);
+                        new Projectile(p.getX(), p.getY(), p.getWidth(), p.getColor() , attack, control, isOfEnemy, 7);
+                        ControlPanel.playerProjectilesToRemove.add(p);
+                        ControlPanel.enemyProjectilesToRemove.add(p);
                         timer.cancel();
                         timer.purge();
                         break;
@@ -292,9 +257,6 @@ public class Projectile extends GameObject {
                                 xComponent = -(-2 * timeTemp + 10);
                                 break;
                         }
-                        break;
-                    case "Bomb":
-                        xComponent = -100;
                         break;
                     default:
                         break;

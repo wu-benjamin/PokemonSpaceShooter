@@ -88,7 +88,7 @@ public class StarterSelectHUD extends HUD {
     public void update(ControlPanel panel) {
         if (!delay) {
             boolean changed = true;
-            if (panel.input.isKeyDown(KeyEvent.VK_SPACE) || panel.input.isButtonDown(MouseEvent.BUTTON1)) {
+            if (ControlPanel.input.isKeyDown(KeyEvent.VK_SPACE) || ControlPanel.input.isButtonDown(MouseEvent.BUTTON1)) {
                 try {
                     ControlPanel.save();
                 } catch (Exception e) {
@@ -98,9 +98,9 @@ public class StarterSelectHUD extends HUD {
                 ControlPanel.toAdd.add(new LevelSelectHUD(control));
                 ControlPanel.toRemove.add(this);
                 return;
-            } else if (panel.input.isKeyDown(KeyEvent.VK_LEFT)) {
+            } else if (ControlPanel.input.isKeyDown(KeyEvent.VK_LEFT)) {
                 decrementStarter();
-            } else if (panel.input.isKeyDown(KeyEvent.VK_RIGHT)) {
+            } else if (ControlPanel.input.isKeyDown(KeyEvent.VK_RIGHT)) {
                 incrementStarter();
             } else {
                 changed = false;

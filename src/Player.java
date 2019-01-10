@@ -1,11 +1,7 @@
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -21,14 +17,14 @@ public class Player extends Character {
     private Pokemon p;
     private Timer timer = new Timer();
     private static Player player;
-    private final int BOMB_DAMAGE = 300;
+    private final int BOMB_DAMAGE = 150;
     private static int bossWall;
     private HealthBar health;
 
     Player(int x, int y, int width, int height, Color color, Pokemon p, ControlPanel control) {
         super(x, y, width, height, color, p, control);
         this.speed = p.getMovementSpeed();
-        this.player = this;
+        player = this;
         this.image1 = p.getBack1();
         this.image2 = p.getBack2();
         this.setHitPoints(p.getHitPoints() * ControlPanel.PLAYER_HEALTH_COEF);
@@ -36,50 +32,52 @@ public class Player extends Character {
         this.p = p;
         this.projectileDelay = p.getAttack().getAttackDelay();
         toShow = image1;
-        this.health = new HealthBar(x, y + this.getHeight(), this.getWidth(), 15, color, this, control);
+        this.health = new HealthBar(x, y + this.getHeight(), this.getWidth(), 15, color, this/*, control*/);
         ControlPanel.toAdd.add(health);
         timer();
     }
 
+    /*
     public boolean checkCollision(GameObject obj) {
         return square.intersects(obj.getObj());
     }
+    */
 
     public void update(ControlPanel panel) {
         // No input if theta equals -100
         double theta = -100;
         int xComponent, yComponent;
         // Keyboard inputs
-        if (panel.input.keyUsed()) {
-            panel.input.mouseMoved = false;
-            if ((panel.input.isKeyDown(KeyEvent.VK_D) || panel.input.isKeyDown(KeyEvent.VK_RIGHT)) && (panel.input.isKeyDown(KeyEvent.VK_W) || panel.input.isKeyDown(KeyEvent.VK_UP))) {
+        if (ControlPanel.input.keyUsed()) {
+            ControlPanel.input.mouseMoved = false;
+            if ((ControlPanel.input.isKeyDown(KeyEvent.VK_D) || ControlPanel.input.isKeyDown(KeyEvent.VK_RIGHT)) && (ControlPanel.input.isKeyDown(KeyEvent.VK_W) || ControlPanel.input.isKeyDown(KeyEvent.VK_UP))) {
                 theta = 7 * Math.PI / 4;
-            } else if ((panel.input.isKeyDown(KeyEvent.VK_W) || panel.input.isKeyDown(KeyEvent.VK_UP)) && (panel.input.isKeyDown(KeyEvent.VK_A) || panel.input.isKeyDown(KeyEvent.VK_LEFT))) {
+            } else if ((ControlPanel.input.isKeyDown(KeyEvent.VK_W) || ControlPanel.input.isKeyDown(KeyEvent.VK_UP)) && (ControlPanel.input.isKeyDown(KeyEvent.VK_A) || ControlPanel.input.isKeyDown(KeyEvent.VK_LEFT))) {
                 theta = 5 * Math.PI / 4;
-            } else if ((panel.input.isKeyDown(KeyEvent.VK_A) || panel.input.isKeyDown(KeyEvent.VK_LEFT)) && (panel.input.isKeyDown(KeyEvent.VK_S) || panel.input.isKeyDown(KeyEvent.VK_DOWN))) {
+            } else if ((ControlPanel.input.isKeyDown(KeyEvent.VK_A) || ControlPanel.input.isKeyDown(KeyEvent.VK_LEFT)) && (ControlPanel.input.isKeyDown(KeyEvent.VK_S) || ControlPanel.input.isKeyDown(KeyEvent.VK_DOWN))) {
                 theta = 3 * Math.PI / 4;
-            } else if ((panel.input.isKeyDown(KeyEvent.VK_S) || panel.input.isKeyDown(KeyEvent.VK_DOWN)) && (panel.input.isKeyDown(KeyEvent.VK_D) || panel.input.isKeyDown(KeyEvent.VK_RIGHT))) {
+            } else if ((ControlPanel.input.isKeyDown(KeyEvent.VK_S) || ControlPanel.input.isKeyDown(KeyEvent.VK_DOWN)) && (ControlPanel.input.isKeyDown(KeyEvent.VK_D) || ControlPanel.input.isKeyDown(KeyEvent.VK_RIGHT))) {
                 theta = Math.PI / 4;
-            } else if ((panel.input.isKeyDown(KeyEvent.VK_W) || panel.input.isKeyDown(KeyEvent.VK_UP))) {
+            } else if ((ControlPanel.input.isKeyDown(KeyEvent.VK_W) || ControlPanel.input.isKeyDown(KeyEvent.VK_UP))) {
                 theta = 3 * Math.PI / 2;
-            } else if (panel.input.isKeyDown(KeyEvent.VK_D) || panel.input.isKeyDown(KeyEvent.VK_RIGHT)) {
+            } else if (ControlPanel.input.isKeyDown(KeyEvent.VK_D) || ControlPanel.input.isKeyDown(KeyEvent.VK_RIGHT)) {
                 theta = 0;
-            } else if (panel.input.isKeyDown(KeyEvent.VK_S) || panel.input.isKeyDown(KeyEvent.VK_DOWN)) {
+            } else if (ControlPanel.input.isKeyDown(KeyEvent.VK_S) || ControlPanel.input.isKeyDown(KeyEvent.VK_DOWN)) {
                 theta = Math.PI / 2;
-            } else if (panel.input.isKeyDown(KeyEvent.VK_A) || panel.input.isKeyDown(KeyEvent.VK_LEFT)) {
+            } else if (ControlPanel.input.isKeyDown(KeyEvent.VK_A) || ControlPanel.input.isKeyDown(KeyEvent.VK_LEFT)) {
                 theta = Math.PI;
-            } else if ((panel.input.isKeyDown(KeyEvent.VK_B) || panel.input.isKeyDown(KeyEvent.VK_Z) || panel.input.isKeyDown(KeyEvent.VK_SHIFT)) && !bombDelay && control.getBombs() > 0) {
+            } else if ((ControlPanel.input.isKeyDown(KeyEvent.VK_B) || ControlPanel.input.isKeyDown(KeyEvent.VK_Z) || ControlPanel.input.isKeyDown(KeyEvent.VK_SHIFT)) && !bombDelay && control.getBombs() > 0) {
                 bomb();
             }
             // Mouse inputs taken if the mouse has been moved since a keyboard button was pressed
-        } else if (panel.input.isMouseOn() && panel.input.mouseMoved) {
-            theta = Math.asin((panel.input.y - (this.getY() + this.height / 2)) / Math.sqrt(Math.pow((panel.input.x - (this.getX() + +this.width / 2)), 2) + Math.pow(((this.getY() + this.height / 2) - panel.input.y), 2)));
+        } else if (ControlPanel.input.isMouseOn() && ControlPanel.input.mouseMoved) {
+            theta = Math.asin((ControlPanel.input.y - (this.getY() + this.height / 2)) / Math.sqrt(Math.pow((ControlPanel.input.x - (this.getX() + +this.width / 2)), 2) + Math.pow(((this.getY() + this.height / 2) - ControlPanel.input.y), 2)));
             // Throws bomb
-            if (panel.input.isButtonDown(MouseEvent.BUTTON3) && !bombDelay && control.getBombs() > 0) {
+            if (ControlPanel.input.isButtonDown(MouseEvent.BUTTON3) && !bombDelay && control.getBombs() > 0) {
                 bomb();
             }
             // Prevents movement and flashing when mouse is on player
-            if (panel.input.isMouseOn() && (this.getX() + this.width / 2 == panel.input.x && this.getY() + this.height / 2 == panel.input.y)) {
+            if (ControlPanel.input.isMouseOn() && (this.getX() + this.width / 2 == ControlPanel.input.x && this.getY() + this.height / 2 == ControlPanel.input.y)) {
                 xComponent = 0;
                 yComponent = 0;
             }
@@ -91,17 +89,17 @@ public class Player extends Character {
         }
         else {
             // Determines how much to move a Pokemon
-            if (panel.input.keyUsed()) {
+            if (ControlPanel.input.keyUsed()) {
                 xComponent = (int) (speed * Math.cos(theta));
                 yComponent = (int) (speed * Math.sin(theta));
             } else {
-                xComponent = (int) Math.min(Math.abs(speed * Math.cos(theta)), Math.abs((this.getX() + this.width / 2) - panel.input.x));
-                yComponent = (int) Math.min(Math.abs(speed * Math.sin(theta)), Math.abs((this.getY() + this.height / 2) - panel.input.y));
+                xComponent = (int) Math.min(Math.abs(speed * Math.cos(theta)), Math.abs((this.getX() + this.width / 2) - ControlPanel.input.x));
+                yComponent = (int) Math.min(Math.abs(speed * Math.sin(theta)), Math.abs((this.getY() + this.height / 2) - ControlPanel.input.y));
                 // Corrects lost information due to inverse trig functions
-                if (panel.input.x < this.getX() + this.width / 2) {
+                if (ControlPanel.input.x < this.getX() + this.width / 2) {
                     xComponent *= -1;
                 }
-                if (panel.input.y < this.getY() + this.height / 2) {
+                if (ControlPanel.input.y < this.getY() + this.height / 2) {
                     yComponent *= -1;
                 }
             }
@@ -132,8 +130,8 @@ public class Player extends Character {
         }
 
         // Fires normal projectile based on player Pokemon species
-        if ((panel.input.isKeyDown(KeyEvent.VK_SPACE) || panel.input.isButtonDown(MouseEvent.BUTTON1)) && attackDelay == false) {
-            ControlPanel.toAdd.add(new Projectile(this.getX() + this.getWidth() / 2 - ((int) (p.getAttack().getProjectileSize() *
+        if ((ControlPanel.input.isKeyDown(KeyEvent.VK_SPACE) || ControlPanel.input.isButtonDown(MouseEvent.BUTTON1)) && !attackDelay) {
+            ControlPanel.playerProjectilesToAdd.add(new Projectile(this.getX() + this.getWidth() / 2 - ((int) (p.getAttack().getProjectileSize() *
                     ((double) control.getPower() + 2) / 2)) / 2, this.getY(), (int) (p.getAttack().getProjectileSize() *
                     ((double) control.getPower() + 2) / 2), this.getColor(), p.getAttack(), control, false, xComponent, yComponent));
             attackDelay = true;
@@ -148,7 +146,7 @@ public class Player extends Character {
     }
 
     // Player takes damage and is checked if alive
-    public void takeDamage(int damage) {
+    void takeDamage(int damage) {
         this.setHitPoints(this.getHitPoints() - Math.max(1, damage));
         if (player.getHitPoints() <= 0) {
             player.death();
@@ -156,11 +154,10 @@ public class Player extends Character {
     }
 
     // Game over
-    public void death() {
-        System.out.print("You lose! You scored: " + control.getScore() * 100);
+    private void death() {
         timer.cancel();
         timer.purge();
-        System.exit(0);
+        ControlPanel.dead = true;
     }
 
     public void paintComponent(Graphics2D g2) {
@@ -172,16 +169,18 @@ public class Player extends Character {
     }
 
     // Creates special bomb projectile
-    public void bomb() {
+    private void bomb() {
         new Flash(0, 0, ControlPanel.width, ControlPanel.height, ControlPanel.TRANSPARENT, 200, true, type1);
         bombDelay = true;
         TimerTask bombTask = new MyBombTask();
         timer.schedule(bombTask, 1200);
         control.decrementBombs();
-        ControlPanel.toAdd.add(new Projectile(BOMB_DAMAGE, type1, 0));
+        for (Enemy e : ControlPanel.enemies) {
+            e.takeDamage((int) (BOMB_DAMAGE * Type.typeEffectiveness(e.getType1(), e.getType2(), p.getType1())), p.getType1());
+        }
     }
 
-    public static Player getPlayer() {
+    static Player getPlayer() {
         return player;
     }
 
@@ -200,11 +199,11 @@ public class Player extends Character {
         return image2;
     }
 
-    public void setToShow(BufferedImage toShow) {
+    private void setToShow(BufferedImage toShow) {
         this.toShow = toShow;
     }
 
-    public void timer() {
+    private void timer() {
         TimerTask imageTask = new MyImageTask();
         timer.schedule(imageTask, 0, 500);
     }

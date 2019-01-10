@@ -13,19 +13,13 @@ public class Background extends GameObject {
     private ControlPanel control;
     private static boolean move;
 
-    public Background(int x, int y, int width, int height, Color color, String image, ControlPanel control, boolean move) {
+    public Background(int x, int y, int width, int height, Color color, BufferedImage image, ControlPanel control, boolean move) {
         super(x, y, width, height, color);
         square = new Rectangle2D.Double(x, y, width, height);
-        // Read image
-        try {
-                URL resource = Pokemon.class.getResource("/Resources/Locations/" + image + ".png" );
-                this.image = ImageIO.read(new File(resource.toURI()));
-            } catch (Exception e) {
-
-        }
-            this.color = color;
+        this.image = image;
+        this.color = color;
         this.control = control;
-        this.move = move;
+        Background.move = move;
     }
 
     public Rectangle2D getObj() {
@@ -52,5 +46,7 @@ public class Background extends GameObject {
         g2.fill(square);
         g2.draw(square);
         g2.drawImage(this.image, this.getX(), this.getY(), this.getWidth(), this.getHeight(), control);
+        g2.setColor(ControlPanel.BACKGROUND_TINT);
+        g2.fill3DRect(this.getX(), this.getY(), this.getWidth(), this.getHeight(), false);
     }
 }

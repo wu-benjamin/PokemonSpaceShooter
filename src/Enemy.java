@@ -1,30 +1,24 @@
-import javax.imageio.ImageIO;
-import javax.naming.ldap.Control;
 import java.awt.*;
 import java.awt.geom.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class Enemy extends Character {
 
-    static ArrayList<Enemy> enemies = new ArrayList<Enemy>();
-    protected BufferedImage image1;
-    protected BufferedImage image2;
-    protected BufferedImage toShow;
-    protected Attack attack;
+    private BufferedImage image1;
+    private BufferedImage image2;
+    private BufferedImage toShow;
+    Attack attack;
     protected Enemy e;
-    protected final int X_COMPONENT = 0;
-    protected final int Y_COMPONENT = 3;
-    protected Timer timer = new Timer();
-    protected HealthBar health;
-    protected int time;
-    protected Pokemon p;
+    private final int X_COMPONENT = 0;
+    private final int Y_COMPONENT = 3;
+    Timer timer = new Timer();
+    HealthBar health;
+    int time;
+    Pokemon p;
 
-    public Enemy(int x, int y, int width, int height, Color color, Pokemon p, ControlPanel control) {
+    Enemy(int x, int y, int width, int height, Color color, Pokemon p, ControlPanel control) {
         super(x, y, width, height, color, p, control);
         this.color = color;
         this.control = control;
@@ -39,9 +33,9 @@ public class Enemy extends Character {
         this.square = new Rectangle2D.Double(x, y, this.width, this.height);
         toShow = image1;
         timer();
-        enemies.add(this);
+        ControlPanel.enemiesToAdd.add(this);
         this.e = this;
-        this.health = new HealthBar(x, y + this.getHeight(), this.getWidth(), 15, color, this, control);
+        this.health = new HealthBar(x, y + this.getHeight(), this.getWidth(), 15, color, this/*, control*/);
         ControlPanel.toAdd.add(health);
     }
 
@@ -53,13 +47,13 @@ public class Enemy extends Character {
         // Despawns enemies when they are off screen
         if (this.getX() < 0 || this.getX() > ControlPanel.width || this.getY() > ControlPanel.height) {
             ControlPanel.toRemove.add(this);
-            enemies.remove(this);
+            ControlPanel.enemiesToRemove.add(this);
             timer.cancel();
             timer.purge();
         }
     }
 
-    public void setToShow(BufferedImage toShow) {
+    private void setToShow(BufferedImage toShow) {
         this.toShow = toShow;
     }
 
@@ -78,9 +72,11 @@ public class Enemy extends Character {
         return image2;
     }
 
+    /*
     public boolean checkCollision(GameObject obj) {
         return (square.intersects((Rectangle2D) obj.getObj()));
     }
+    */
 
     // Creates death animation and removes enemy when killed
     public void enemyDeath(Enemy e, Type type) {
@@ -89,23 +85,26 @@ public class Enemy extends Character {
         if (ControlPanel.rand.nextInt(1000) < ControlPanel.RECRUIT_RATE) {
             ControlPanel.unlockedPokemon[e.p.getIndex()] = true;
         }
-        control.incrementScore(100);
+        control.incrementScore(ControlPanel.SCORE_FOR_ENEMY_KILL);
         ControlPanel.toRemove.add(e.health);
         e.health = null;
         this.health = null;
         e.timer.cancel();
         e.timer.purge();
         ControlPanel.toRemove.add(e);
-        enemies.remove(e);
+        ControlPanel.enemiesToRemove.add(e);
         // Drops powerups
         if (ControlPanel.rand.nextInt(1000) < ControlPanel.POWER_UP_DROP_RATE) {
             int random = ControlPanel.rand.nextInt(100);
             if (random < 25) {
-                new PowerUp(e.getX() + e.getWidth() / 2 - PowerUp.getSize() / 2, e.getY() + e.getHeight() / 2 - PowerUp.getSize() / 2, PowerUp.getSize(), PowerUp.getSize(), ControlPanel.TRANSPARENT, "Bomb", control);
+                new PowerUp(e.getX() + e.getWidth() / 2 - PowerUp.getSize() / 2, e.getY() + e.getHeight() / 2 - PowerUp.getSize() / 2,
+                        PowerUp.getSize(), PowerUp.getSize(), ControlPanel.TRANSPARENT, "Bomb", control);
             } else if (random < 50 && control.getPower() < 5) {
-                new PowerUp(e.getX() + e.getWidth() / 2 - PowerUp.getSize() / 2, e.getY() + e.getHeight() / 2 - PowerUp.getSize() / 2, PowerUp.getSize(), PowerUp.getSize(), ControlPanel.TRANSPARENT, "RareCandy", control);
+                new PowerUp(e.getX() + e.getWidth() / 2 - PowerUp.getSize() / 2, e.getY() + e.getHeight() / 2 - PowerUp.getSize() / 2,
+                        PowerUp.getSize(), PowerUp.getSize(), ControlPanel.TRANSPARENT, "RareCandy", control);
             } else if (random < 100) {
-                new PowerUp(e.getX() + e.getWidth() / 2 - PowerUp.getSize() / 2, e.getY() + e.getHeight() / 2 - PowerUp.getSize() / 2, PowerUp.getSize(), PowerUp.getSize(), ControlPanel.TRANSPARENT, "OranBerry", control);
+                new PowerUp(e.getX() + e.getWidth() / 2 - PowerUp.getSize() / 2, e.getY() + e.getHeight() / 2 - PowerUp.getSize() / 2,
+                        PowerUp.getSize(), PowerUp.getSize(), ControlPanel.TRANSPARENT, "OranBerry", control);
             }
         }
     }
@@ -131,13 +130,13 @@ public class Enemy extends Character {
         TimerTask moveTask = new MoveTask();
         TimerTask imageTask = new ImageTask();
         timer.schedule(attackTask, 0, (int) (1.5 * attack.getAttackDelay() * (ControlPanel.rand.nextInt(200) + 300) / 100));
-        timer.schedule(moveTask, 0, 1000 / ControlPanel.FRAME_RATE);
+        timer.schedule(moveTask, 0, 50);
         timer.schedule(imageTask, 0, 300);
     }
 
 
     // Ensures players can at least damage the opponent regardless of type effectiveness
-    public void takeDamage(int damage, Type type) {
+    void takeDamage(int damage, Type type) {
         this.setHitPoints(this.getHitPoints() - Math.max(5, damage));
         if (e.getHitPoints() <= 0) {
             e.enemyDeath(e, type);
@@ -152,7 +151,7 @@ public class Enemy extends Character {
                 e.setX(e.getX() + X_COMPONENT);
                 e.setY(e.getY() + Y_COMPONENT);
             } catch (Exception e) {
-
+                e.printStackTrace();
             }
         }
     }
@@ -161,11 +160,12 @@ public class Enemy extends Character {
     class AttackTask extends TimerTask {
         @Override
         public void run() {
-            if (Projectile.enemyProjectiles.size() <= 15) {
+            if (ControlPanel.enemyProjectiles.size() <= 15) {
                 try {
-                    ControlPanel.toAdd.add(new Projectile(e.getX() + e.getWidth() / 2 - attack.getProjectileSize() / 2,
+                    ControlPanel.enemyProjectilesToAdd.add(new Projectile(e.getX() + e.getWidth() / 2 - attack.getProjectileSize() / 2,
                             e.getY() + e.getHeight(), attack.getProjectileSize(), color, attack, control, true, X_COMPONENT, Y_COMPONENT));
                 } catch (NullPointerException e) {
+                    //e.printStackTrace();
                 }
             }
         }

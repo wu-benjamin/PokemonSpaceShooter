@@ -1,15 +1,13 @@
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Timer;
 
 // Abstract Pokemon Character for methods shared by player and enemies such as health checks
 public abstract class Character extends GameObject {
 
     Rectangle2D square;
     ControlPanel control;
-    Attack attack;
+    // private Attack attack;
     Type type1;
     Type type2;
     private int hitPoints;
@@ -20,7 +18,7 @@ public abstract class Character extends GameObject {
         super(x, y, width, height, color);
         this.square = new Rectangle2D.Double(x,y,width,height);
         this.control = control;
-        this.attack = p.getAttack();
+        // this.attack = p.getAttack();
         this.type1 = p.getType1();
         this.type2 = p.getType2();
         this.p = p;
@@ -66,9 +64,5 @@ public abstract class Character extends GameObject {
 
     public Rectangle2D getObj() {
         return square;
-    }
-
-    public boolean getIsBoss() {
-        return false;
     }
 }

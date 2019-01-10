@@ -8,25 +8,22 @@ public class DeadHUD extends HUD {
         super(control);
         try {
             ControlPanel.save();
+            Thread.sleep(1000);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        try {
-            Thread.sleep(ControlPanel.MENU_DELAY);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        ControlPanel.dead = false;
+        ControlPanel.win = false;
     }
     public void paintComponent(Graphics2D g2) {
         g2.drawImage(HUD.spaceBackground, 0, 0, ControlPanel.width, ControlPanel.height, control);
         g2.setColor(ControlPanel.TEXT);
         g2.setFont(font);
-        g2.drawString("Game Over!", ControlPanel.width / 2 - 150, ControlPanel.height / 2 - 50);
-        g2.drawString("You scored " + control.getScore() + " points!", ControlPanel.width / 2 - 250, ControlPanel.height / 2 + 50);
+        drawCenteredString(g2, new Rectangle(0,0,ControlPanel.width,ControlPanel.height), "Game Over!\nYou scored " + control.getScore() + " points!", font);
     }
 
     public void update(ControlPanel panel) {
-        if (panel.input.isKeyDown(KeyEvent.VK_SPACE) || panel.input.isButtonDown(MouseEvent.BUTTON1)) {
+        if (ControlPanel.input.isKeyDown(KeyEvent.VK_SPACE) || ControlPanel.input.isButtonDown(MouseEvent.BUTTON1)) {
             ControlPanel.toAdd.add(new LevelSelectHUD(control));
             ControlPanel.toRemove.add(this);
             return;
