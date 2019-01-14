@@ -30,7 +30,7 @@ public class Projectile extends GameObject {
     private double rawY;
 
     // Projectile constructor for Characters to fire directly
-    public Projectile(int x, int y, int size, Color color, Attack attack, ControlPanel control, boolean isOfEnemy, int xComponent, int yComponent) {
+    Projectile(int x, int y, int size, Color color, Attack attack, ControlPanel control, boolean isOfEnemy, int xComponent, int yComponent) {
         super(x, y, size, size, color);
         this.isOfEnemy = isOfEnemy;
         this.square = new Rectangle2D.Double(x, y, size, size);
@@ -50,7 +50,7 @@ public class Projectile extends GameObject {
         this.time = 0;
         this.rawX = x;
         this.rawY = y;
-        timer();
+        timer(17);
     }
 
     // Individual radial bullets
@@ -73,7 +73,7 @@ public class Projectile extends GameObject {
         attackImage = attack.getAttackImage();
         this.rawX = x;
         this.rawY = y;
-        timer();
+        timer(17);
     }
 
     // Individual boomerang bullets
@@ -95,7 +95,7 @@ public class Projectile extends GameObject {
         this.boomerangNum = boomerangNum;
         this.rawX = x;
         this.rawY = y;
-        timer();
+        timer(10);
     }
 
     public Rectangle2D getObj() {
@@ -113,7 +113,6 @@ public class Projectile extends GameObject {
             } else {
                 ControlPanel.enemyProjectilesToRemove.add(this);
             }
-            ControlPanel.toRemove.add(this);
             this.p = null;
         } else {
             boolean hit = false;
@@ -126,7 +125,6 @@ public class Projectile extends GameObject {
                     this.p = null;
                     this.timer.cancel();
                     this.timer.purge();
-                    ControlPanel.toRemove.add(this);
                     ControlPanel.playerProjectilesToRemove.add(this);
                     hit = true;
                 }
@@ -135,7 +133,6 @@ public class Projectile extends GameObject {
                 this.p = null;
                 this.timer.cancel();
                 this.timer.purge();
-                ControlPanel.toRemove.add(this);
                 ControlPanel.playerProjectilesToRemove.add(this);
             }
             // Attack player
@@ -146,14 +143,9 @@ public class Projectile extends GameObject {
                 this.p = null;
                 this.timer.cancel();
                 this.timer.purge();
-                ControlPanel.toRemove.add(this);
                 ControlPanel.enemyProjectilesToRemove.add(this);
             }
         }
-    }
-
-    public boolean checkCollision(GameObject obj) {
-        return (square.intersects(obj.getObj()));
     }
 
     public void paintComponent(Graphics2D g2) {
@@ -168,12 +160,17 @@ public class Projectile extends GameObject {
         }
     }
 
-    public void timer() {
-        TimerTask task = new MyTask();
-        timer.schedule(task, 0, 17);
+    private boolean checkCollision(GameObject obj) {
+        return (square.intersects(obj.getObj()));
     }
 
-    public Attack getAttack() {
+
+    public void timer(int speed) {
+        TimerTask task = new MyTask();
+        timer.schedule(task, 0, speed);
+    }
+
+    private Attack getAttack() {
         return attack;
     }
 
@@ -280,7 +277,7 @@ public class Projectile extends GameObject {
                     p.setY((int) rawY);
                 }
             } catch (NullPointerException e) {
-
+                e.printStackTrace();
             }
         }
     }

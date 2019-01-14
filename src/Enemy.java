@@ -36,7 +36,6 @@ public class Enemy extends Character {
         ControlPanel.enemiesToAdd.add(this);
         this.e = this;
         this.health = new HealthBar(x, y + this.getHeight(), this.getWidth(), 15, color, this/*, control*/);
-        ControlPanel.toAdd.add(health);
     }
 
     public Rectangle2D getObj() {
@@ -81,7 +80,7 @@ public class Enemy extends Character {
     // Ensures players can at least damage the opponent regardless of type effectiveness
     void takeDamage(int damage, Type type) {
         int hitPointsBefore = this.getHitPoints();
-        this.setHitPoints(this.getHitPoints() - Math.max(5, damage));
+        this.setHitPoints(this.getHitPoints() - Math.max(ControlPanel.MIN_DAMAGE, damage));
         if (e.getHitPoints() <= 0 && hitPointsBefore > 0) {
             e.enemyDeath(e, type);
         }
@@ -89,12 +88,12 @@ public class Enemy extends Character {
 
     // Creates death animation and removes enemy when killed
     public void enemyDeath(Enemy e, Type type) {
-        new HitFlash(0, 0, ControlPanel.width, ControlPanel.height, ControlPanel.TRANSPARENT, type, 100, 70);
+        // new HitFlash(0, 0, ControlPanel.width, ControlPanel.height, ControlPanel.TRANSPARENT, type, 100, 70);
         // Handles recruiting new Pokemon -- not yet fully implemented
         if (ControlPanel.rand.nextInt(1000) < /*ControlPanel.RECRUIT_RATE*/ 1000) {
             if (!ControlPanel.unlockedPokemon[e.p.getIndex()]) {
                 ControlPanel.unlockedPokemon[e.p.getIndex()] = true;
-                NewRecruitNotice.addNewRecruit(this.getPokemon().getName());
+                ControlPanel.recruitNotice.addNewRecruit(this.getPokemon().getName());
             }
         }
         control.incrementScore(ControlPanel.SCORE_FOR_ENEMY_KILL);
@@ -168,7 +167,7 @@ public class Enemy extends Character {
                     ControlPanel.enemyProjectilesToAdd.add(new Projectile(e.getX() + e.getWidth() / 2 - attack.getProjectileSize() / 2,
                             e.getY() + e.getHeight(), attack.getProjectileSize(), color, attack, control, true, X_COMPONENT, Y_COMPONENT));
                 } catch (NullPointerException e) {
-                    //e.printStackTrace();
+                    e.printStackTrace();
                 }
             }
         }

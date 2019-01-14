@@ -7,7 +7,6 @@ public abstract class Character extends GameObject {
 
     Rectangle2D square;
     ControlPanel control;
-    // private Attack attack;
     Type type1;
     Type type2;
     private int hitPoints;

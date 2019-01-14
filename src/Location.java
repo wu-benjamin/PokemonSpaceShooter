@@ -1,5 +1,3 @@
-// Currently not implemented (for future level select)
-
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -71,7 +69,7 @@ public enum Location {
     private String intro;
     private String outro;
 
-    Location(int levelIndex, String levelName, int numberOfEnemies, Pokemon boss, String backgroundName,
+    Location(int levelIndex, String levelName, int numberOfRegEnemies, Pokemon boss, String backgroundName,
             String intro, String outro, Pokemon... enemy) {
         this.levelName = levelName;
         URL resource = Pokemon.class.getResource("/Resources/Locations/" + backgroundName + ".png");
@@ -81,7 +79,7 @@ public enum Location {
             e.printStackTrace();
         }
         this.levelIndex = levelIndex;
-        this.numberOfEnemies = numberOfEnemies;
+        this.numberOfEnemies = numberOfRegEnemies - 1; // Minus one due to boss
         this.enemy = enemy;
         this.boss = boss;
         this.intro = intro;

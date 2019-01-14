@@ -33,7 +33,6 @@ public class Player extends Character {
         this.projectileDelay = p.getAttack().getAttackDelay();
         toShow = image1;
         this.health = new HealthBar(x, y + this.getHeight(), this.getWidth(), 15, color, this/*, control*/);
-        ControlPanel.toAdd.add(health);
         timer();
     }
 
@@ -147,7 +146,7 @@ public class Player extends Character {
 
     // Player takes damage and is checked if alive
     void takeDamage(int damage) {
-        this.setHitPoints(this.getHitPoints() - Math.max(1, damage));
+        this.setHitPoints(this.getHitPoints() - Math.max(ControlPanel.MIN_DAMAGE, damage));
         if (player.getHitPoints() <= 0) {
             player.death();
         }

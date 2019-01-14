@@ -30,14 +30,14 @@ public class HealthBar extends GameObject {
         } else {
             this.scale = ControlPanel.ENEMY_SCALE;
         }
-        ControlPanel.toAdd.add(this);
+        ControlPanel.healthBarsToAdd.add(this);
     }
 
     public void update(ControlPanel panel) {
         this.setX(c.getX());
         this.setY(c.getY());
-        if (this.getX() < 0 || this.getX() > ControlPanel.width || this.getY() > ControlPanel.height || c.getHitPoints() < 0) {
-            ControlPanel.toRemove.add(this);
+        if (this.getX() < 0 || this.getX() > ControlPanel.width || this.getY() > ControlPanel.height || c.getHitPoints() <= 0) {
+            ControlPanel.healthBarsToRemove.add(this);
         }
     }
 
@@ -60,8 +60,8 @@ public class HealthBar extends GameObject {
         g2.draw(square);
         g2.setFont(font);
         g2.setColor(Color.BLACK);
-        int currentHealth = Math.max(c.getHitPoints(), 0);
         // Displays numerical health value of Pokemon
-        g2.drawString(Integer.toString(currentHealth), this.getX() + (c.getWidth() - avgWidth) / 2, this.getY() + maxHeight / 2 + c.getHeight() / 2 + 15);
+        g2.drawString(Integer.toString(Math.max(c.getHitPoints(), 0)), this.getX() + (c.getWidth() - avgWidth) / 2, this.getY() + maxHeight / 2 + c.getHeight() / 2 + 15);
+        g2.setColor(ControlPanel.TRANSPARENT);
     }
 }

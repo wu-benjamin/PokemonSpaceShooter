@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.TimerTask;
 
 public class DeadHUD extends HUD {
 
@@ -8,12 +9,13 @@ public class DeadHUD extends HUD {
         super(control);
         try {
             ControlPanel.save();
-            Thread.sleep(1000);
         } catch (Exception e) {
             e.printStackTrace();
         }
         ControlPanel.dead = false;
         ControlPanel.win = false;
+        TimerTask delayTask = new DelayTask();
+        timer.schedule(delayTask, 500);
     }
     public void paintComponent(Graphics2D g2) {
         g2.drawImage(HUD.spaceBackground, 0, 0, ControlPanel.width, ControlPanel.height, control);
@@ -23,10 +25,12 @@ public class DeadHUD extends HUD {
     }
 
     public void update(ControlPanel panel) {
-        if (ControlPanel.input.isKeyDown(KeyEvent.VK_SPACE) || ControlPanel.input.isButtonDown(MouseEvent.BUTTON1)) {
-            ControlPanel.menusToAdd.add(new LevelSelectHUD(control));
-            ControlPanel.menusToRemove.add(this);
-            return;
+        if (!delay) {
+            if (ControlPanel.input.isKeyDown(KeyEvent.VK_SPACE) || ControlPanel.input.isButtonDown(MouseEvent.BUTTON1)) {
+                ControlPanel.menusToAdd.add(new LevelSelectHUD(control));
+                ControlPanel.menusToRemove.add(this);
+                return;
+            }
         }
     }
 }

@@ -1,10 +1,17 @@
 import java.awt.*;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class PlayingHUD extends HUD {
 
     private static int numSpawned = 0;
     private static int maxSpawn;
     private static int numRemaining;
+    private static boolean longTimeNoSpawn = false;
+    private static boolean justSpawned = false;
+    private static final int MAX_TIME_NO_SPAWN = 7000; // time in ms
+    private static final int MIN_TIME_NO_SPAWN = 1000; // time in ms
+    private Timer spawnTimer = new Timer();
 
     public PlayingHUD(ControlPanel control) {
         super(control);
@@ -29,6 +36,12 @@ public class PlayingHUD extends HUD {
                 ControlPanel.PLAYER_SCALE / 2, ControlPanel.playerPokemon.getWidth() * ControlPanel.PLAYER_SCALE, ControlPanel.playerPokemon.getHeight() * ControlPanel.PLAYER_SCALE,
                 ControlPanel.TRANSPARENT, ControlPanel.playerPokemon, control));
         this.numRemaining = this.maxSpawn + 1;
+        TimerTask delayTask = new DelayTask();
+        timer.schedule(delayTask, ControlPanel.MENU_DELAY_TIME);
+        LongNoSpawnTask longNoSpawnTask = new LongNoSpawnTask();
+        spawnTimer.schedule(longNoSpawnTask, MAX_TIME_NO_SPAWN);
+        JustSpawnTask justSpawnTask = new JustSpawnTask();
+        spawnTimer.schedule(justSpawnTask, MIN_TIME_NO_SPAWN);
     }
 
     public static void decrementNumRemaining(int decrement) {
@@ -40,44 +53,69 @@ public class PlayingHUD extends HUD {
         g2.fill3DRect(0, 0, ControlPanel.width, ControlPanel.height, false);
         g2.setColor(ControlPanel.TEXT);
         g2.setFont(font);
-        drawBorderedString(g2, "Score: " + control.getScore(), 20, 70, 200);
-        drawBorderedString(g2, "Z-Move: " + control.getBombs(), 20, ControlPanel.height - 25, 200);
-        drawBorderedString(g2,"Level: " + control.getPower(), ControlPanel.width - 250, ControlPanel.height - 25, 200);
-        drawBorderedString(g2, numRemaining + " Enemies Remain", ControlPanel.width - 480, 70, 200);
+        drawBorderedString(g2, "Score: " + control.getScore(), 20, 70);
+        drawBorderedString(g2, "Z-Move: " + control.getBombs(), 20, ControlPanel.height - 25);
+        drawBorderedString(g2,"Level: " + control.getPower(), ControlPanel.width - 250, ControlPanel.height - 25);
+        drawBorderedString(g2, numRemaining + " Enemies Remain", ControlPanel.width - 480, 70);
     }
 
     public void update(ControlPanel control) {
-        if (ControlPanel.win) {
-            ControlPanel.menusToAdd.add(new WinHUD(control));
-            ControlPanel.menusToRemove.add(this);
-            ControlPanel.clear();
-            return;
-        }
-        if (ControlPanel.dead) {
-            ControlPanel.menusToAdd.add(new DeadHUD(control));
-            ControlPanel.menusToRemove.add(this);
-            ControlPanel.clear();
-            return;
-        }
-        if (numSpawned <= maxSpawn) {
-            if (ControlPanel.rand.nextInt((int) (ControlPanel.FRAME_RATE / ControlPanel.SPAWN_PER_SECOND)) == 0) {
-                if (numSpawned < maxSpawn) {
-                    Pokemon enemy = ControlPanel.location.getEnemies()[ControlPanel.rand.nextInt(ControlPanel.location.getEnemies().length)];
-                    ControlPanel.toAdd.add(new Enemy(ControlPanel.rand.nextInt(ControlPanel.width - enemy.getWidth() * ControlPanel.ENEMY_SCALE),
-                            -enemy.getHeight() * ControlPanel.ENEMY_SCALE - 5, enemy.getWidth() * ControlPanel.ENEMY_SCALE,
-                            enemy.getHeight() * ControlPanel.ENEMY_SCALE, ControlPanel.TRANSPARENT, enemy, control));
-                    numSpawned++;
+        if (!delay) {
+            if (ControlPanel.win) {
+                ControlPanel.menusToAdd.add(new WinHUD(control));
+                ControlPanel.menusToRemove.add(this);
+                ControlPanel.clear();
+                return;
+            }
+            if (ControlPanel.dead) {
+                ControlPanel.menusToAdd.add(new DeadHUD(control));
+                ControlPanel.menusToRemove.add(this);
+                ControlPanel.clear();
+                return;
+            }
+            if (numSpawned <= maxSpawn) {
+                if ((ControlPanel.rand.nextInt((int) (ControlPanel.FRAME_RATE / ControlPanel.SPAWN_PER_SECOND)) == 0 || longTimeNoSpawn) && !justSpawned) {
+                    if (numSpawned < maxSpawn) {
+                        Pokemon enemy = ControlPanel.location.getEnemies()[ControlPanel.rand.nextInt(ControlPanel.location.getEnemies().length)];
+                        ControlPanel.toAdd.add(new Enemy(ControlPanel.rand.nextInt(ControlPanel.width - enemy.getWidth() * ControlPanel.ENEMY_SCALE),
+                                -enemy.getHeight() * ControlPanel.ENEMY_SCALE - 5, enemy.getWidth() * ControlPanel.ENEMY_SCALE,
+                                enemy.getHeight() * ControlPanel.ENEMY_SCALE, ControlPanel.TRANSPARENT, enemy, control));
+                        numSpawned++;
+                    }
+                    LongNoSpawnTask longNoSpawnTask = new LongNoSpawnTask();
+                    JustSpawnTask justSpawnTask = new JustSpawnTask();
+                    spawnTimer.cancel();
+                    spawnTimer.purge();
+                    Timer spawnTimer = new Timer();
+                    spawnTimer.schedule(longNoSpawnTask, MAX_TIME_NO_SPAWN);
+                    spawnTimer.schedule(justSpawnTask, MIN_TIME_NO_SPAWN);
+                    longTimeNoSpawn = false;
+                    justSpawned = true;
+                }
+                if (ControlPanel.enemies.size() == 0 && numSpawned == maxSpawn) {
+                    control.setBossFight(true);
+                    Pokemon bossPokemon = ControlPanel.location.getBoss();
+                    Player.setBossWall(bossPokemon.getHeight() * ControlPanel.BOSS_SCALE);
+                    Boss boss = new Boss(ControlPanel.width / 2 - bossPokemon.getWidth() * ControlPanel.BOSS_SCALE / 2,
+                            -bossPokemon.getHeight() * ControlPanel.BOSS_SCALE - 100, bossPokemon.getWidth() * ControlPanel.BOSS_SCALE,
+                            bossPokemon.getHeight() * ControlPanel.BOSS_SCALE, ControlPanel.TRANSPARENT, bossPokemon, control);
+                    ControlPanel.toAdd.add(boss);
                 }
             }
-            if (ControlPanel.enemies.size() == 0 && numSpawned == maxSpawn) {
-                control.setBossFight(true);
-                Pokemon bossPokemon = ControlPanel.location.getBoss();
-                Player.setBossWall(bossPokemon.getHeight() * ControlPanel.BOSS_SCALE);
-                Boss boss = new Boss(ControlPanel.width / 2 - bossPokemon.getWidth() * ControlPanel.BOSS_SCALE / 2,
-                        -bossPokemon.getHeight() * ControlPanel.BOSS_SCALE - 100, bossPokemon.getWidth() * ControlPanel.BOSS_SCALE,
-                        bossPokemon.getHeight() * ControlPanel.BOSS_SCALE, ControlPanel.TRANSPARENT, bossPokemon, control);
-                ControlPanel.toAdd.add(boss);
-            }
+        }
+    }
+
+    class LongNoSpawnTask extends TimerTask {
+        @Override
+        public void run() {
+            longTimeNoSpawn = true;
+        }
+    }
+
+    class JustSpawnTask extends TimerTask {
+        @Override
+        public void run() {
+            justSpawned = false;
         }
     }
 }

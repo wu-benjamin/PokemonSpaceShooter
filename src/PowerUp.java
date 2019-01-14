@@ -28,7 +28,9 @@ public class PowerUp extends GameObject {
             candy = ImageIO.read(new File(resource.toURI()));
             resource = Pokemon.class.getResource("/Resources/PowerUps/OranBerry.png");
             berry = ImageIO.read(new File(resource.toURI()));
-        } catch (Exception e) { }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public PowerUp(int x, int y, int width, int height, Color color, String desc, ControlPanel control) {

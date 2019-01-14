@@ -13,7 +13,7 @@ public class ControlPanel extends JPanel implements Runnable {
     // CONSTANTS
     public static final double SPAWN_PER_SECOND = 0.3;
     public static final int POWER_UP_DROP_RATE = 250;    // Probability out of 1000
-    public static final int RECRUIT_RATE = 25;           // Probability out of 1000
+    public static final int RECRUIT_RATE = 50;           // Probability out of 1000
     public static final Color TRANSPARENT = new Color(0,0,0,0);
     public static final Color TEXT_BACKGROUND = new Color(92, 167, 237, 150);
     public static final Color TEXT = new Color(255, 203, 5);
@@ -27,11 +27,15 @@ public class ControlPanel extends JPanel implements Runnable {
     public static final int PLAYER_SCALE = 4;
     public static final int PLAYER_HEALTH_COEF = 3;
     public static final int BOSS_HEALTH_COEF = 15;
-    public static final int MENU_DELAY = 150;
+    public static final int MENU_DELAY_TIME = 150;
+    public static final int MIN_DAMAGE = 1;
 
     private static ArrayList<GameObject> objects = new ArrayList<>(); // Contains flashes, the player,  backgrounds, health bars, and power-ups
     static ArrayList<GameObject> toAdd = new ArrayList<>();
     static ArrayList<GameObject> toRemove = new ArrayList<>();
+    static ArrayList<HealthBar> healthBars = new ArrayList<>();
+    static ArrayList<HealthBar> healthBarsToAdd = new ArrayList<>();
+    static ArrayList<HealthBar> healthBarsToRemove = new ArrayList<>();
     static ArrayList<Enemy> enemies = new ArrayList<>();
     static ArrayList<Enemy> enemiesToAdd = new ArrayList<>();
     static ArrayList<Enemy> enemiesToRemove = new ArrayList<>();
@@ -63,7 +67,7 @@ public class ControlPanel extends JPanel implements Runnable {
     private static JFrame frame = new JFrame("Pokémon Space Shooter");
     private static File fontFile;
 
-    static Pokemon playerPokemon;
+    static Pokemon playerPokemon = null;
     static Location location;
     static Boss boss;
 
@@ -144,19 +148,18 @@ public class ControlPanel extends JPanel implements Runnable {
             try {
                 for (GameObject i : objects) {
                     i.update(this);
-                    repaint();
+                }
+                for (HealthBar h : healthBars) {
+                    h.update(this);
                 }
                 for (Projectile p : playerProjectiles) {
                     p.update(this);
-                    repaint();
                 }
                 for (Projectile p : enemyProjectiles) {
                     p.update(this);
-                    repaint();
                 }
                 for (HUD h : menus) {
                     h.update(this);
-                    repaint();
                 }
                 recruitNotice.update(this);
                 repaint();
@@ -170,11 +173,15 @@ public class ControlPanel extends JPanel implements Runnable {
                 playerProjectiles.addAll(playerProjectilesToAdd);
                 enemyProjectiles.addAll(enemyProjectilesToAdd);
                 menus.addAll(menusToAdd);
+                healthBars.addAll(healthBarsToAdd);
                 PlayingHUD.decrementNumRemaining(enemiesToRemove.size());
                 // Making changes to objects ArrayList at once prevents ConcurrentModificationException
                 objects.removeAll(toRemove);
                 toRemove.clear();
                 toAdd.clear();
+                healthBars.removeAll(healthBarsToRemove);
+                healthBarsToRemove.clear();
+                healthBarsToAdd.clear();
                 enemies.removeAll(enemiesToRemove);
                 enemiesToRemove.clear();
                 enemiesToAdd.clear();
@@ -200,6 +207,9 @@ public class ControlPanel extends JPanel implements Runnable {
             for (GameObject i : objects) {
                 i.paintComponent(g2);
             }
+            for (HealthBar h : healthBars) {
+                h.paintComponent(g2);
+            }
             for (Projectile p : playerProjectiles) {
                 p.paintComponent(g2);
             }
@@ -211,7 +221,7 @@ public class ControlPanel extends JPanel implements Runnable {
             }
             recruitNotice.paintComponent(g2);
         } catch (ConcurrentModificationException e) {
-            // e.printStackTrace();
+            e.printStackTrace();
         }
     }
 
@@ -244,6 +254,7 @@ public class ControlPanel extends JPanel implements Runnable {
             URL resource = Pokemon.class.getResource("/Resources/Pokemon Solid.ttf");
             fontFile = new File(resource.toURI());
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

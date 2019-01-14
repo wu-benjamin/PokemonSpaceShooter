@@ -6,7 +6,7 @@ import java.util.TimerTask;
 public abstract class Flash extends GameObject {
 
     Rectangle2D square;
-    static int time; // Increases by 1 every ms
+    int time; // Increases by 1 every ms
     Color color;
     Timer timer = new Timer();
     int duration;

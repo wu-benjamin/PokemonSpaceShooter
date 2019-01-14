@@ -1,10 +1,9 @@
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.net.URL;
+import java.util.Timer;
+import java.util.TimerTask;
 
 // Handles HUD for the player
 public abstract class HUD extends GameObject {
@@ -15,16 +14,9 @@ public abstract class HUD extends GameObject {
     static BufferedImage spaceBackground;
     static final int DISPLAY_SCALE = 7;
     private static final int BORDER_WIDTH = 2;
-
-    static {
-        URL spaceBackgroundResource = HUD.class.getResource("/Resources/Space_Background.png");
-        try {
-            spaceBackground = ImageIO.read(new File(spaceBackgroundResource.toURI()));
-            font = Font.createFont(Font.TRUETYPE_FONT, ControlPanel.getFontFile()).deriveFont(50f);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+    public static final int ATTACK_IMAGE_SIZE = 100;
+    boolean delay = true;
+    Timer timer = new Timer();
 
     HUD(ControlPanel control) {
         super(0, 0, 1, 1, new Color(0,0,0,0));
@@ -82,5 +74,16 @@ public abstract class HUD extends GameObject {
                     ControlPanel.TEXT.getBlue(), alpha[0]));
         }
         g.drawString(s, x, y);
+    }
+
+    class DelayTask extends TimerTask {
+        @Override
+        public void run() {
+            try {
+                delay = false;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

@@ -1,15 +1,12 @@
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.util.Timer;
 import java.util.TimerTask;
 
 public class LevelSelectHUD extends HUD {
 
     int level;
     int numberOfLevels;
-    boolean delay = false;
-    Timer timer = new Timer();
 
     public LevelSelectHUD(ControlPanel control) {
         super(control);
@@ -19,22 +16,8 @@ public class LevelSelectHUD extends HUD {
             }
         }
         this.numberOfLevels = ControlPanel.unlockedLocation.length;
-        try {
-            Thread.sleep(ControlPanel.MENU_DELAY);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    class DelayTask extends TimerTask {
-        @Override
-        public void run() {
-            try {
-                delay = false;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        TimerTask delayTask = new DelayTask();
+        timer.schedule(delayTask, ControlPanel.MENU_DELAY_TIME);
     }
 
     public void incrementLevel() {
@@ -89,7 +72,7 @@ public class LevelSelectHUD extends HUD {
             if (changed) {
                 delay = true;
                 TimerTask delayTask = new DelayTask();
-                timer.schedule(delayTask, ControlPanel.MENU_DELAY);
+                timer.schedule(delayTask, ControlPanel.MENU_DELAY_TIME);
             }
         }
     }

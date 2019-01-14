@@ -19,7 +19,7 @@ public class NewRecruitNotice extends Flash {
         super(x, y, width, height, color, 2000);
     }
 
-    public static void addNewRecruit(String newRecruitName) {
+    public void addNewRecruit(String newRecruitName) {
         time = 0;
         newRecruitNamesToAdd.add(newRecruitName);
     }
@@ -35,7 +35,7 @@ public class NewRecruitNotice extends Flash {
 
     public void paintComponent(Graphics2D g2) {
         if (newRecruitNames.size() > 0) {
-            HUD.drawCenteredString(g2, new Rectangle(0, 0, ControlPanel.width, ControlPanel.height), "You Befriended " + newRecruitNames.get(0) + "!", font, 150);
+            HUD.drawCenteredString(g2, new Rectangle(0, 0, ControlPanel.width, ControlPanel.height), "You Befriended\n" + newRecruitNames.get(0) + "!", font);
         }
         newRecruitNames.removeAll(newRecruitNamesToRemove);
         newRecruitNames.addAll(newRecruitNamesToAdd);
