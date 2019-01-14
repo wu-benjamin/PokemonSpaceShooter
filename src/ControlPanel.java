@@ -7,40 +7,13 @@ import java.io.*;
 import java.net.URL;
 import java.util.*;
 
+// Currently ~ 2840 lines of code
 public class ControlPanel extends JPanel implements Runnable {
 
-    private static ArrayList<GameObject> objects = new ArrayList<>();
-    static ArrayList<GameObject> toAdd = new ArrayList<>();
-    static ArrayList<GameObject> toRemove = new ArrayList<>();
-    static ArrayList<Enemy> enemies = new ArrayList<>();
-    static ArrayList<Enemy> enemiesToAdd = new ArrayList<>();
-    static ArrayList<Enemy> enemiesToRemove = new ArrayList<>();
-    static ArrayList<Projectile> playerProjectiles = new ArrayList<>();
-    static ArrayList<Projectile> playerProjectilesToAdd = new ArrayList<>();
-    static ArrayList<Projectile> playerProjectilesToRemove = new ArrayList<>();
-    static ArrayList<Projectile> enemyProjectiles = new ArrayList<>();
-    static ArrayList<Projectile> enemyProjectilesToAdd = new ArrayList<>();
-    static ArrayList<Projectile> enemyProjectilesToRemove = new ArrayList<>();
-
-    private static boolean run = false;
-
-    static Input input = new Input();
-    static int width;
-    static int height;
-
-    static Random rand = new Random();
-    private static int score = 0;
-    private static int bombs = 3;
-    private static int power = 1;
-    static boolean[] unlockedPokemon = new boolean[Pokemon.values().length]; // Unlocking Pokemon to be added with main menu
-    static boolean[] unlockedLocation = new boolean[Location.values().length]; // Unlocking Locations to be added with main menu
-    static int[] highScores = new int[Location.values().length]; // High scores to be added with location selection
-
     // CONSTANTS
-    // Probability out of 1000
     public static final double SPAWN_PER_SECOND = 0.3;
-    public static final int POWER_UP_DROP_RATE = 500;
-    public static final int RECRUIT_RATE = 25;
+    public static final int POWER_UP_DROP_RATE = 250;    // Probability out of 1000
+    public static final int RECRUIT_RATE = 25;           // Probability out of 1000
     public static final Color TRANSPARENT = new Color(0,0,0,0);
     public static final Color TEXT_BACKGROUND = new Color(92, 167, 237, 150);
     public static final Color TEXT = new Color(255, 203, 5);
@@ -55,6 +28,37 @@ public class ControlPanel extends JPanel implements Runnable {
     public static final int PLAYER_HEALTH_COEF = 3;
     public static final int BOSS_HEALTH_COEF = 15;
     public static final int MENU_DELAY = 150;
+
+    private static ArrayList<GameObject> objects = new ArrayList<>(); // Contains flashes, the player,  backgrounds, health bars, and power-ups
+    static ArrayList<GameObject> toAdd = new ArrayList<>();
+    static ArrayList<GameObject> toRemove = new ArrayList<>();
+    static ArrayList<Enemy> enemies = new ArrayList<>();
+    static ArrayList<Enemy> enemiesToAdd = new ArrayList<>();
+    static ArrayList<Enemy> enemiesToRemove = new ArrayList<>();
+    private static ArrayList<Projectile> playerProjectiles = new ArrayList<>();
+    static ArrayList<Projectile> playerProjectilesToAdd = new ArrayList<>();
+    static ArrayList<Projectile> playerProjectilesToRemove = new ArrayList<>();
+    static ArrayList<Projectile> enemyProjectiles = new ArrayList<>();
+    static ArrayList<Projectile> enemyProjectilesToAdd = new ArrayList<>();
+    static ArrayList<Projectile> enemyProjectilesToRemove = new ArrayList<>();
+    private static ArrayList<HUD> menus = new ArrayList<>();
+    static ArrayList<HUD> menusToAdd = new ArrayList<>();
+    static ArrayList<HUD> menusToRemove = new ArrayList<>();
+    static NewRecruitNotice recruitNotice;
+
+    private static boolean run = false;
+
+    static Input input = new Input();
+    static int width;
+    static int height;
+
+    static Random rand = new Random();
+    private static int score = 0;
+    private static int bombs = 3;
+    private static int power = 1;
+    static boolean[] unlockedPokemon = new boolean[Pokemon.values().length]; // Unlocking Pokemon to be added with main menu
+    static boolean[] unlockedLocation = new boolean[Location.values().length]; // Unlocking Locations to be added with main menu
+    static int[] highScores = new int[Location.values().length]; // High scores to be added with location selection
 
     private static JFrame frame = new JFrame("Pokémon Space Shooter");
     private static File fontFile;
@@ -79,6 +83,21 @@ public class ControlPanel extends JPanel implements Runnable {
         Thread thread = new Thread(this);
         run = true;
         thread.start();
+    }
+
+    // Gives other classes access to Pokemon font resource
+    public static File getFontFile() {
+        return  fontFile;
+    }
+
+    private static void setUp(ControlPanel control) {
+        try {
+            loadSave();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        menus.add(new TitleHUD(control));
+        recruitNotice = new NewRecruitNotice(0,0, 1,1, TRANSPARENT);
     }
 
     public static void resetItems() {
@@ -135,23 +154,23 @@ public class ControlPanel extends JPanel implements Runnable {
                     p.update(this);
                     repaint();
                 }
+                for (HUD h : menus) {
+                    h.update(this);
+                    repaint();
+                }
+                recruitNotice.update(this);
+                repaint();
                 try {
                     Thread.sleep(1000 / FRAME_RATE);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                for (GameObject j : toAdd) {
-                    objects.add(j);
-                }
-                for (Enemy e : enemiesToAdd) {
-                    enemies.add(e);
-                }
-                for (Projectile p : playerProjectilesToAdd) {
-                    playerProjectiles.add(p);
-                }
-                for (Projectile p : enemyProjectilesToAdd) {
-                    enemyProjectiles.add(p);
-                }
+                objects.addAll(toAdd);
+                enemies.addAll(enemiesToAdd);
+                playerProjectiles.addAll(playerProjectilesToAdd);
+                enemyProjectiles.addAll(enemyProjectilesToAdd);
+                menus.addAll(menusToAdd);
+                PlayingHUD.decrementNumRemaining(enemiesToRemove.size());
                 // Making changes to objects ArrayList at once prevents ConcurrentModificationException
                 objects.removeAll(toRemove);
                 toRemove.clear();
@@ -165,6 +184,9 @@ public class ControlPanel extends JPanel implements Runnable {
                 enemyProjectiles.removeAll(enemyProjectilesToRemove);
                 enemyProjectilesToRemove.clear();
                 enemyProjectilesToAdd.clear();
+                menus.removeAll(menusToRemove);
+                menusToAdd.clear();
+                menusToRemove.clear();
             } catch (ConcurrentModificationException e) {
                 e.printStackTrace();
             }
@@ -184,6 +206,10 @@ public class ControlPanel extends JPanel implements Runnable {
             for (Projectile p : enemyProjectiles) {
                 p.paintComponent(g2);
             }
+            for (HUD h : menus) {
+                h.paintComponent(g2);
+            }
+            recruitNotice.paintComponent(g2);
         } catch (ConcurrentModificationException e) {
             // e.printStackTrace();
         }
@@ -212,31 +238,6 @@ public class ControlPanel extends JPanel implements Runnable {
         bossFight = set;
     }
 
-    public static void main(String[] args) {
-        // Dynamically sizes board
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        height = dim.height- 100;
-        width = dim.width;
-        ControlPanel.loadFont();
-        ControlPanel control = new ControlPanel();
-        setUp(control);
-        frame.setVisible(true);
-        frame.setSize(width, height);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setResizable(false);
-        control.setPreferredSize(new Dimension(width, height));
-        control.setFocusable(true);
-        control.setDoubleBuffered(true);
-        frame.setBackground(Color.BLACK);
-        frame.add(control);
-        frame.pack();
-        control.start();
-        frame.addKeyListener(input);
-        frame.addMouseListener(input);
-        frame.addMouseMotionListener(input);
-        //frame.setAlwaysOnTop(true);
-    }
-
     // Loads Pokemon font resource
     public static void loadFont() {
         try {
@@ -244,20 +245,6 @@ public class ControlPanel extends JPanel implements Runnable {
             fontFile = new File(resource.toURI());
         } catch (Exception e) {
         }
-    }
-
-    // Gives other classes access to Pokemon font resource
-    public static File getFontFile() {
-        return  fontFile;
-    }
-
-    private static void setUp(ControlPanel control) {
-        try {
-            loadSave();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        objects.add(new TitleHUD(control));
     }
 
     // Reads save data (Will be useful when Pokemon are checked if unlocked and progress is tracked)
@@ -326,6 +313,40 @@ public class ControlPanel extends JPanel implements Runnable {
                 out.close();
             }
         }
+    }
+
+    public static void main(String[] args) {
+        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+            public void run() {
+                try {
+                    save();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }));
+        // Dynamically sizes board
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        height = dim.height- 100;
+        width = dim.width;
+        ControlPanel.loadFont();
+        ControlPanel control = new ControlPanel();
+        setUp(control);
+        frame.setVisible(true);
+        frame.setSize(width, height);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setResizable(false);
+        control.setPreferredSize(new Dimension(width, height));
+        control.setFocusable(true);
+        control.setDoubleBuffered(true);
+        frame.setBackground(Color.BLACK);
+        frame.add(control);
+        frame.pack();
+        control.start();
+        frame.addKeyListener(input);
+        frame.addMouseListener(input);
+        frame.addMouseMotionListener(input);
+        //frame.setAlwaysOnTop(true);
     }
 }
 

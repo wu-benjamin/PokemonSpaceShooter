@@ -76,8 +76,8 @@ public class LevelSelectHUD extends HUD {
             boolean changed = true;
             if (ControlPanel.unlockedLocation[level] && (ControlPanel.input.isKeyDown(KeyEvent.VK_SPACE) || ControlPanel.input.isButtonDown(MouseEvent.BUTTON1))) {
                 ControlPanel.location = Location.values()[level];
-                ControlPanel.toAdd.add(new PlayerSelectHUD(control));
-                ControlPanel.toRemove.add(this);
+                ControlPanel.menusToAdd.add(new PlayerSelectHUD(control));
+                ControlPanel.menusToRemove.add(this);
                 return;
             } else if (ControlPanel.input.isKeyDown(KeyEvent.VK_LEFT)) {
                 decrementLevel();

@@ -3,8 +3,8 @@ import java.awt.geom.Rectangle2D;
 
 public class HealthBar extends GameObject {
 
-    private final Color yesHealth = new Color(66, 244, 66, 240);
-    private final Color noHealth = new Color(244, 66, 66, 240);
+    private final Color YES_HEALTH = new Color(66, 244, 66, 240);
+    private final Color NO_HEALTH = new Color(244, 66, 66, 240);
     private Rectangle2D square;
     private Character c;
     // private ControlPanel control;
@@ -50,12 +50,12 @@ public class HealthBar extends GameObject {
         int maxHeight = (int) (scale * (double) Math.max(c.getImage1().getHeight(), c.getImage2().getHeight()));
         // Draws red of health bar
         square.setFrame(this.getX() + (c.getWidth() - avgWidth) / 2, this.getY() + maxHeight / 2 + c.getHeight() / 2, avgWidth, 15);
-        g2.setColor(noHealth);
+        g2.setColor(NO_HEALTH);
         g2.fill(square);
         g2.draw(square);
         // Draws green bar on top
         square.setFrame(this.getX() + (c.getWidth() - avgWidth) / 2, this.getY() + maxHeight / 2 + c.getHeight() / 2, avgWidth * (double) c.getHitPoints() / (double) c.getMaxHitPoints(), 15);
-        g2.setColor(yesHealth);
+        g2.setColor(YES_HEALTH);
         g2.fill(square);
         g2.draw(square);
         g2.setFont(font);

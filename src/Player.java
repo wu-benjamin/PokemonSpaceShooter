@@ -170,10 +170,10 @@ public class Player extends Character {
 
     // Creates special bomb projectile
     private void bomb() {
-        new Flash(0, 0, ControlPanel.width, ControlPanel.height, ControlPanel.TRANSPARENT, 200, true, type1);
+        new HitFlash(0, 0, ControlPanel.width, ControlPanel.height, ControlPanel.TRANSPARENT, type1, 500, 150);
         bombDelay = true;
         TimerTask bombTask = new MyBombTask();
-        timer.schedule(bombTask, 1200);
+        timer.schedule(bombTask, 1000);
         control.decrementBombs();
         for (Enemy e : ControlPanel.enemies) {
             e.takeDamage((int) (BOMB_DAMAGE * Type.typeEffectiveness(e.getType1(), e.getType2(), p.getType1())), p.getType1());

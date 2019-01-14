@@ -1,4 +1,3 @@
-import javax.naming.ldap.Control;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -31,11 +30,11 @@ public class TitleHUD extends HUD {
     public void update(ControlPanel panel) {
         if (ControlPanel.input.isKeyDown(KeyEvent.VK_SPACE) || ControlPanel.input.isButtonDown(MouseEvent.BUTTON1)) {
             if (haveStarter()) {
-                ControlPanel.toAdd.add(new LevelSelectHUD(control));
+                ControlPanel.menusToAdd.add(new LevelSelectHUD(control));
             } else {
-                ControlPanel.toAdd.add(new StarterSelectHUD(control));
+                ControlPanel.menusToAdd.add(new StarterSelectHUD(control));
             }
-            ControlPanel.toRemove.add(this);
+            ControlPanel.menusToRemove.add(this);
         }
         return;
     }

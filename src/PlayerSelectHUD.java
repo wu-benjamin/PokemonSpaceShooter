@@ -120,10 +120,10 @@ public class PlayerSelectHUD extends HUD {
             boolean changed = true;
             if (ControlPanel.unlockedPokemon[player] && (ControlPanel.input.isKeyDown(KeyEvent.VK_SPACE) || ControlPanel.input.isButtonDown(MouseEvent.BUTTON1))) {
                 ControlPanel.playerPokemon = Pokemon.values()[player];
-                ControlPanel.toAdd.add(new PlayingHUD(control));
+                ControlPanel.menusToAdd.add(new PlayingHUD(control));
                 timer.cancel();
                 timer.purge();
-                ControlPanel.toRemove.add(this);
+                ControlPanel.menusToRemove.add(this);
                 return;
             } else if (ControlPanel.input.isKeyDown(KeyEvent.VK_LEFT)) {
                 decrementPlayer();

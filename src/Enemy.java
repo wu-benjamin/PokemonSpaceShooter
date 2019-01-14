@@ -44,7 +44,7 @@ public class Enemy extends Character {
     }
 
     public void update(ControlPanel panel) {
-        // Despawns enemies when they are off screen
+        // De-spawns enemies when they are off screen
         if (this.getX() < 0 || this.getX() > ControlPanel.width || this.getY() > ControlPanel.height) {
             ControlPanel.toRemove.add(this);
             ControlPanel.enemiesToRemove.add(this);
@@ -78,12 +78,24 @@ public class Enemy extends Character {
     }
     */
 
+    // Ensures players can at least damage the opponent regardless of type effectiveness
+    void takeDamage(int damage, Type type) {
+        int hitPointsBefore = this.getHitPoints();
+        this.setHitPoints(this.getHitPoints() - Math.max(5, damage));
+        if (e.getHitPoints() <= 0 && hitPointsBefore > 0) {
+            e.enemyDeath(e, type);
+        }
+    }
+
     // Creates death animation and removes enemy when killed
     public void enemyDeath(Enemy e, Type type) {
-        new Flash(0, 0, ControlPanel.width, ControlPanel.height, ControlPanel.TRANSPARENT, 20, false, type);
+        new HitFlash(0, 0, ControlPanel.width, ControlPanel.height, ControlPanel.TRANSPARENT, type, 100, 70);
         // Handles recruiting new Pokemon -- not yet fully implemented
-        if (ControlPanel.rand.nextInt(1000) < ControlPanel.RECRUIT_RATE) {
-            ControlPanel.unlockedPokemon[e.p.getIndex()] = true;
+        if (ControlPanel.rand.nextInt(1000) < /*ControlPanel.RECRUIT_RATE*/ 1000) {
+            if (!ControlPanel.unlockedPokemon[e.p.getIndex()]) {
+                ControlPanel.unlockedPokemon[e.p.getIndex()] = true;
+                NewRecruitNotice.addNewRecruit(this.getPokemon().getName());
+            }
         }
         control.incrementScore(ControlPanel.SCORE_FOR_ENEMY_KILL);
         ControlPanel.toRemove.add(e.health);
@@ -93,7 +105,7 @@ public class Enemy extends Character {
         e.timer.purge();
         ControlPanel.toRemove.add(e);
         ControlPanel.enemiesToRemove.add(e);
-        // Drops powerups
+        // Drops power-ups
         if (ControlPanel.rand.nextInt(1000) < ControlPanel.POWER_UP_DROP_RATE) {
             int random = ControlPanel.rand.nextInt(100);
             if (random < 25) {
@@ -134,15 +146,6 @@ public class Enemy extends Character {
         timer.schedule(imageTask, 0, 300);
     }
 
-
-    // Ensures players can at least damage the opponent regardless of type effectiveness
-    void takeDamage(int damage, Type type) {
-        this.setHitPoints(this.getHitPoints() - Math.max(5, damage));
-        if (e.getHitPoints() <= 0) {
-            e.enemyDeath(e, type);
-        }
-    }
-
     // Moves enemies down and moves boss side to side using a parametric function of time
     class MoveTask extends TimerTask {
         @Override
@@ -160,7 +163,7 @@ public class Enemy extends Character {
     class AttackTask extends TimerTask {
         @Override
         public void run() {
-            if (ControlPanel.enemyProjectiles.size() <= 15) {
+            if (ControlPanel.enemyProjectiles.size() < 25) {
                 try {
                     ControlPanel.enemyProjectilesToAdd.add(new Projectile(e.getX() + e.getWidth() / 2 - attack.getProjectileSize() / 2,
                             e.getY() + e.getHeight(), attack.getProjectileSize(), color, attack, control, true, X_COMPONENT, Y_COMPONENT));

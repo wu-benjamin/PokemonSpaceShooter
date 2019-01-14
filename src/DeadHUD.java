@@ -24,8 +24,8 @@ public class DeadHUD extends HUD {
 
     public void update(ControlPanel panel) {
         if (ControlPanel.input.isKeyDown(KeyEvent.VK_SPACE) || ControlPanel.input.isButtonDown(MouseEvent.BUTTON1)) {
-            ControlPanel.toAdd.add(new LevelSelectHUD(control));
-            ControlPanel.toRemove.add(this);
+            ControlPanel.menusToAdd.add(new LevelSelectHUD(control));
+            ControlPanel.menusToRemove.add(this);
             return;
         }
     }

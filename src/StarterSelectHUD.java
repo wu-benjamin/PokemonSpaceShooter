@@ -95,8 +95,8 @@ public class StarterSelectHUD extends HUD {
                     e.printStackTrace();
                 }
                 ControlPanel.unlockedPokemon[starterDexNums[currentStarterDexNumIndex]] = true;
-                ControlPanel.toAdd.add(new LevelSelectHUD(control));
-                ControlPanel.toRemove.add(this);
+                ControlPanel.menusToAdd.add(new LevelSelectHUD(control));
+                ControlPanel.menusToRemove.add(this);
                 return;
             } else if (ControlPanel.input.isKeyDown(KeyEvent.VK_LEFT)) {
                 decrementStarter();

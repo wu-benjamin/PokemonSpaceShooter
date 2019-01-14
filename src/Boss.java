@@ -13,7 +13,7 @@ public class Boss extends Enemy {
     // Ends stage when boss dies
     @Override
     public void enemyDeath(Enemy e, Type type) {
-        new Flash(0, 0, ControlPanel.width, ControlPanel.height, ControlPanel.TRANSPARENT, 20, false, type);
+        new HitFlash(0, 0, ControlPanel.width, ControlPanel.height, ControlPanel.TRANSPARENT, type, 200, 100);
         // Handles recruiting new Pokemon -- not yet fully implemented
         if (ControlPanel.rand.nextInt(1000) < ControlPanel.RECRUIT_RATE) {
             ControlPanel.unlockedPokemon[e.p.getIndex()] = true;
@@ -27,6 +27,7 @@ public class Boss extends Enemy {
         e.timer.purge();
         ControlPanel.toRemove.add(e);
         control.setBossFight(false);
+        Background.setMove(false);
     }
 
     @Override

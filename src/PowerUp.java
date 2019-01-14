@@ -53,7 +53,7 @@ public class PowerUp extends GameObject {
     }
 
     public void update(ControlPanel panel) {
-        // Despawns the powerup when off screen
+        // De-spawns the power-up when off screen
         if (this.getX() < 0 || this.getX() > ControlPanel.width || this.getY() < 0 || this.getY() > ControlPanel.height) {
             ControlPanel.toRemove.add(this);
             timer.cancel();

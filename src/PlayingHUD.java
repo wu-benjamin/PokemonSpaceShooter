@@ -2,8 +2,9 @@ import java.awt.*;
 
 public class PlayingHUD extends HUD {
 
-    private int numSpawned = 0;
-    private int maxSpawn;
+    private static int numSpawned = 0;
+    private static int maxSpawn;
+    private static int numRemaining;
 
     public PlayingHUD(ControlPanel control) {
         super(control);
@@ -27,29 +28,35 @@ public class PlayingHUD extends HUD {
         ControlPanel.toAdd.add(new Player(ControlPanel.width / 2 - ControlPanel.playerPokemon.getWidth() * ControlPanel.PLAYER_SCALE / 2, ControlPanel.height / 2 - ControlPanel.playerPokemon.getHeight() *
                 ControlPanel.PLAYER_SCALE / 2, ControlPanel.playerPokemon.getWidth() * ControlPanel.PLAYER_SCALE, ControlPanel.playerPokemon.getHeight() * ControlPanel.PLAYER_SCALE,
                 ControlPanel.TRANSPARENT, ControlPanel.playerPokemon, control));
+        this.numRemaining = this.maxSpawn + 1;
     }
+
+    public static void decrementNumRemaining(int decrement) {
+        numRemaining -= decrement;
+    }
+
 
     public void paintComponent(Graphics2D g2) {
         g2.fill3DRect(0, 0, ControlPanel.width, ControlPanel.height, false);
         g2.setColor(ControlPanel.TEXT);
         g2.setFont(font);
-        drawBorderedString(g2, "Score: " + control.getScore(), 20, + 70);
-        drawBorderedString(g2, "Z-Move: " + control.getBombs(), 20, ControlPanel.height - 25);
-        drawBorderedString(g2,"Level: " + control.getPower(), ControlPanel.width - 250, ControlPanel.height - 25);
+        drawBorderedString(g2, "Score: " + control.getScore(), 20, 70, 200);
+        drawBorderedString(g2, "Z-Move: " + control.getBombs(), 20, ControlPanel.height - 25, 200);
+        drawBorderedString(g2,"Level: " + control.getPower(), ControlPanel.width - 250, ControlPanel.height - 25, 200);
+        drawBorderedString(g2, numRemaining + " Enemies Remain", ControlPanel.width - 480, 70, 200);
     }
 
     public void update(ControlPanel control) {
         if (ControlPanel.win) {
-            ControlPanel.toRemove.add(this);
+            ControlPanel.menusToAdd.add(new WinHUD(control));
+            ControlPanel.menusToRemove.add(this);
             ControlPanel.clear();
-            ControlPanel.toAdd.add(new WinHUD(control));
-
             return;
         }
         if (ControlPanel.dead) {
-            ControlPanel.toRemove.add(this);
+            ControlPanel.menusToAdd.add(new DeadHUD(control));
+            ControlPanel.menusToRemove.add(this);
             ControlPanel.clear();
-            ControlPanel.toAdd.add(new DeadHUD(control));
             return;
         }
         if (numSpawned <= maxSpawn) {
@@ -59,16 +66,17 @@ public class PlayingHUD extends HUD {
                     ControlPanel.toAdd.add(new Enemy(ControlPanel.rand.nextInt(ControlPanel.width - enemy.getWidth() * ControlPanel.ENEMY_SCALE),
                             -enemy.getHeight() * ControlPanel.ENEMY_SCALE - 5, enemy.getWidth() * ControlPanel.ENEMY_SCALE,
                             enemy.getHeight() * ControlPanel.ENEMY_SCALE, ControlPanel.TRANSPARENT, enemy, control));
-                } else {
-                    control.setBossFight(true);
-                    Pokemon bossPokemon = ControlPanel.location.getBoss();
-                    Player.setBossWall(bossPokemon.getHeight() * ControlPanel.BOSS_SCALE);
-                    Boss boss = new Boss(ControlPanel.width / 2 - bossPokemon.getWidth() * ControlPanel.BOSS_SCALE / 2,
-                            -bossPokemon.getHeight() * ControlPanel.BOSS_SCALE - 100, bossPokemon.getWidth() * ControlPanel.BOSS_SCALE,
-                            bossPokemon.getHeight() * ControlPanel.BOSS_SCALE, ControlPanel.TRANSPARENT, bossPokemon, control);
-                    ControlPanel.toAdd.add(boss);
+                    numSpawned++;
                 }
-                numSpawned++;
+            }
+            if (ControlPanel.enemies.size() == 0 && numSpawned == maxSpawn) {
+                control.setBossFight(true);
+                Pokemon bossPokemon = ControlPanel.location.getBoss();
+                Player.setBossWall(bossPokemon.getHeight() * ControlPanel.BOSS_SCALE);
+                Boss boss = new Boss(ControlPanel.width / 2 - bossPokemon.getWidth() * ControlPanel.BOSS_SCALE / 2,
+                        -bossPokemon.getHeight() * ControlPanel.BOSS_SCALE - 100, bossPokemon.getWidth() * ControlPanel.BOSS_SCALE,
+                        bossPokemon.getHeight() * ControlPanel.BOSS_SCALE, ControlPanel.TRANSPARENT, bossPokemon, control);
+                ControlPanel.toAdd.add(boss);
             }
         }
     }

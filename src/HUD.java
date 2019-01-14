@@ -40,8 +40,8 @@ public abstract class HUD extends GameObject {
 
     public abstract void paintComponent(Graphics2D g2);
 
-    void drawCenteredString(Graphics g, Rectangle r, String s,
-                             Font font) {
+    public static void drawCenteredString(Graphics g, Rectangle r, String s,
+                             Font font, int... alpha) {
         FontRenderContext frc =
                 new FontRenderContext(null, true, true);
         String[] lines = s.split("\n");
@@ -58,21 +58,29 @@ public abstract class HUD extends GameObject {
 
             int a = (r.width / 2) - (rWidth / 2) - rX;
             int b = (r.height / 2) - (rHeight / 2) - rY;
-            drawBorderedString(g, lines[i], r.x + a, r.y + b - lines.length / 2 * lineHeight + i * lineHeight);
+            drawBorderedString(g, lines[i], r.x + a, r.y + b - lines.length / 2 * lineHeight + i * lineHeight, alpha);
         }
     }
 
-    void drawBorderedString(Graphics g, String s, int x, int y) {
+    static void drawBorderedString(Graphics g, String s, int x, int y, int... alpha) {
         /*
         g.setColor(ControlPanel.TEXT_BACKGROUND);
         g.fill3DRect(x - 15, y - height, width + 30, height + 35, false);
         */
         g.setColor(ControlPanel.TEXT_BORDER);
+        if (alpha.length > 0) {
+            g.setColor(new Color(ControlPanel.TEXT_BORDER.getRed(), ControlPanel.TEXT_BORDER.getGreen(),
+                    ControlPanel.TEXT_BORDER.getBlue(), alpha[0]));
+        }
         g.drawString(s, x + BORDER_WIDTH, y + BORDER_WIDTH);
         g.drawString(s, x + BORDER_WIDTH, y - BORDER_WIDTH);
         g.drawString(s, x - BORDER_WIDTH, y + BORDER_WIDTH);
         g.drawString(s, x - BORDER_WIDTH, y - BORDER_WIDTH);
         g.setColor(ControlPanel.TEXT);
+        if (alpha.length > 0) {
+            g.setColor(new Color(ControlPanel.TEXT.getRed(), ControlPanel.TEXT.getGreen(),
+                    ControlPanel.TEXT.getBlue(), alpha[0]));
+        }
         g.drawString(s, x, y);
     }
 }

@@ -10,8 +10,6 @@ public abstract class GameObject {
     protected int height;
     protected Color color;
     private final int MINIMUM_BULLET_SPEED = 3;
-    private final Color YES_HEALTH = new Color(66, 244, 66, 240);
-    private final Color NO_HEALTH = new Color(244, 66, 66, 240);
 
     public GameObject(int x, int y, int width, int height, Color color) {
         this.x = x;
@@ -55,14 +53,6 @@ public abstract class GameObject {
 
     public int getMinimumBulletSpeed() {
         return MINIMUM_BULLET_SPEED;
-    }
-
-    public Color getHealthColor() {
-        return YES_HEALTH;
-    }
-
-    public Color getDamageColor() {
-        return NO_HEALTH;
     }
 
     public Color getColor() {
