@@ -13,18 +13,15 @@ public class Boss extends Enemy {
     // Ends stage when boss dies
     @Override
     public void enemyDeath(Enemy e, Type type) {
-        new HitFlash(0, 0, ControlPanel.width, ControlPanel.height, ControlPanel.TRANSPARENT, type, 200, 100);
-        // Handles recruiting new Pokemon -- not yet fully implemented
+        new HitFlash(0, 0, ControlPanel.width, ControlPanel.height, ControlPanel.TRANSPARENT, type, 500, 100);
         if (ControlPanel.rand.nextInt(1000) < ControlPanel.RECRUIT_RATE) {
             ControlPanel.unlockedPokemon[e.p.getIndex()] = true;
+            ControlPanel.recruitNotice.addNewRecruit(e.getPokemon().getName());
         }
         ControlPanel.win = true;
         control.incrementScore(ControlPanel.SCORE_FOR_BOSS_KILL);
-        ControlPanel.toRemove.add(e.health);
-        e.health = null;
-        this.health = null;
-        e.timer.cancel();
-        e.timer.purge();
+        timer.cancel();
+        timer.purge();
         ControlPanel.toRemove.add(e);
         control.setBossFight(false);
         Background.setMove(false);
@@ -36,7 +33,7 @@ public class Boss extends Enemy {
         TimerTask moveTask = new MoveTask();
         TimerTask imageTask = new ImageTask();
         timer.schedule(attackTask, 0, (int) (1.5 * attack.getAttackDelay() * (ControlPanel.rand.nextInt(200) + 300) / 100));
-        timer.schedule(moveTask, 0, 1000 / ControlPanel.FRAME_RATE);
+        timer.schedule(moveTask, 0, 10);
         timer.schedule(imageTask, 0, 300);
     }
 
@@ -45,14 +42,20 @@ public class Boss extends Enemy {
         @Override
         public void run() {
             try {
-                if (e.getY() < 0) {
-                    e.setY(e.getY() + 3);
+                if (y < 0) {
+                    y += 1;
                 } else {
-                    time++;
-                    e.setX(e.getX() + (int) (3 * Math.cos((double) time / 90)));
+                    if (Math.abs(Player.getPlayer().getX() + Player.getPlayer().getWidth() / 2 - (x + width / 2)) > 5) {
+                        if (Player.getPlayer().getX() + Player.getPlayer().getWidth() / 2 < x + width / 2) {
+                            x -= 1;
+                        }
+                        if (Player.getPlayer().getX() + Player.getPlayer().getWidth() / 2 > x + width / 2) {
+                            x += 1;
+                        }
+                    }
                 }
             } catch (Exception e) {
-
+                e.printStackTrace();
             }
         }
     }

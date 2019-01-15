@@ -2,28 +2,26 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.util.Timer;
 import java.util.TimerTask;
 
 public class StarterSelectHUD extends HUD {
 
-    int currentStarterDexNumIndex = 0;
-    int[] starterDexNums = {1,4,7};
-    Timer timer = new Timer();
+    private int currentStarterDexNumIndex = 0;
+    private int[] starterDexNums = {1,4,7};
     boolean delay = false;
-    BufferedImage toShow;
+    private BufferedImage toShow;
     int width;
     int height;
     int x;
     int y;
 
-    public StarterSelectHUD(ControlPanel control) {
+    StarterSelectHUD(ControlPanel control) {
         super(control);
         this.toShow = Pokemon.values()[starterDexNums[currentStarterDexNumIndex]].getFront1();
-        this.width = this.toShow.getWidth() * DISPLAY_SCALE;
-        this.height = this.toShow.getHeight() * DISPLAY_SCALE;
-        this.x = ControlPanel.width / 2 - Pokemon.values()[starterDexNums[currentStarterDexNumIndex]].getWidth() * DISPLAY_SCALE / 2;
-        this.y = ControlPanel.height / 4 - Pokemon.values()[starterDexNums[currentStarterDexNumIndex]].getHeight() * DISPLAY_SCALE / 2;
+        this.width = this.toShow.getWidth() * BIG_DISPLAY_SCALE;
+        this.height = this.toShow.getHeight() * BIG_DISPLAY_SCALE;
+        this.x = ControlPanel.width / 2 - Pokemon.values()[starterDexNums[currentStarterDexNumIndex]].getWidth() * BIG_DISPLAY_SCALE / 2;
+        this.y = ControlPanel.height / 4 - Pokemon.values()[starterDexNums[currentStarterDexNumIndex]].getHeight() * BIG_DISPLAY_SCALE / 2;
         TimerTask imageTask = new MyImageTask();
         timer.schedule(imageTask, 0, 300);
         TimerTask delayTask = new HUD.DelayTask();
@@ -60,12 +58,12 @@ public class StarterSelectHUD extends HUD {
         }
     }
 
-    public void incrementStarter() {
+    private void incrementStarter() {
         currentStarterDexNumIndex++;
         currentStarterDexNumIndex %= starterDexNums.length;
     }
 
-    public void decrementStarter() {
+    private void decrementStarter() {
         currentStarterDexNumIndex += starterDexNums.length - 1;
         currentStarterDexNumIndex %= starterDexNums.length;
     }
@@ -81,13 +79,18 @@ public class StarterSelectHUD extends HUD {
                 + Pokemon.values()[starterDexNums[currentStarterDexNumIndex]].getType2(), font);
         g2.drawImage(Pokemon.values()[starterDexNums[currentStarterDexNumIndex]].getAttack().getAttackImage(), ControlPanel.width * 3 / 4 - ATTACK_IMAGE_SIZE / 2,
                 ControlPanel.height / 5 - ATTACK_IMAGE_SIZE, ATTACK_IMAGE_SIZE, ATTACK_IMAGE_SIZE, control);
-        drawCenteredString(g2, new Rectangle(ControlPanel.width / 2,ControlPanel.height / 5, ControlPanel.width / 2, ControlPanel.height * 4 / 5),
-                Pokemon.values()[starterDexNums[currentStarterDexNumIndex]].getAttack().getAttackName() +"\n" + Pokemon.values()[starterDexNums[currentStarterDexNumIndex]].getAttack().getType().getName()
+        drawCenteredString(g2, new Rectangle(ControlPanel.width * 3 / 5,ControlPanel.height / 5, ControlPanel.width * 2 / 5, ControlPanel.height * 4 / 5),
+                Pokemon.values()[starterDexNums[currentStarterDexNumIndex]].getAttack().getAttackName() +"\n"
+                        + Pokemon.values()[starterDexNums[currentStarterDexNumIndex]].getAttack().getType().getName()
                         + "\n" + Pokemon.values()[starterDexNums[currentStarterDexNumIndex]].getAttack().getAttackPath()
                         + "\nBase Power: " + Pokemon.values()[starterDexNums[currentStarterDexNumIndex]].getAttack().getAttackDamage()
                         + "\nSize: " + Pokemon.values()[starterDexNums[currentStarterDexNumIndex]].getAttack().getProjectileSize()
                         + "\nSpeed: " + Pokemon.values()[starterDexNums[currentStarterDexNumIndex]].getAttack().getProjectileSpeed()
                         + "\nCooldown: " + Pokemon.values()[starterDexNums[currentStarterDexNumIndex]].getAttack().getAttackDelay(), font);
+        drawCenteredString(g2, new Rectangle(0,ControlPanel.height / 5, ControlPanel.width * 2 / 5, ControlPanel.height * 4 / 5),
+                Pokemon.values()[starterDexNums[currentStarterDexNumIndex]].getName() + "\nHit Points: " + Pokemon.values()[starterDexNums[currentStarterDexNumIndex]].getHitPoints() + "\nAttack: "
+                        + (int) Pokemon.values()[starterDexNums[currentStarterDexNumIndex]].getAttackPower() +"\nSpeed: " + (int) Pokemon.values()[starterDexNums[currentStarterDexNumIndex]].getBaseSpeed(),font);
+        drawCenteredString(g2, new Rectangle(ControlPanel.width - 120, 10, 120, 70), Integer.toString(Pokemon.values()[starterDexNums[currentStarterDexNumIndex]].getIndex()), font);
     }
 
     public void update(ControlPanel panel) {

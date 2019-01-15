@@ -5,7 +5,7 @@ import java.net.URL;
 
 public enum Location {
 
-    PALLET      (0, "Pallet Town", 0, Pokemon.EEVEE, "Grass", "Your friend just got their first Pokemon too!\nTime for your first battle!", "Congratulations on your first win!"),
+    PALLET      (0, "Pallet Town", 1, Pokemon.EEVEE, "Grass", "Your friend just got their first Pokemon too!\nTime for your first battle!", "Congratulations on your first win!"),
     ROUTE1      (1, "Route 1", 25, Pokemon.SPEAROW, "Grass", "Head north and begin your journey!", "Good job!", Pokemon.PIDGEY, Pokemon.RATTATA),
     ROUTE22     (2, "Route 22", 10, Pokemon.MANKEY, "Grass", "Explore Route 22 west of Viridian!", "Excellent findings!", Pokemon.RATTATA, Pokemon.NIDORANF, Pokemon.NIDORANM, Pokemon.SPEAROW),
     ROUTE2      (3, "Route 2", 25, Pokemon.BUTTERFREE, "Grass", "Head north to Viridian Forest!", "You arrived at the forest!", Pokemon.RATTATA, Pokemon.PIDGEY, Pokemon.WEEDLE, Pokemon.CATERPIE, Pokemon.NIDORANF, Pokemon.NIDORANM),
@@ -79,7 +79,7 @@ public enum Location {
             e.printStackTrace();
         }
         this.levelIndex = levelIndex;
-        this.numberOfEnemies = numberOfRegEnemies - 1; // Minus one due to boss
+        this.numberOfEnemies = numberOfRegEnemies;
         this.enemy = enemy;
         this.boss = boss;
         this.intro = intro;
@@ -107,4 +107,12 @@ public enum Location {
     }
 
     public int getLevelIndex() { return levelIndex; }
+
+    public String getIntro() {
+        return intro;
+    }
+
+    public String getOutro() {
+        return outro;
+    }
 }

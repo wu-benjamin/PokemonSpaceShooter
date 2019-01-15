@@ -1,5 +1,3 @@
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -11,38 +9,41 @@ import java.util.*;
 public class ControlPanel extends JPanel implements Runnable {
 
     // CONSTANTS
-    public static final double SPAWN_PER_SECOND = 0.3;
-    public static final int POWER_UP_DROP_RATE = 250;    // Probability out of 1000
-    public static final int RECRUIT_RATE = 50;           // Probability out of 1000
-    public static final Color TRANSPARENT = new Color(0,0,0,0);
-    public static final Color TEXT_BACKGROUND = new Color(92, 167, 237, 150);
-    public static final Color TEXT = new Color(255, 203, 5);
-    public static final Color TEXT_BORDER = new Color(42, 117, 187);
-    public static final Color BACKGROUND_TINT = new Color(0,0,0,150);
-    public static final int SCORE_FOR_BOSS_KILL = 1000;
-    public static final int SCORE_FOR_ENEMY_KILL = 200;
-    public static final int FRAME_RATE = 30;
-    public static final int BOSS_SCALE = 7;
-    public static final int ENEMY_SCALE = 3;
-    public static final int PLAYER_SCALE = 4;
-    public static final int PLAYER_HEALTH_COEF = 3;
-    public static final int BOSS_HEALTH_COEF = 15;
-    public static final int MENU_DELAY_TIME = 150;
-    public static final int MIN_DAMAGE = 1;
+    static final double SPAWN_PER_SECOND = 0.3;
+    static final int POWER_UP_DROP_RATE = 250;    // Probability out of 1000
+    static final int RECRUIT_RATE = 50;           // Probability out of 1000
+    static final Color TRANSPARENT = new Color(0,0,0,0);
+    static final Color TEXT_BACKGROUND = new Color(92, 167, 237, 150);
+    static final Color TEXT = new Color(255, 203, 5);
+    static final Color TEXT_BORDER = new Color(42, 117, 187);
+    static final Color BACKGROUND_TINT = new Color(0,0,0,150);
+    static final int SCORE_FOR_BOSS_KILL = 200;
+    static final int SCORE_FOR_ENEMY_KILL = 200;
+    static final int FRAME_RATE = 30;
+    static final int BOSS_SCALE = 7;
+    static final int ENEMY_SCALE = 3;
+    static final int PLAYER_SCALE = 4;
+    static final int PLAYER_HEALTH_COEF = 3;
+    static final int BOSS_HEALTH_COEF = 15;
+    static final int MENU_DELAY_TIME = 150;
+    static final int MIN_DAMAGE = 1;
 
-    private static ArrayList<GameObject> objects = new ArrayList<>(); // Contains flashes, the player,  backgrounds, health bars, and power-ups
+    private static ArrayList<GameObject> objects = new ArrayList<>(); // Contains flashes, backgrounds, and power-ups
     static ArrayList<GameObject> toAdd = new ArrayList<>();
     static ArrayList<GameObject> toRemove = new ArrayList<>();
-    static ArrayList<HealthBar> healthBars = new ArrayList<>();
+    private static ArrayList<HealthBar> healthBars = new ArrayList<>();
     static ArrayList<HealthBar> healthBarsToAdd = new ArrayList<>();
     static ArrayList<HealthBar> healthBarsToRemove = new ArrayList<>();
-    static ArrayList<Enemy> enemies = new ArrayList<>();
+    private static ArrayList<Enemy> enemies = new ArrayList<>();
     static ArrayList<Enemy> enemiesToAdd = new ArrayList<>();
     static ArrayList<Enemy> enemiesToRemove = new ArrayList<>();
+    private static ArrayList<LocationEncounterDisplay> encounterDisplays = new ArrayList<>();
+    static ArrayList<LocationEncounterDisplay> encounterDisplaysToAdd = new ArrayList<>();
+    static ArrayList<LocationEncounterDisplay> encounterDisplaysToRemove = new ArrayList<>();
     private static ArrayList<Projectile> playerProjectiles = new ArrayList<>();
     static ArrayList<Projectile> playerProjectilesToAdd = new ArrayList<>();
     static ArrayList<Projectile> playerProjectilesToRemove = new ArrayList<>();
-    static ArrayList<Projectile> enemyProjectiles = new ArrayList<>();
+    private static ArrayList<Projectile> enemyProjectiles = new ArrayList<>();
     static ArrayList<Projectile> enemyProjectilesToAdd = new ArrayList<>();
     static ArrayList<Projectile> enemyProjectilesToRemove = new ArrayList<>();
     private static ArrayList<HUD> menus = new ArrayList<>();
@@ -67,13 +68,13 @@ public class ControlPanel extends JPanel implements Runnable {
     private static JFrame frame = new JFrame("Pokémon Space Shooter");
     private static File fontFile;
 
-    static Pokemon playerPokemon = null;
-    static Location location;
+    static Player player = null;
+    static Location location = Location.values()[0];
     static Boss boss;
 
     private boolean bossFight;
-    public static boolean dead = false;
-    public static boolean win = false;
+    static boolean dead = false;
+    static boolean win = false;
 
     // Adds listeners
     public ControlPanel() {
@@ -83,14 +84,14 @@ public class ControlPanel extends JPanel implements Runnable {
         bossFight = false;
     }
 
-    public void start() {
+    private void start() {
         Thread thread = new Thread(this);
         run = true;
         thread.start();
     }
 
     // Gives other classes access to Pokemon font resource
-    public static File getFontFile() {
+    static File getFontFile() {
         return  fontFile;
     }
 
@@ -104,40 +105,40 @@ public class ControlPanel extends JPanel implements Runnable {
         recruitNotice = new NewRecruitNotice(0,0, 1,1, TRANSPARENT);
     }
 
-    public static void resetItems() {
+    static void resetItems() {
         score = 0;
         bombs = 3;
         power = 1;
     }
 
-    public void incrementScore(int increase) {
+    void incrementScore(int increase) {
         score += increase;
         score = Math.min(score, 999999);
     }
 
-    public int getScore() {
-        return score;
-    }
-
-    public void incrementPower() {
+    void incrementPower() {
         power++;
         power = Math.min(5, power);
     }
 
-    public int getPower() {
+    int getScore() {
+        return score;
+    }
+
+    int getPower() {
         return power;
     }
 
-    public int getBombs() {
+    int getBombs() {
         return bombs;
     }
 
-    public void incrementBombs() {
+    void incrementBombs() {
         bombs++;
         bombs = Math.min(bombs, 99);
     }
 
-    public void decrementBombs() {
+    void decrementBombs() {
         bombs--;
         bombs = Math.max(bombs, 0);
     }
@@ -148,6 +149,9 @@ public class ControlPanel extends JPanel implements Runnable {
             try {
                 for (GameObject i : objects) {
                     i.update(this);
+                }
+                if (player != null) {
+                    player.update(this);
                 }
                 for (HealthBar h : healthBars) {
                     h.update(this);
@@ -160,6 +164,9 @@ public class ControlPanel extends JPanel implements Runnable {
                 }
                 for (HUD h : menus) {
                     h.update(this);
+                }
+                for (LocationEncounterDisplay d : encounterDisplays) {
+                    d.update(this);
                 }
                 recruitNotice.update(this);
                 repaint();
@@ -174,6 +181,7 @@ public class ControlPanel extends JPanel implements Runnable {
                 enemyProjectiles.addAll(enemyProjectilesToAdd);
                 menus.addAll(menusToAdd);
                 healthBars.addAll(healthBarsToAdd);
+                encounterDisplays.addAll(encounterDisplaysToAdd);
                 PlayingHUD.decrementNumRemaining(enemiesToRemove.size());
                 // Making changes to objects ArrayList at once prevents ConcurrentModificationException
                 objects.removeAll(toRemove);
@@ -194,6 +202,9 @@ public class ControlPanel extends JPanel implements Runnable {
                 menus.removeAll(menusToRemove);
                 menusToAdd.clear();
                 menusToRemove.clear();
+                encounterDisplays.removeAll(encounterDisplaysToRemove);
+                encounterDisplaysToAdd.clear();
+                encounterDisplaysToRemove.clear();
             } catch (ConcurrentModificationException e) {
                 e.printStackTrace();
             }
@@ -207,6 +218,9 @@ public class ControlPanel extends JPanel implements Runnable {
             for (GameObject i : objects) {
                 i.paintComponent(g2);
             }
+            if (player != null) {
+                player.paintComponent(g2);
+            }
             for (HealthBar h : healthBars) {
                 h.paintComponent(g2);
             }
@@ -219,16 +233,22 @@ public class ControlPanel extends JPanel implements Runnable {
             for (HUD h : menus) {
                 h.paintComponent(g2);
             }
+            for (LocationEncounterDisplay d : encounterDisplays) {
+                d.paintComponent(g2);
+            }
             recruitNotice.paintComponent(g2);
         } catch (ConcurrentModificationException e) {
-            e.printStackTrace();
+            // e.printStackTrace();
         }
     }
 
-    public static void clear() {
+    static void clear() {
         objects.clear();
         toAdd.clear();
         toRemove.clear();
+        healthBars.clear();
+        healthBarsToRemove.clear();
+        healthBarsToAdd.clear();
         enemies.clear();
         enemiesToAdd.clear();
         enemiesToRemove.clear();
@@ -238,18 +258,32 @@ public class ControlPanel extends JPanel implements Runnable {
         enemyProjectiles.clear();
         enemyProjectilesToAdd.clear();
         enemyProjectilesToRemove.clear();
+        player = null;
     }
 
-    public boolean getBossFight() {
+    static void clearLevelEncounterDisplay() {
+        encounterDisplaysToRemove.addAll(encounterDisplays);
+        encounterDisplaysToAdd.clear();
+    }
+
+    static int numEnemies() {
+        return enemies.size();
+    }
+
+    static ArrayList<Enemy> getEnemies() {
+        return new ArrayList<>(enemies);
+    }
+
+    boolean getBossFight() {
         return bossFight;
     }
 
-    public void setBossFight(boolean set) {
+    void setBossFight(boolean set) {
         bossFight = set;
     }
 
     // Loads Pokemon font resource
-    public static void loadFont() {
+    private static void loadFont() {
         try {
             URL resource = Pokemon.class.getResource("/Resources/Pokemon Solid.ttf");
             fontFile = new File(resource.toURI());
@@ -287,8 +321,11 @@ public class ControlPanel extends JPanel implements Runnable {
         }
     }
 
-    public static void save() throws IOException {
+    static void save() throws IOException {
         // Records progress
+        if (score > highScores[location.getLevelIndex()]) {
+            highScores[location.getLevelIndex()] = score;
+        }
         FileWriter out = null;
         try {
             out = new FileWriter("SaveData.txt");
@@ -317,7 +354,7 @@ public class ControlPanel extends JPanel implements Runnable {
                 }
             }
         } catch (FileNotFoundException e) {
-
+            e.printStackTrace();
         } finally {
             if (out != null) {
                 // Closes writer
@@ -401,7 +438,7 @@ class Input implements KeyListener, MouseListener, MouseMotionListener {
         mouseOnPanel = true;
     }
 
-    public boolean keyUsed() {
+    boolean keyUsed() {
         // Checks if any key is pressed
         for (int i = 0; i < keys.length - 1; i++) {
             if (keys[i]) {

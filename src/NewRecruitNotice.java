@@ -3,9 +3,9 @@ import java.util.ArrayList;
 
 public class NewRecruitNotice extends Flash {
 
-    private static ArrayList<String> newRecruitNames = new ArrayList<String>();
-    private static ArrayList<String> newRecruitNamesToAdd = new ArrayList<String>();
-    private static ArrayList<String> newRecruitNamesToRemove = new ArrayList<String>();
+    private static ArrayList<String> newRecruitNames = new ArrayList<>();
+    private static ArrayList<String> newRecruitNamesToAdd = new ArrayList<>();
+    private static ArrayList<String> newRecruitNamesToRemove = new ArrayList<>();
     private static Font font;
     static {
         try {
@@ -15,13 +15,17 @@ public class NewRecruitNotice extends Flash {
         }
     }
 
-    public NewRecruitNotice(int x, int y, int width, int height, Color color) {
+    NewRecruitNotice(int x, int y, int width, int height, Color color) {
         super(x, y, width, height, color, 2000);
     }
 
-    public void addNewRecruit(String newRecruitName) {
+    void addNewRecruit(String newRecruitName) {
         time = 0;
         newRecruitNamesToAdd.add(newRecruitName);
+    }
+
+    int size() {
+        return Math.max(newRecruitNames.size(), newRecruitNamesToAdd.size());
     }
 
     public void update(ControlPanel panel) {

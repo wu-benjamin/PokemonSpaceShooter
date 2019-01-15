@@ -33,7 +33,7 @@ public class PowerUp extends GameObject {
         }
     }
 
-    public PowerUp(int x, int y, int width, int height, Color color, String desc, ControlPanel control) {
+    PowerUp(int x, int y, int width, int height, Color color, String desc, ControlPanel control) {
         super(x, y, width, height, color);
         square = new Rectangle2D.Double(x, y, width, height);
         this.control = control;
@@ -75,11 +75,11 @@ public class PowerUp extends GameObject {
         }
     }
 
-    public static int getSize() {
+    static int getSize() {
         return POWER_UP_SIZE;
     }
 
-    public boolean checkCollision(GameObject obj) {
+    private boolean checkCollision(GameObject obj) {
         return (square.intersects(obj.getObj()));
     }
 
@@ -93,14 +93,14 @@ public class PowerUp extends GameObject {
 
     public void timer() {
         TimerTask task = new MyTask();
-        timer.schedule(task, 0, 1000 / ControlPanel.FRAME_RATE);
+        timer.schedule(task, 0, 20);
     }
 
-    // Moves the powerup down the screen over time
+    // Moves the power-up down the screen over time
     class MyTask extends TimerTask {
         @Override
         public void run() {
-            pow.setY(pow.getY() + 3);
+            pow.setY(pow.getY() + 1);
         }
     }
 }

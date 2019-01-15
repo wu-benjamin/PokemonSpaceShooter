@@ -12,7 +12,8 @@ public abstract class HUD extends GameObject {
     ControlPanel control;
     static Font font;
     static BufferedImage spaceBackground;
-    static final int DISPLAY_SCALE = 7;
+    static final int BIG_DISPLAY_SCALE = 7;
+    static final int SMALL_DISPLAY_SCALE = 4;
     private static final int BORDER_WIDTH = 2;
     public static final int ATTACK_IMAGE_SIZE = 100;
     boolean delay = true;

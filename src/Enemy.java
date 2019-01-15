@@ -10,12 +10,9 @@ public class Enemy extends Character {
     private BufferedImage image2;
     private BufferedImage toShow;
     Attack attack;
-    protected Enemy e;
     private final int X_COMPONENT = 0;
     private final int Y_COMPONENT = 3;
     Timer timer = new Timer();
-    HealthBar health;
-    int time;
     Pokemon p;
 
     Enemy(int x, int y, int width, int height, Color color, Pokemon p, ControlPanel control) {
@@ -34,8 +31,7 @@ public class Enemy extends Character {
         toShow = image1;
         timer();
         ControlPanel.enemiesToAdd.add(this);
-        this.e = this;
-        this.health = new HealthBar(x, y + this.getHeight(), this.getWidth(), 15, color, this/*, control*/);
+        new HealthBar(x, y + this.getHeight(), this.getWidth(), 15, color, this/*, control*/);
     }
 
     public Rectangle2D getObj() {
@@ -44,16 +40,11 @@ public class Enemy extends Character {
 
     public void update(ControlPanel panel) {
         // De-spawns enemies when they are off screen
-        if (this.getX() < 0 || this.getX() > ControlPanel.width || this.getY() > ControlPanel.height) {
-            ControlPanel.toRemove.add(this);
+        if (x < 0 - width || x > ControlPanel.width || y > ControlPanel.height) {
             ControlPanel.enemiesToRemove.add(this);
             timer.cancel();
             timer.purge();
         }
-    }
-
-    private void setToShow(BufferedImage toShow) {
-        this.toShow = toShow;
     }
 
     @Override
@@ -79,10 +70,12 @@ public class Enemy extends Character {
 
     // Ensures players can at least damage the opponent regardless of type effectiveness
     void takeDamage(int damage, Type type) {
-        int hitPointsBefore = this.getHitPoints();
-        this.setHitPoints(this.getHitPoints() - Math.max(ControlPanel.MIN_DAMAGE, damage));
-        if (e.getHitPoints() <= 0 && hitPointsBefore > 0) {
-            e.enemyDeath(e, type);
+        if (!ControlPanel.win && !ControlPanel.dead) {
+            int hitPointsBefore = this.getHitPoints();
+            this.setHitPoints(this.getHitPoints() - Math.max(ControlPanel.MIN_DAMAGE, damage));
+            if (this.getHitPoints() <= 0 && hitPointsBefore > 0) {
+                this.enemyDeath(this, type);
+            }
         }
     }
 
@@ -93,15 +86,12 @@ public class Enemy extends Character {
         if (ControlPanel.rand.nextInt(1000) < /*ControlPanel.RECRUIT_RATE*/ 1000) {
             if (!ControlPanel.unlockedPokemon[e.p.getIndex()]) {
                 ControlPanel.unlockedPokemon[e.p.getIndex()] = true;
-                ControlPanel.recruitNotice.addNewRecruit(this.getPokemon().getName());
+                ControlPanel.recruitNotice.addNewRecruit(e.getPokemon().getName());
             }
         }
         control.incrementScore(ControlPanel.SCORE_FOR_ENEMY_KILL);
-        ControlPanel.toRemove.add(e.health);
-        e.health = null;
-        this.health = null;
-        e.timer.cancel();
-        e.timer.purge();
+        timer.cancel();
+        timer.purge();
         ControlPanel.toRemove.add(e);
         ControlPanel.enemiesToRemove.add(e);
         // Drops power-ups
@@ -140,7 +130,7 @@ public class Enemy extends Character {
         TimerTask attackTask = new AttackTask();
         TimerTask moveTask = new MoveTask();
         TimerTask imageTask = new ImageTask();
-        timer.schedule(attackTask, 0, (int) (1.5 * attack.getAttackDelay() * (ControlPanel.rand.nextInt(200) + 300) / 100));
+        timer.schedule(attackTask, 0, (int) (1.5 * attack.getAttackDelay() / p.getAttackSpeed() * 60 * (ControlPanel.rand.nextInt(200) + 300) / 100));
         timer.schedule(moveTask, 0, 50);
         timer.schedule(imageTask, 0, 300);
     }
@@ -150,8 +140,8 @@ public class Enemy extends Character {
         @Override
         public void run() {
             try {
-                e.setX(e.getX() + X_COMPONENT);
-                e.setY(e.getY() + Y_COMPONENT);
+                x += X_COMPONENT;
+                y += Y_COMPONENT;
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -162,10 +152,10 @@ public class Enemy extends Character {
     class AttackTask extends TimerTask {
         @Override
         public void run() {
-            if (ControlPanel.enemyProjectiles.size() < 25) {
+            if (ControlPanel.numEnemies() < 25) {
                 try {
-                    ControlPanel.enemyProjectilesToAdd.add(new Projectile(e.getX() + e.getWidth() / 2 - attack.getProjectileSize() / 2,
-                            e.getY() + e.getHeight(), attack.getProjectileSize(), color, attack, control, true, X_COMPONENT, Y_COMPONENT));
+                    ControlPanel.enemyProjectilesToAdd.add(new Projectile(x + width / 2 - attack.getProjectileSize() / 2,
+                            y + height, attack.getProjectileSize(), color, attack, control, true, X_COMPONENT, Y_COMPONENT));
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
@@ -177,18 +167,18 @@ public class Enemy extends Character {
     class ImageTask extends TimerTask {
         @Override
         public void run() {
-            double scale = e.getHeight() / e.getToShow().getHeight();
-            int orgHeight = e.getHeight();
-            int orgWidth = e.getWidth();
-            if (e.getToShow().equals(e.getImage1())) {
-                e.setToShow(e.getImage2());
+            double scale = height / toShow.getHeight();
+            int orgHeight = height;
+            int orgWidth = width;
+            if (toShow.equals(image1)) {
+                toShow = image2;
             } else {
-                e.setToShow(e.getImage1());
+                toShow = image1;
             }
-            e.setWidth((int) (e.getToShow().getWidth() * scale));
-            e.setHeight((int) (e.getToShow().getHeight() * scale));
-            e.setX(e.getX() + (orgWidth - e.getWidth()) / 2);
-            e.setY(e.getY() + (orgHeight - e.getHeight()) / 2);
+            width = (int) (toShow.getWidth() * scale);
+            height = (int) (toShow.getHeight() * scale);
+            x += (orgWidth - width) / 2;
+            y += (orgHeight - height) / 2;
         }
     }
 }

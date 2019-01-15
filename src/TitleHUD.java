@@ -18,7 +18,7 @@ public class TitleHUD extends HUD {
         }
     }
 
-    public TitleHUD(ControlPanel control) {
+    TitleHUD(ControlPanel control) {
         super(control);
         TimerTask delayTask = new DelayTask();
         timer.schedule(delayTask, ControlPanel.MENU_DELAY_TIME);
@@ -29,7 +29,7 @@ public class TitleHUD extends HUD {
         drawCenteredString(g2, new Rectangle(0, 0, ControlPanel.width, ControlPanel.height), "Pokémon, The Space Shooter", font);
     }
 
-    public boolean haveStarter() {
+    private boolean haveStarter() {
         for (int i = 0; i < ControlPanel.unlockedPokemon.length; i++) {
             if (ControlPanel.unlockedPokemon[i]) {
                 return true;
@@ -48,7 +48,6 @@ public class TitleHUD extends HUD {
                 }
                 ControlPanel.menusToRemove.add(this);
             }
-            return;
         }
     }
 }

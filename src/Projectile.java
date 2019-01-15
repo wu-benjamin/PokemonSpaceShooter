@@ -1,9 +1,6 @@
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -113,16 +110,14 @@ public class Projectile extends GameObject {
             } else {
                 ControlPanel.enemyProjectilesToRemove.add(this);
             }
-            this.p = null;
         } else {
             boolean hit = false;
             // Attack enemies
-            for (Enemy e : ControlPanel.enemies) {
+            for (Enemy e : ControlPanel.getEnemies()) {
                 // Checks for hits
                 if (checkCollision(e) && !this.isOfEnemy) {
                     e.takeDamage((int) (((double) this.getAttack().getAttackDamage() * (Type.typeEffectiveness(e.getType1(),
                             e.getType2(), this.getAttack().getType())) + 1.0) * (1.0 + (double) control.getPower() / 10.0) / 5.0), attackType);
-                    this.p = null;
                     this.timer.cancel();
                     this.timer.purge();
                     ControlPanel.playerProjectilesToRemove.add(this);
@@ -130,7 +125,6 @@ public class Projectile extends GameObject {
                 }
             }
             if (hit) {
-                this.p = null;
                 this.timer.cancel();
                 this.timer.purge();
                 ControlPanel.playerProjectilesToRemove.add(this);
@@ -140,7 +134,6 @@ public class Projectile extends GameObject {
                 Player.getPlayer().takeDamage((int) ((this.getAttack().getAttackDamage() *
                         (Type.typeEffectiveness(Player.getPlayer().getType1(),
                                 Player.getPlayer().getType2(), this.getAttack().getType())) + 1) / 5));
-                this.p = null;
                 this.timer.cancel();
                 this.timer.purge();
                 ControlPanel.enemyProjectilesToRemove.add(this);

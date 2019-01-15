@@ -170,6 +170,7 @@ public enum Pokemon {
     private int hitPoints;
     private double attackPower;
     private double movementSpeed;
+    private double baseSpeed;
     private double critChance;
     private BufferedImage front1;
     private BufferedImage front2;
@@ -188,7 +189,9 @@ public enum Pokemon {
             this.front2 = ImageIO.read(new File(resource2.toURI()));
             this.back1 = ImageIO.read(new File(resource3.toURI()));
             this.back2 = ImageIO.read(new File(resource4.toURI()));
-        } catch (Exception e) { }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         this.width = (back1.getWidth() + back2.getWidth() + front1.getWidth() + front2.getWidth()) / 4;
         this.height = (back1.getHeight() + back2.getHeight() + front1.getHeight() + front2.getHeight()) / 4;
         this.type1 = type1;
@@ -197,10 +200,11 @@ public enum Pokemon {
         this.index = index;
         this.hitPoints = (int) Math.ceil((hitPoints + defense + special) / 3);
         this.attackPower = (attackPower + special) / 2;
-        this.movementSpeed = (10 + speed / 40) * 1.5;
+        this.movementSpeed = speed / 4;
         this.attackSpeed = speed;
+        this.baseSpeed = speed;
         // To use critChance, generate a number from 1 to 300 (inclusive)
-        // and crit if it is less than criChance
+        // and crit if it is less than critChance
         this.critChance = speed;
     }
 
@@ -252,6 +256,10 @@ public enum Pokemon {
         return movementSpeed;
     }
 
+    public double getBaseSpeed() {
+        return baseSpeed;
+    }
+
     public BufferedImage getFront1() {
         return front1;
     }
@@ -266,5 +274,21 @@ public enum Pokemon {
 
     public BufferedImage getBack2() {
         return back2;
+    }
+
+    public static String appearsIn(Pokemon p) {
+        for (int i = 0; i < Location.values().length; i++) {
+            if (ControlPanel.unlockedLocation[i]) {
+                if (p.equals(Location.values()[i].getBoss())) {
+                    return Location.values()[i].getLevelName();
+                }
+                for (int j = 0; j < Location.values()[i].getEnemies().length; j++) {
+                    if (p.equals(Location.values()[i].getEnemies()[j])) {
+                        return Location.values()[i].getLevelName();
+                    }
+                }
+            }
+        }
+        return "Unknown Location";
     }
 }

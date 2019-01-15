@@ -17,9 +17,8 @@ public class Player extends Character {
     private Pokemon p;
     private Timer timer = new Timer();
     private static Player player;
-    private final int BOMB_DAMAGE = 150;
+    private final int BOMB_DAMAGE = 255;
     private static int bossWall;
-    private HealthBar health;
 
     Player(int x, int y, int width, int height, Color color, Pokemon p, ControlPanel control) {
         super(x, y, width, height, color, p, control);
@@ -30,9 +29,9 @@ public class Player extends Character {
         this.setHitPoints(p.getHitPoints() * ControlPanel.PLAYER_HEALTH_COEF);
         this.setMaxHitPoints(this.getHitPoints());
         this.p = p;
-        this.projectileDelay = p.getAttack().getAttackDelay();
+        this.projectileDelay = p.getAttack().getAttackDelay() / p.getAttackSpeed() * 60;
         toShow = image1;
-        this.health = new HealthBar(x, y + this.getHeight(), this.getWidth(), 15, color, this/*, control*/);
+        new HealthBar(x, y + this.getHeight(), this.getWidth(), 15, color, this/*, control*/);
         timer();
     }
 
@@ -131,8 +130,10 @@ public class Player extends Character {
         // Fires normal projectile based on player Pokemon species
         if ((ControlPanel.input.isKeyDown(KeyEvent.VK_SPACE) || ControlPanel.input.isButtonDown(MouseEvent.BUTTON1)) && !attackDelay) {
             ControlPanel.playerProjectilesToAdd.add(new Projectile(this.getX() + this.getWidth() / 2 - ((int) (p.getAttack().getProjectileSize() *
-                    ((double) control.getPower() + 2) / 2)) / 2, this.getY(), (int) (p.getAttack().getProjectileSize() *
-                    ((double) control.getPower() + 2) / 2), this.getColor(), p.getAttack(), control, false, xComponent, yComponent));
+                    ((double) control.getPower() + 7) / 7)) / 2, this.getY(),
+                    (int) (p.getAttack().getProjectileSize() * ((double) control.getPower() + 7) / 7),
+                    this.getColor(), p.getAttack(), control,
+                    false, xComponent, yComponent));
             attackDelay = true;
             TimerTask projectileTask = new MyProjectileTask();
             timer.schedule(projectileTask, (int) projectileDelay);
@@ -140,15 +141,17 @@ public class Player extends Character {
     }
 
     // Prevents player from going too close to the boss
-    public static void setBossWall(int wall) {
+    static void setBossWall(int wall) {
         bossWall = wall;
     }
 
     // Player takes damage and is checked if alive
     void takeDamage(int damage) {
-        this.setHitPoints(this.getHitPoints() - Math.max(ControlPanel.MIN_DAMAGE, damage));
-        if (player.getHitPoints() <= 0) {
-            player.death();
+        if (!ControlPanel.win && !ControlPanel.dead) {
+            this.setHitPoints(this.getHitPoints() - Math.max(ControlPanel.MIN_DAMAGE, damage));
+            if (player.getHitPoints() <= 0) {
+                player.death();
+            }
         }
     }
 
@@ -174,8 +177,14 @@ public class Player extends Character {
         TimerTask bombTask = new MyBombTask();
         timer.schedule(bombTask, 1000);
         control.decrementBombs();
-        for (Enemy e : ControlPanel.enemies) {
-            e.takeDamage((int) (BOMB_DAMAGE * Type.typeEffectiveness(e.getType1(), e.getType2(), p.getType1())), p.getType1());
+        if (ControlPanel.rand.nextInt(300) < p.getCritChance()) {
+            for (Enemy e : ControlPanel.getEnemies()) {
+                e.takeDamage((int) (2 * BOMB_DAMAGE * Type.typeEffectiveness(e.getType1(), e.getType2(), p.getType1())), p.getType1());
+            }
+        } else {
+            for (Enemy e : ControlPanel.getEnemies()) {
+                e.takeDamage((int) (BOMB_DAMAGE * Type.typeEffectiveness(e.getType1(), e.getType2(), p.getType1())), p.getType1());
+            }
         }
     }
 

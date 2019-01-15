@@ -13,7 +13,7 @@ public class PlayingHUD extends HUD {
     private static final int MIN_TIME_NO_SPAWN = 1000; // time in ms
     private Timer spawnTimer = new Timer();
 
-    public PlayingHUD(ControlPanel control) {
+    PlayingHUD(ControlPanel control) {
         super(control);
         /*
         // Beings looping music (Context sensitive music to be implemented at a later date)
@@ -29,13 +29,10 @@ public class PlayingHUD extends HUD {
         */
         // Add background first so that it is bottom
         ControlPanel.resetItems();
-        this.maxSpawn = ControlPanel.location.getNumberOfEnemies();
+        maxSpawn = ControlPanel.location.getNumberOfEnemies();
         ControlPanel.toAdd.add(new Background(0, -ControlPanel.height, ControlPanel.width, ControlPanel.height, ControlPanel.TRANSPARENT,ControlPanel.location.getBackground(), control, true));
         ControlPanel.toAdd.add(new Background(0, 0, ControlPanel.width, ControlPanel.height, ControlPanel.TRANSPARENT, ControlPanel.location.getBackground(), control, true));
-        ControlPanel.toAdd.add(new Player(ControlPanel.width / 2 - ControlPanel.playerPokemon.getWidth() * ControlPanel.PLAYER_SCALE / 2, ControlPanel.height / 2 - ControlPanel.playerPokemon.getHeight() *
-                ControlPanel.PLAYER_SCALE / 2, ControlPanel.playerPokemon.getWidth() * ControlPanel.PLAYER_SCALE, ControlPanel.playerPokemon.getHeight() * ControlPanel.PLAYER_SCALE,
-                ControlPanel.TRANSPARENT, ControlPanel.playerPokemon, control));
-        this.numRemaining = this.maxSpawn + 1;
+        numRemaining = maxSpawn;
         TimerTask delayTask = new DelayTask();
         timer.schedule(delayTask, ControlPanel.MENU_DELAY_TIME);
         LongNoSpawnTask longNoSpawnTask = new LongNoSpawnTask();
@@ -44,7 +41,7 @@ public class PlayingHUD extends HUD {
         spawnTimer.schedule(justSpawnTask, MIN_TIME_NO_SPAWN);
     }
 
-    public static void decrementNumRemaining(int decrement) {
+    static void decrementNumRemaining(int decrement) {
         numRemaining -= decrement;
     }
 
@@ -61,21 +58,21 @@ public class PlayingHUD extends HUD {
 
     public void update(ControlPanel control) {
         if (!delay) {
-            if (ControlPanel.win) {
+            if (ControlPanel.win && ControlPanel.recruitNotice.size() == 0) {
                 ControlPanel.menusToAdd.add(new WinHUD(control));
                 ControlPanel.menusToRemove.add(this);
                 ControlPanel.clear();
                 return;
             }
-            if (ControlPanel.dead) {
+            if (ControlPanel.dead && ControlPanel.recruitNotice.size() == 0) {
                 ControlPanel.menusToAdd.add(new DeadHUD(control));
                 ControlPanel.menusToRemove.add(this);
                 ControlPanel.clear();
                 return;
             }
-            if (numSpawned <= maxSpawn) {
+            if (numSpawned < maxSpawn) {
                 if ((ControlPanel.rand.nextInt((int) (ControlPanel.FRAME_RATE / ControlPanel.SPAWN_PER_SECOND)) == 0 || longTimeNoSpawn) && !justSpawned) {
-                    if (numSpawned < maxSpawn) {
+                    if (numSpawned < maxSpawn - 1) {
                         Pokemon enemy = ControlPanel.location.getEnemies()[ControlPanel.rand.nextInt(ControlPanel.location.getEnemies().length)];
                         ControlPanel.toAdd.add(new Enemy(ControlPanel.rand.nextInt(ControlPanel.width - enemy.getWidth() * ControlPanel.ENEMY_SCALE),
                                 -enemy.getHeight() * ControlPanel.ENEMY_SCALE - 5, enemy.getWidth() * ControlPanel.ENEMY_SCALE,
@@ -92,10 +89,10 @@ public class PlayingHUD extends HUD {
                     longTimeNoSpawn = false;
                     justSpawned = true;
                 }
-                if (ControlPanel.enemies.size() == 0 && numSpawned == maxSpawn) {
+                if (ControlPanel.numEnemies() == 0 && numSpawned == maxSpawn - 1) {
                     control.setBossFight(true);
                     Pokemon bossPokemon = ControlPanel.location.getBoss();
-                    Player.setBossWall(bossPokemon.getHeight() * ControlPanel.BOSS_SCALE);
+                    Player.setBossWall(bossPokemon.getHeight() * ControlPanel.BOSS_SCALE + 40);
                     Boss boss = new Boss(ControlPanel.width / 2 - bossPokemon.getWidth() * ControlPanel.BOSS_SCALE / 2,
                             -bossPokemon.getHeight() * ControlPanel.BOSS_SCALE - 100, bossPokemon.getWidth() * ControlPanel.BOSS_SCALE,
                             bossPokemon.getHeight() * ControlPanel.BOSS_SCALE, ControlPanel.TRANSPARENT, bossPokemon, control);
