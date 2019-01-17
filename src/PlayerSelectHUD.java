@@ -37,7 +37,7 @@ public class PlayerSelectHUD extends HUD {
         TimerTask imageTask = new MyImageTask();
         timer.schedule(imageTask, 0, 300);
         TimerTask delayTask = new DelayTask();
-        timer.schedule(delayTask, ControlPanel.MENU_DELAY_TIME);
+        timer.schedule(delayTask, 500);
     }
 
     private void incrementPlayer() {
@@ -95,22 +95,29 @@ public class PlayerSelectHUD extends HUD {
                 Pokemon.values()[player].getName() + "\nHit Points: " + Pokemon.values()[player].getHitPoints() + "\nAttack: "
                 + (int) Pokemon.values()[player].getAttackPower() +"\nSpeed: " + (int) Pokemon.values()[player].getBaseSpeed(),font);
         drawCenteredString(g2, new Rectangle(ControlPanel.width - 120, 10, 120, 70), Integer.toString(Pokemon.values()[player].getIndex()), font);
+        g2.setColor(new Color (120, 120, 120));
+        g2.fill3DRect(8, ControlPanel.height / 2 - 17, 44, 34, true);
+        g2.fill3DRect(ControlPanel.width - 52, ControlPanel.height / 2 - 17, 44, 34, true);
+        g2.drawImage(HUD.leftArrow,10, ControlPanel.height / 2 - 15, 40, 30, control);
+        g2.drawImage(HUD.rightArrow,ControlPanel.width - 50, ControlPanel.height / 2 - 15, 40, 30, control);
     }
 
     public void update(ControlPanel panel) {
         if (!delay) {
             boolean changed = true;
-            if (ControlPanel.unlockedPokemon[player] && (ControlPanel.input.isKeyDown(KeyEvent.VK_SPACE) || ControlPanel.input.isButtonDown(MouseEvent.BUTTON1))) {
+            if (ControlPanel.input.isKeyDown(KeyEvent.VK_LEFT) || ControlPanel.input.isKeyDown(KeyEvent.VK_A)
+                    || ControlPanel.input.x > 10 && ControlPanel.input.x < 50 && ControlPanel.input.y > ControlPanel.height / 2 - 15 && ControlPanel.input.y < ControlPanel.height / 2 + 15 && ControlPanel.input.isButtonDown(MouseEvent.BUTTON1)) {
+                decrementPlayer();
+            } else if (ControlPanel.input.isKeyDown(KeyEvent.VK_RIGHT) || ControlPanel.input.isKeyDown(KeyEvent.VK_D)
+                    || ControlPanel.input.x > ControlPanel.width - 50 && ControlPanel.input.x < ControlPanel.width - 10 && ControlPanel.input.y > ControlPanel.height / 2 - 15 && ControlPanel.input.y < ControlPanel.height / 2 + 15 && ControlPanel.input.isButtonDown(MouseEvent.BUTTON1)) {
+                incrementPlayer();
+            } else if (ControlPanel.unlockedPokemon[player] && (ControlPanel.input.isKeyDown(KeyEvent.VK_SPACE) || ControlPanel.input.isButtonDown(MouseEvent.BUTTON1))) {
                 ControlPanel.player = new Player(ControlPanel.width / 2 - Pokemon.values()[player].getWidth() * ControlPanel.PLAYER_SCALE / 2, ControlPanel.height / 2 - Pokemon.values()[player].getHeight() *
-                                ControlPanel.PLAYER_SCALE / 2, Pokemon.values()[player].getWidth() * ControlPanel.PLAYER_SCALE, Pokemon.values()[player].getHeight() * ControlPanel.PLAYER_SCALE,
+                        ControlPanel.PLAYER_SCALE / 2, Pokemon.values()[player].getWidth() * ControlPanel.PLAYER_SCALE, Pokemon.values()[player].getHeight() * ControlPanel.PLAYER_SCALE,
                         ControlPanel.TRANSPARENT, Pokemon.values()[player], control);
                 ControlPanel.menusToAdd.add(new PlayingHUD(control));
                 ControlPanel.menusToRemove.add(this);
                 return;
-            } else if (ControlPanel.input.isKeyDown(KeyEvent.VK_LEFT)) {
-                decrementPlayer();
-            } else if (ControlPanel.input.isKeyDown(KeyEvent.VK_RIGHT)) {
-                incrementPlayer();
             } else {
                 changed = false;
             }

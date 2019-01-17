@@ -1,3 +1,4 @@
+import javax.naming.ldap.Control;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -22,13 +23,13 @@ public class LevelSelectHUD extends HUD {
         }
         this.numberOfLevels = ControlPanel.unlockedLocation.length;
         TimerTask delayTask = new DelayTask();
-        timer.schedule(delayTask, ControlPanel.MENU_DELAY_TIME);
+        timer.schedule(delayTask, 500);
         this.possibleEncounters = new ArrayList<>();
         possibleEncounters.add(Location.values()[level].getBoss()); // Boss should get index 0
         possibleEncounters.addAll(Arrays.asList(Location.values()[level].getEnemies()));
         this.nextDisplay = 0;
         DisplayTask displayTask = new DisplayTask();
-        timer.schedule(displayTask, 0, 500);
+        timer.schedule(displayTask, 0, 1000);
         this.containsNewPokemon = false;
         for (int i = 0; i < possibleEncounters.size(); i++) {
             if (!ControlPanel.unlockedPokemon[possibleEncounters.get(i).getIndex()]) {
@@ -100,21 +101,28 @@ public class LevelSelectHUD extends HUD {
         drawBorderedString(g2, "High Score: " + ControlPanel.highScores[level], 20, 70);
         drawBorderedString(g2, "Max Score: " + (ControlPanel.SCORE_FOR_ENEMY_KILL * (Location.values()[level].getNumberOfEnemies() - 1) + ControlPanel.SCORE_FOR_BOSS_KILL), 20, 150);
         drawBorderedString(g2, "Number of Enemies: " + Location.values()[level].getNumberOfEnemies(), 20, 230);
+        g2.setColor(new Color (120, 120, 120));
+        g2.fill3DRect(8, ControlPanel.height / 2 - 17, 44, 34, true);
+        g2.fill3DRect(ControlPanel.width - 52, ControlPanel.height / 2 - 17, 44, 34, true);
+        g2.drawImage(HUD.leftArrow,10, ControlPanel.height / 2 - 15, 40, 30, control);
+        g2.drawImage(HUD.rightArrow,ControlPanel.width - 50, ControlPanel.height / 2 - 15, 40, 30, control);
     }
 
     public void update(ControlPanel panel) {
         if (!delay) {
             boolean changed = true;
-            if (ControlPanel.unlockedLocation[level] && (ControlPanel.input.isKeyDown(KeyEvent.VK_SPACE) || ControlPanel.input.isButtonDown(MouseEvent.BUTTON1))) {
+            if (ControlPanel.input.isKeyDown(KeyEvent.VK_LEFT) || ControlPanel.input.isKeyDown(KeyEvent.VK_A)
+                    || ControlPanel.input.x > 10 && ControlPanel.input.x < 50 && ControlPanel.input.y > ControlPanel.height / 2 - 15 && ControlPanel.input.y < ControlPanel.height / 2 + 15 && ControlPanel.input.isButtonDown(MouseEvent.BUTTON1)) {
+                decrementLevel();
+            } else if (ControlPanel.input.isKeyDown(KeyEvent.VK_RIGHT) || ControlPanel.input.isKeyDown(KeyEvent.VK_D)
+                    || ControlPanel.input.x > ControlPanel.width - 50 && ControlPanel.input.x < ControlPanel.width - 10 && ControlPanel.input.y > ControlPanel.height / 2 - 15 && ControlPanel.input.y < ControlPanel.height / 2 + 15 && ControlPanel.input.isButtonDown(MouseEvent.BUTTON1)) {
+                incrementLevel();
+            } else if (ControlPanel.unlockedLocation[level] && (ControlPanel.input.isKeyDown(KeyEvent.VK_SPACE) || ControlPanel.input.isButtonDown(MouseEvent.BUTTON1))) {
                 ControlPanel.location = Location.values()[level];
                 ControlPanel.clearLevelEncounterDisplay();
                 ControlPanel.menusToAdd.add(new LocationIntroHUD(control));
                 ControlPanel.menusToRemove.add(this);
                 return;
-            } else if (ControlPanel.input.isKeyDown(KeyEvent.VK_LEFT)) {
-                decrementLevel();
-            } else if (ControlPanel.input.isKeyDown(KeyEvent.VK_RIGHT)) {
-                incrementLevel();
             } else {
                 changed = false;
             }

@@ -25,6 +25,7 @@ public class Boss extends Enemy {
         ControlPanel.enemiesToRemove.add(e);
         control.setBossFight(false);
         Background.setMove(false);
+        ControlPanel.boss = null;
     }
 
     @Override

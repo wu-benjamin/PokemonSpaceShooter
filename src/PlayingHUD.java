@@ -93,6 +93,8 @@ public class PlayingHUD extends HUD {
                             -bossPokemon.getHeight() * ControlPanel.BOSS_SCALE - 100, bossPokemon.getWidth() * ControlPanel.BOSS_SCALE,
                             bossPokemon.getHeight() * ControlPanel.BOSS_SCALE, ControlPanel.TRANSPARENT, bossPokemon, control);
                     ControlPanel.enemiesToAdd.add(boss);
+                    ControlPanel.boss = boss;
+                    numSpawned++;
                 }
             }
         }

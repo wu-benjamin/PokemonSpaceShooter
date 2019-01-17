@@ -11,7 +11,7 @@ public class ControlPanel extends JPanel implements Runnable {
     // CONSTANTS
     static final double SPAWN_PER_SECOND = 0.3;
     static final int POWER_UP_DROP_RATE = 250;    // Probability out of 1000
-    static final int RECRUIT_RATE = 50;           // Probability out of 1000
+    static final int RECRUIT_RATE = 1000;           // Probability out of 1000
     static final Color TRANSPARENT = new Color(0,0,0,0);
     static final Color TEXT = new Color(255, 203, 5);
     static final Color TEXT_BORDER = new Color(42, 117, 187);
@@ -23,7 +23,7 @@ public class ControlPanel extends JPanel implements Runnable {
     static final int ENEMY_SCALE = 3;
     static final int PLAYER_SCALE = 4;
     static final int PLAYER_HEALTH_COEF = 3;
-    static final int BOSS_HEALTH_COEF = 15;
+    static final int BOSS_HEALTH_COEF = 30;
     static final int MENU_DELAY_TIME = 150;
     static final int MIN_DAMAGE = 1;
 
@@ -376,9 +376,10 @@ public class ControlPanel extends JPanel implements Runnable {
             }
         } catch (Exception e) {
             // Creates new save file if no save file currently exists or is corrupted
+            e.printStackTrace();
+        } finally {
             unlockedLocation[0] = true;
             save();
-        } finally {
             if (in != null) {
                 // Closes reader
                 in.close();

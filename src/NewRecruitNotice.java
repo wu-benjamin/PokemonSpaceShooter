@@ -31,6 +31,7 @@ public class NewRecruitNotice extends Flash {
     public void update(ControlPanel panel) {
         if (time > duration) {
             if (newRecruitNames.size() > 0) {
+                System.out.print("hi");
                 newRecruitNamesToRemove.add(newRecruitNames.get(0));
                 time = 0;
             }

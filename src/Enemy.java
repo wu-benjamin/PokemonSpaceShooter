@@ -81,7 +81,7 @@ public class Enemy extends Character {
     public void enemyDeath(Enemy e, Type type) {
         // new HitFlash(0, 0, ControlPanel.width, ControlPanel.height, ControlPanel.TRANSPARENT, type, 100, 70);
         // Handles recruiting new Pokemon -- not yet fully implemented
-        if (ControlPanel.rand.nextInt(1000) < /*ControlPanel.RECRUIT_RATE*/ 1000) {
+        if (ControlPanel.rand.nextInt(1000) < ControlPanel.RECRUIT_RATE) {
             if (!ControlPanel.unlockedPokemon[e.p.getIndex()]) {
                 ControlPanel.unlockedPokemon[e.p.getIndex()] = true;
                 ControlPanel.recruitNotice.addNewRecruit(e.getPokemon().getName());

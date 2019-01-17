@@ -2,84 +2,45 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="21b91a9d-a976-4126-a397-a8b917aae4a6" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Bomb.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/BoomerangProjectile.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/HomingProjectile.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/LinearProjectile.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/OranBerry.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/OscillatingProjectile.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/ProjectileLauncher.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/RadialProjectile.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/RareCandy.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SaveData.txt" beforeDir="false" afterPath="$PROJECT_DIR$/SaveData.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Attack.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Attack.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Background.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Background.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Boss$MoveTask.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Boss$MoveTask.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Boss.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Boss.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/BossApproachHUD.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Character.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Character.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/ControlPanel$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/ControlPanel$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/ControlPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/ControlPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/DeadHUD.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/DeadHUD.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Enemy$AttackTask.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Enemy$AttackTask.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Enemy$ImageTask.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Enemy$ImageTask.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Enemy$MoveTask.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Enemy$MoveTask.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/ControlPanel$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/ControlPanel.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Enemy.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Enemy.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Flash$OpaqueTask.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Flash$OpaqueTask.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Flash.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Flash.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/HUD$DelayTask.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/HUD$DelayTask.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/HUD.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/HUD.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/HitFlash.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/HitFlash.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Input.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Input.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/HomingProjectile$MoveTask.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/HomingProjectile$MoveTask.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/HomingProjectile.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/HomingProjectile.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Input.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/LevelSelectHUD$DisplayTask.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/LevelSelectHUD$DisplayTask.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/LevelSelectHUD.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/LevelSelectHUD.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Location.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Location.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/LocationEncounterDisplay$ImageTask.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/LocationEncounterDisplay$ImageTask.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/LocationEncounterDisplay$MoveTask.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/LocationEncounterDisplay$MoveTask.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/LocationEncounterDisplay.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/LocationEncounterDisplay.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/NewRecruitNotice.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/NewRecruitNotice.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Player$MyBombTask.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Player$MyBombTask.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Player$MyImageTask.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Player$MyImageTask.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Player$MyProjectileTask.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Player$MyProjectileTask.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Player.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Player.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/PlayerSelectHUD$MyImageTask.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/PlayerSelectHUD$MyImageTask.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/PlayerSelectHUD.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/PlayerSelectHUD.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/PlayingHUD$JustSpawnTask.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/PlayingHUD$JustSpawnTask.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/PlayingHUD$LongNoSpawnTask.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/PlayingHUD$LongNoSpawnTask.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/PlayingHUD.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/PlayingHUD.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Pokemon.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Pokemon.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/PowerUp$MyTask.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/PowerUp$MoveTask.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/PowerUp$MoveTask.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/PowerUp.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/PowerUp.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Projectile$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Projectile$MyTask.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Projectile.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/Projectile.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/StarterSelectHUD$DelayTask.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/StarterSelectHUD$DelayTask.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/StarterSelectHUD$MyImageTask.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/StarterSelectHUD$MyImageTask.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/StarterSelectHUD.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/StarterSelectHUD.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/TitleHUD.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/TitleHUD.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/WinHUD.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PokemonSpaceShooter/WinHUD.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Attack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Attack.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Background.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Background.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Boss.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Boss.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/BossApproachHUD.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BossApproachNotice.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Character.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Character.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ControlPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ControlPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DeadHUD.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DeadHUD.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Enemy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Enemy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Flash.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Flash.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HUD.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/HUD.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HitFlash.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/HitFlash.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/LevelSelectHUD.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/LevelSelectHUD.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Location.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Location.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/LocationEncounterDisplay.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/LocationEncounterDisplay.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/NewRecruitNotice.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/NewRecruitNotice.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Player.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/PlayerSelectHUD.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/PlayerSelectHUD.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/PlayingHUD.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/PlayingHUD.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/PowerUp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/PowerUp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Projectile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Projectile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TitleHUD.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TitleHUD.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/WinHUD.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/WinHUD.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Resources/Heart.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/Resources/Heart.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Resources/LeftArrow.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/Resources/LeftArrow.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/StarterSelectHUD.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/StarterSelectHUD.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -91,23 +52,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="ControlPanel.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ControlPanel.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="127">
-              <caret line="64" column="33" lean-forward="true" selection-start-line="64" selection-start-column="33" selection-end-line="64" selection-end-column="33" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="HUD.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/HUD.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="22" column="61" lean-forward="true" selection-start-line="22" selection-start-column="61" selection-end-line="22" selection-end-column="61" />
+            <state relative-caret-position="75">
+              <caret line="13" column="7" selection-start-line="13" selection-start-column="7" selection-end-line="13" selection-end-column="7" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -115,11 +64,29 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="LevelSelectHUD.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/LevelSelectHUD.java">
+      <file leaf-file-name="NewRecruitNotice.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/NewRecruitNotice.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="277">
-              <caret line="43" column="51" lean-forward="true" selection-start-line="43" selection-start-column="51" selection-end-line="43" selection-end-column="51" />
+            <state relative-caret-position="270">
+              <caret line="21" column="47" selection-start-line="21" selection-start-column="47" selection-end-line="21" selection-end-column="47" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Flash.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Flash.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="30">
+              <caret line="5" column="22" selection-start-line="5" selection-start-column="22" selection-end-line="5" selection-end-column="22" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ControlPanel.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/ControlPanel.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="15">
+              <caret line="24" column="44" selection-start-line="24" selection-start-column="44" selection-end-line="24" selection-end-column="44" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -127,11 +94,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="LocationEncounterDisplay.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="LocationEncounterDisplay.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/LocationEncounterDisplay.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="624">
-              <caret line="66" column="38" selection-start-line="66" selection-start-column="38" selection-end-line="66" selection-end-column="38" />
+            <state relative-caret-position="30">
+              <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -142,8 +109,8 @@
       <file leaf-file-name="PlayingHUD.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/PlayingHUD.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-398">
-              <caret line="28" column="10" selection-start-line="28" selection-start-column="10" selection-end-line="28" selection-end-column="10" />
+            <state relative-caret-position="1380">
+              <caret line="96" column="33" selection-start-line="96" selection-start-column="33" selection-end-line="96" selection-end-column="33" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -154,7 +121,8 @@
       <file leaf-file-name="TitleHUD.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/TitleHUD.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
+            <state relative-caret-position="270">
+              <caret line="21" column="28" selection-start-line="21" selection-start-column="28" selection-end-line="21" selection-end-column="28" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -162,29 +130,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PowerUp.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/PowerUp.java">
+      <file leaf-file-name="StarterSelectHUD.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/StarterSelectHUD.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="975">
-              <caret line="73" column="51" selection-start-line="73" selection-start-column="51" selection-end-line="73" selection-end-column="51" />
+            <state relative-caret-position="30">
+              <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
               <folding>
-                <element signature="e#2061#2062#0" expanded="true" />
-                <element signature="e#2090#2091#0" expanded="true" />
-                <element signature="e#2953#2954#0" expanded="true" />
-                <element signature="e#2989#2990#0" expanded="true" />
-                <element signature="e#3099#3100#0" expanded="true" />
-                <element signature="e#3575#3576#0" expanded="true" />
-                <element signature="e#3603#3604#0" expanded="true" />
+                <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RareCandy.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/RareCandy.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="8" column="45" selection-start-line="8" selection-start-column="45" selection-end-line="8" selection-end-column="45" />
             </state>
           </provider>
         </entry>
@@ -192,20 +145,26 @@
       <file leaf-file-name="Enemy.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Enemy.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1335">
-              <caret line="97" column="91" lean-forward="true" selection-start-line="97" selection-start-column="91" selection-end-line="97" selection-end-column="91" />
+            <state relative-caret-position="1065">
+              <caret line="83" column="46" selection-start-line="83" selection-start-column="46" selection-end-line="83" selection-end-column="46" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#4611#4612#0" expanded="true" />
+                <element signature="e#4640#4641#0" expanded="true" />
+                <element signature="e#4669#4670#0" expanded="true" />
+                <element signature="e#4697#4698#0" expanded="true" />
+                <element signature="e#4728#4729#0" expanded="true" />
+                <element signature="e#4756#4757#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="OranBerry.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/OranBerry.java">
+      <file leaf-file-name="Boss.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Boss.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="8" selection-end-line="10" />
+            <state relative-caret-position="30">
+              <caret line="3" column="13" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -221,13 +180,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>new</find>
-      <find>pla</find>
-      <find>playe</find>
-      <find>num</find>
-      <find>clear</find>
-      <find>void clear()</find>
-      <find>this.timer</find>
       <find>timer.</find>
       <find>timer.can</find>
       <find>timer</find>
@@ -251,6 +203,13 @@
       <find>purge</find>
       <find>setup</find>
       <find>space</find>
+      <find>displa</find>
+      <find>displaytask</find>
+      <find>save</find>
+      <find>health</find>
+      <find>dead</find>
+      <find>notice</find>
+      <find>delay</find>
     </findStrings>
     <replaceStrings>
       <replace>(int) (attack.getProjectileSize() *  ((double) control.getPower() + 2) / 2)</replace>
@@ -274,20 +233,16 @@
         <option value="$PROJECT_DIR$/src/LocationIntroHUD.java" />
         <option value="$PROJECT_DIR$/src/LocationOutroHUD.java" />
         <option value="$PROJECT_DIR$/src/Pokemon.java" />
-        <option value="$PROJECT_DIR$/src/StarterSelectHUD.java" />
         <option value="$PROJECT_DIR$/src/WinHUD.java" />
         <option value="$PROJECT_DIR$/src/DeadHUD.java" />
         <option value="$PROJECT_DIR$/src/LinearProjectile.java" />
         <option value="$PROJECT_DIR$/src/BoomerangProjectile.java" />
         <option value="$PROJECT_DIR$/src/Character.java" />
-        <option value="$PROJECT_DIR$/src/Boss.java" />
         <option value="$PROJECT_DIR$/src/Player.java" />
         <option value="$PROJECT_DIR$/src/Flash.java" />
         <option value="$PROJECT_DIR$/src/HitFlash.java" />
         <option value="$PROJECT_DIR$/src/BossApproachHUD.java" />
         <option value="$PROJECT_DIR$/src/BossApproachNotice.java" />
-        <option value="$PROJECT_DIR$/src/NewRecruitNotice.java" />
-        <option value="$PROJECT_DIR$/src/PlayerSelectHUD.java" />
         <option value="$PROJECT_DIR$/src/Location.java" />
         <option value="$PROJECT_DIR$/src/OscillatingProjectile.java" />
         <option value="$PROJECT_DIR$/src/Projectile.java" />
@@ -300,17 +255,22 @@
         <option value="$PROJECT_DIR$/src/OranBerry.java" />
         <option value="$PROJECT_DIR$/src/RareCandy.java" />
         <option value="$PROJECT_DIR$/src/PowerUp.java" />
-        <option value="$PROJECT_DIR$/src/Enemy.java" />
-        <option value="$PROJECT_DIR$/src/ControlPanel.java" />
         <option value="$PROJECT_DIR$/src/TitleHUD.java" />
         <option value="$PROJECT_DIR$/src/HUD.java" />
-        <option value="$PROJECT_DIR$/src/PlayingHUD.java" />
-        <option value="$PROJECT_DIR$/src/LevelSelectHUD.java" />
         <option value="$PROJECT_DIR$/src/LocationEncounterDisplay.java" />
+        <option value="$PROJECT_DIR$/src/PlayerSelectHUD.java" />
+        <option value="$PROJECT_DIR$/src/LevelSelectHUD.java" />
+        <option value="$PROJECT_DIR$/src/Boss.java" />
+        <option value="$PROJECT_DIR$/src/Enemy.java" />
+        <option value="$PROJECT_DIR$/src/PlayingHUD.java" />
+        <option value="$PROJECT_DIR$/src/StarterSelectHUD.java" />
+        <option value="$PROJECT_DIR$/src/NewRecruitNotice.java" />
+        <option value="$PROJECT_DIR$/src/ControlPanel.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="77" />
     <option name="y" value="23" />
     <option name="width" value="1680" />
     <option name="height" value="960" />
@@ -415,13 +375,12 @@
       <window_info anchor="right" id="Palette&#9;" order="3" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="right" id="Maven Projects" order="3" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.3295711" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.2268623" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Designer" order="2" />
       <window_info content_ui="combo" id="Project" order="0" weight="0.22202381" />
       <window_info anchor="bottom" id="Statistic" order="8" />
-      <window_info active="true" anchor="bottom" id="Find" order="1" visible="true" weight="0.0" />
       <window_info id="Structure" order="1" side_tool="true" visible="true" weight="0.12440476" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
@@ -431,25 +390,26 @@
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info active="true" anchor="bottom" id="Find" order="1" visible="true" weight="0.0" />
     </layout>
     <layout-to-restore>
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.17832957" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22202381" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Version Control" order="9" />
-      <window_info anchor="bottom" id="Find" order="1" />
       <window_info id="Designer" order="2" />
+      <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="right" id="Palette&#9;" order="3" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Version Control" order="9" />
+      <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Messages" order="10" weight="0.3261851" />
       <window_info anchor="right" id="Maven Projects" order="4" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -583,30 +543,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Boss.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="173">
-          <caret line="21" column="57" selection-start-line="21" selection-start-column="54" selection-end-line="21" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/HealthBar.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
           <caret line="3" column="13" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/DeadHUD.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="12" selection-start-line="11" selection-start-column="12" selection-end-line="11" selection-end-column="12" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -630,44 +570,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/StarterSelectHUD.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1098">
-          <caret line="20" column="61" selection-start-line="20" selection-start-column="61" selection-end-line="20" selection-end-column="61" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/WinHUD.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="49">
-          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Pokemon.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
           <caret line="7" column="12" selection-start-line="7" selection-start-column="12" selection-end-line="7" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Player.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1475">
-          <caret line="176" column="24" selection-start-line="176" selection-start-column="24" selection-end-line="176" selection-end-column="24" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#7396#7397#0" expanded="true" />
-            <element signature="e#7466#7467#0" expanded="true" />
-            <element signature="e#7856#7857#0" expanded="true" />
-            <element signature="e#7896#7897#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -678,53 +584,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/NewRecruitNotice.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="14" column="9" lean-forward="true" selection-start-line="14" selection-start-column="9" selection-end-line="14" selection-end-column="9" />
-          <folding>
-            <element signature="e#640#641#0" expanded="true" />
-            <element signature="e#695#696#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Flash.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="5" column="22" selection-start-line="5" selection-start-column="22" selection-end-line="5" selection-end-column="22" />
-          <folding>
-            <element signature="e#818#819#0" expanded="true" />
-            <element signature="e#846#847#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/BossApproachNotice.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="12" lean-forward="true" selection-start-line="6" selection-start-column="12" selection-end-line="6" selection-end-column="12" />
-          <folding>
-            <element signature="e#360#361#0" expanded="true" />
-            <element signature="e#398#399#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Location.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="750">
           <caret line="50" column="117" selection-start-line="50" selection-start-column="117" selection-end-line="50" selection-end-column="117" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/PlayerSelectHUD.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="313">
-          <caret line="84" column="44" selection-start-line="84" selection-start-column="44" selection-end-line="84" selection-end-column="44" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -766,9 +629,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="244">
           <caret line="72" column="53" lean-forward="true" selection-start-line="72" selection-start-column="53" selection-end-line="72" selection-end-column="53" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -790,9 +650,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
           <caret line="8" column="52" lean-forward="true" selection-start-line="8" selection-start-column="52" selection-end-line="8" selection-end-column="52" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -800,12 +657,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
           <caret line="8" column="5" lean-forward="true" selection-end-line="10" />
-          <folding>
-            <element signature="e#109#110#0" expanded="true" />
-            <element signature="e#160#161#0" expanded="true" />
-            <element signature="e#72#73#0" expanded="true" />
-            <element signature="e#112#113#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -818,16 +669,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/PowerUp.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="975">
+        <state relative-caret-position="915">
           <caret line="73" column="51" selection-start-line="73" selection-start-column="51" selection-end-line="73" selection-end-column="51" />
           <folding>
-            <element signature="e#2061#2062#0" expanded="true" />
-            <element signature="e#2090#2091#0" expanded="true" />
-            <element signature="e#2953#2954#0" expanded="true" />
-            <element signature="e#2989#2990#0" expanded="true" />
-            <element signature="e#3099#3100#0" expanded="true" />
-            <element signature="e#3575#3576#0" expanded="true" />
-            <element signature="e#3603#3604#0" expanded="true" />
+            <element signature="e#2606#2607#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -839,49 +684,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Enemy.java">
+    <entry file="file://$PROJECT_DIR$/src/DeadHUD.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1335">
-          <caret line="97" column="91" lean-forward="true" selection-start-line="97" selection-start-column="91" selection-end-line="97" selection-end-column="91" />
+        <state relative-caret-position="225">
+          <caret line="15" column="34" lean-forward="true" selection-start-line="15" selection-start-column="34" selection-end-line="15" selection-end-column="34" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ControlPanel.java">
+    <entry file="file://$PROJECT_DIR$/src/WinHUD.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="127">
-          <caret line="64" column="33" lean-forward="true" selection-start-line="64" selection-start-column="33" selection-end-line="64" selection-end-column="33" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/TitleHUD.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/HUD.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="22" column="61" lean-forward="true" selection-start-line="22" selection-start-column="61" selection-end-line="22" selection-end-column="61" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/PlayingHUD.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-398">
-          <caret line="28" column="10" selection-start-line="28" selection-start-column="10" selection-end-line="28" selection-end-column="10" />
+        <state relative-caret-position="75">
+          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -890,8 +706,72 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/LevelSelectHUD.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="277">
-          <caret line="43" column="51" lean-forward="true" selection-start-line="43" selection-start-column="51" selection-end-line="43" selection-end-column="51" />
+        <state relative-caret-position="435">
+          <caret line="29" column="29" selection-start-line="29" selection-start-column="29" selection-end-line="29" selection-end-column="29" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/BossApproachNotice.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="18" selection-start-line="18" selection-end-line="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/PlayerSelectHUD.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="199">
+          <caret line="38" column="23" selection-start-line="38" selection-start-column="18" selection-end-line="38" selection-end-column="23" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Player.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="199">
+          <caret line="149" column="51" selection-start-line="149" selection-start-column="47" selection-end-line="149" selection-end-column="51" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#7396#7397#0" expanded="true" />
+            <element signature="e#7466#7467#0" expanded="true" />
+            <element signature="e#7856#7857#0" expanded="true" />
+            <element signature="e#7896#7897#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Flash.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="5" column="22" selection-start-line="5" selection-start-column="22" selection-end-line="5" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Enemy.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1065">
+          <caret line="83" column="46" selection-start-line="83" selection-start-column="46" selection-end-line="83" selection-end-column="46" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#4611#4612#0" expanded="true" />
+            <element signature="e#4640#4641#0" expanded="true" />
+            <element signature="e#4669#4670#0" expanded="true" />
+            <element signature="e#4697#4698#0" expanded="true" />
+            <element signature="e#4728#4729#0" expanded="true" />
+            <element signature="e#4756#4757#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/PlayingHUD.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1380">
+          <caret line="96" column="33" selection-start-line="96" selection-start-column="33" selection-end-line="96" selection-end-column="33" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -900,8 +780,62 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/LocationEncounterDisplay.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="624">
-          <caret line="66" column="38" selection-start-line="66" selection-start-column="38" selection-end-line="66" selection-end-column="38" />
+        <state relative-caret-position="30">
+          <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/NewRecruitNotice.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="21" column="47" selection-start-line="21" selection-start-column="47" selection-end-line="21" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/HUD.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="13" column="7" selection-start-line="13" selection-start-column="7" selection-end-line="13" selection-end-column="7" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/StarterSelectHUD.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/TitleHUD.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="21" column="28" selection-start-line="21" selection-start-column="28" selection-end-line="21" selection-end-column="28" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Boss.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="3" column="13" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ControlPanel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="24" column="44" selection-start-line="24" selection-start-column="44" selection-end-line="24" selection-end-column="44" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

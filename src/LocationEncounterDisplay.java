@@ -12,6 +12,7 @@ public class LocationEncounterDisplay extends Character {
     private final int X_COMPONENT = 4;
     private final int Y_COMPONENT = 0;
     private int origY;
+    private int avgHeight;
     private int encounterTableIndex;
     Timer timer = new Timer();
     Pokemon p;
@@ -28,7 +29,9 @@ public class LocationEncounterDisplay extends Character {
         this.p = p;
         this.square = new Rectangle2D.Double(x, y, this.width, this.height);
         this.origY = y;
-        toShow = image1;
+        this.toShow = image1;
+        double scale = height / toShow.getHeight();
+        this.avgHeight = (int) ((((double) this.image1.getHeight() + (double) this.image2.getHeight()) * scale) / 2.0);
         timer();
     }
 
@@ -68,8 +71,8 @@ public class LocationEncounterDisplay extends Character {
         if (encounterTableIndex == 0) {
             g2.drawImage(Attack.HYPERBEAM.getAttackImage(), this.getX() + this.getWidth() / 2 - 10, origY - 20, 20, 20, control);
         }
-        if (p.get) {
-
+        if (ControlPanel.unlockedPokemon[p.getIndex()]) {
+            g2.drawImage(HUD.heart, this.getX() + this.getWidth() / 2 - 10, origY + avgHeight + 20, 20, 20, control);
         }
     }
 
