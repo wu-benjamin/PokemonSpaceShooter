@@ -1,22 +1,9 @@
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.io.File;
-import java.net.URL;
 import java.util.TimerTask;
 
 public class TitleHUD extends HUD {
-
-    static {
-        URL spaceBackgroundResource = HUD.class.getResource("/Resources/Space_Background.png");
-        try {
-            spaceBackground = ImageIO.read(new File(spaceBackgroundResource.toURI()));
-            font = Font.createFont(Font.TRUETYPE_FONT, ControlPanel.getFontFile()).deriveFont(50f);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     TitleHUD(ControlPanel control) {
         super(control);

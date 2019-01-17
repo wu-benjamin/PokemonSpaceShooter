@@ -12,6 +12,7 @@ public class DeadHUD extends HUD {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        ControlPanel.clear();
         ControlPanel.dead = false;
         ControlPanel.win = false;
         TimerTask delayTask = new DelayTask();
@@ -29,7 +30,6 @@ public class DeadHUD extends HUD {
             if (ControlPanel.input.isKeyDown(KeyEvent.VK_SPACE) || ControlPanel.input.isButtonDown(MouseEvent.BUTTON1)) {
                 ControlPanel.menusToAdd.add(new LevelSelectHUD(control));
                 ControlPanel.menusToRemove.add(this);
-                return;
             }
         }
     }

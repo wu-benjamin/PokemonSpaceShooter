@@ -13,7 +13,6 @@ public class ControlPanel extends JPanel implements Runnable {
     static final int POWER_UP_DROP_RATE = 250;    // Probability out of 1000
     static final int RECRUIT_RATE = 50;           // Probability out of 1000
     static final Color TRANSPARENT = new Color(0,0,0,0);
-    static final Color TEXT_BACKGROUND = new Color(92, 167, 237, 150);
     static final Color TEXT = new Color(255, 203, 5);
     static final Color TEXT_BORDER = new Color(42, 117, 187);
     static final Color BACKGROUND_TINT = new Color(0,0,0,150);
@@ -28,9 +27,12 @@ public class ControlPanel extends JPanel implements Runnable {
     static final int MENU_DELAY_TIME = 150;
     static final int MIN_DAMAGE = 1;
 
-    private static ArrayList<GameObject> objects = new ArrayList<>(); // Contains flashes, backgrounds, and power-ups
-    static ArrayList<GameObject> toAdd = new ArrayList<>();
-    static ArrayList<GameObject> toRemove = new ArrayList<>();
+    private static ArrayList<PowerUp> powerUps = new ArrayList<>();
+    static ArrayList<PowerUp> powerUpsToAdd = new ArrayList<>();
+    static ArrayList<PowerUp> powerUpsToRemove = new ArrayList<>();
+    private static ArrayList<Flash> flashes = new ArrayList<>();
+    static ArrayList<Flash> flashesToAdd = new ArrayList<>();
+    static ArrayList<Flash> flashesToRemove = new ArrayList<>();
     private static ArrayList<HealthBar> healthBars = new ArrayList<>();
     static ArrayList<HealthBar> healthBarsToAdd = new ArrayList<>();
     static ArrayList<HealthBar> healthBarsToRemove = new ArrayList<>();
@@ -50,6 +52,7 @@ public class ControlPanel extends JPanel implements Runnable {
     static ArrayList<HUD> menusToAdd = new ArrayList<>();
     static ArrayList<HUD> menusToRemove = new ArrayList<>();
     static NewRecruitNotice recruitNotice;
+    static BossApproachNotice bossNotice;
 
     private static boolean run = false;
 
@@ -71,6 +74,7 @@ public class ControlPanel extends JPanel implements Runnable {
     static Player player = null;
     static Location location = Location.values()[0];
     static Boss boss;
+    static Background background = null;
 
     private boolean bossFight;
     static boolean dead = false;
@@ -102,7 +106,8 @@ public class ControlPanel extends JPanel implements Runnable {
             e.printStackTrace();
         }
         menus.add(new TitleHUD(control));
-        recruitNotice = new NewRecruitNotice(0,0, 1,1, TRANSPARENT);
+        recruitNotice = new NewRecruitNotice();
+        bossNotice = new BossApproachNotice(control);
     }
 
     static void resetItems() {
@@ -135,20 +140,26 @@ public class ControlPanel extends JPanel implements Runnable {
 
     void incrementBombs() {
         bombs++;
-        bombs = Math.min(bombs, 99);
+        bombs = Math.min(bombs, PowerUp.MAX_BOMB);
     }
 
     void decrementBombs() {
         bombs--;
-        bombs = Math.max(bombs, 0);
+        bombs = Math.max(bombs, PowerUp.MAX_LEVEL);
     }
 
     public void run() {
         while (run) {
             // Check for collision, draw objects and sleep
             try {
-                for (GameObject i : objects) {
-                    i.update(this);
+                for (Flash f : flashes) {
+                    f.update(this);
+                }
+                for (PowerUp p : powerUps) {
+                    p.update(this);
+                }
+                if (background != null) {
+                    background.update(this);
                 }
                 if (player != null) {
                     player.update(this);
@@ -168,6 +179,41 @@ public class ControlPanel extends JPanel implements Runnable {
                 for (LocationEncounterDisplay d : encounterDisplays) {
                     d.update(this);
                 }
+                ArrayList<LocationEncounterDisplay> encounterDisplaysToRemoveCopy = new ArrayList<>(encounterDisplaysToRemove);
+                for (LocationEncounterDisplay d : encounterDisplaysToRemoveCopy) {
+                    d.getTimer().purge();
+                    d.getTimer().cancel();
+                }
+                ArrayList<Flash> flashesToRemoveCopy = new ArrayList<>(flashesToRemove);
+                for (Flash f : flashesToRemoveCopy) {
+                    f.getTimer().purge();
+                    f.getTimer().cancel();
+                }
+                ArrayList<PowerUp> powerUpsToRemoveCopy = new ArrayList<>(powerUpsToRemove);
+                for (PowerUp p : powerUpsToRemoveCopy) {
+                    p.getTimer().purge();
+                    p.getTimer().cancel();
+                }
+                ArrayList<HUD> menusToRemoveCopy = new ArrayList<>(menusToRemove);
+                for (HUD h : menusToRemoveCopy) {
+                    h.getTimer().purge();
+                    h.getTimer().cancel();
+                }
+                ArrayList<Enemy> enemiesToRemoveCopy = new ArrayList<>(enemiesToRemove);
+                for (Enemy e : enemiesToRemoveCopy) {
+                    e.getTimer().purge();
+                    e.getTimer().cancel();
+                }
+                ArrayList<Projectile> playerProjectilesToRemoveCopy = new ArrayList<>(playerProjectilesToRemove);
+                for (Projectile p : playerProjectilesToRemoveCopy) {
+                    p.getTimer().purge();
+                    p.getTimer().cancel();
+                }
+                ArrayList<Projectile> enemyProjectilesToRemoveCopy = new ArrayList<>(enemyProjectilesToRemove);
+                for (Projectile p : enemyProjectilesToRemoveCopy) {
+                    p.getTimer().purge();
+                    p.getTimer().cancel();
+                }
                 recruitNotice.update(this);
                 repaint();
                 try {
@@ -175,18 +221,23 @@ public class ControlPanel extends JPanel implements Runnable {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                objects.addAll(toAdd);
+                flashes.addAll(flashesToAdd);
+                powerUps.addAll(powerUpsToAdd);
                 enemies.addAll(enemiesToAdd);
                 playerProjectiles.addAll(playerProjectilesToAdd);
                 enemyProjectiles.addAll(enemyProjectilesToAdd);
                 menus.addAll(menusToAdd);
                 healthBars.addAll(healthBarsToAdd);
                 encounterDisplays.addAll(encounterDisplaysToAdd);
+
                 PlayingHUD.decrementNumRemaining(enemiesToRemove.size());
-                // Making changes to objects ArrayList at once prevents ConcurrentModificationException
-                objects.removeAll(toRemove);
-                toRemove.clear();
-                toAdd.clear();
+
+                flashes.removeAll(flashesToRemove);
+                flashesToRemove.clear();
+                flashesToAdd.clear();
+                powerUps.removeAll(powerUpsToRemove);
+                powerUpsToRemove.clear();
+                powerUpsToAdd.clear();
                 healthBars.removeAll(healthBarsToRemove);
                 healthBarsToRemove.clear();
                 healthBarsToAdd.clear();
@@ -211,53 +262,67 @@ public class ControlPanel extends JPanel implements Runnable {
         }
     }
 
-    public void paintComponent(Graphics g) throws ConcurrentModificationException {
-        try {
-            super.paintComponent(g);
-            Graphics2D g2 = (Graphics2D) g;
-            for (GameObject i : objects) {
-                i.paintComponent(g2);
-            }
-            if (player != null) {
-                player.paintComponent(g2);
-            }
-            for (HealthBar h : healthBars) {
-                h.paintComponent(g2);
-            }
-            for (Projectile p : playerProjectiles) {
-                p.paintComponent(g2);
-            }
-            for (Projectile p : enemyProjectiles) {
-                p.paintComponent(g2);
-            }
-            for (HUD h : menus) {
-                h.paintComponent(g2);
-            }
-            for (LocationEncounterDisplay d : encounterDisplays) {
-                d.paintComponent(g2);
-            }
-            recruitNotice.paintComponent(g2);
-        } catch (ConcurrentModificationException e) {
-            // e.printStackTrace();
+     public void paintComponent(Graphics g) throws ConcurrentModificationException {
+        super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g;
+         if (background != null) {
+             background.paintComponent(g2);
+         }
+         ArrayList<Flash> flashesCopy = new ArrayList<>(flashes);
+         for (Flash f : flashesCopy) {
+             f.paintComponent(g2);
+         }
+         ArrayList<HealthBar> healthBarsCopy = new ArrayList<>(healthBars);
+         for (HealthBar h : healthBarsCopy) {
+            h.paintComponent(g2);
         }
+         ArrayList<PowerUp> powerUpsCopy = new ArrayList<>(powerUps);
+         for (PowerUp p : powerUpsCopy) {
+             p.paintComponent(g2);
+         }
+         if (player != null) {
+             player.paintComponent(g2);
+         }
+         ArrayList<Enemy> enemiesCopy = new ArrayList<>(enemies);
+         for (Enemy e : enemiesCopy) {
+             e.paintComponent(g2);
+         }
+         ArrayList<Projectile> playerProjectilesCopy = new ArrayList<>(playerProjectiles);
+         for (Projectile p : playerProjectilesCopy) {
+            p.paintComponent(g2);
+        }
+         ArrayList<Projectile> enemyProjectilesCopy = new ArrayList<>(enemyProjectiles);
+         for (Projectile p : enemyProjectilesCopy) {
+            p.paintComponent(g2);
+        }
+         ArrayList<HUD> menusCopy = new ArrayList<>(menus);
+         for (HUD h : menusCopy) {
+            h.paintComponent(g2);
+        }
+        ArrayList<LocationEncounterDisplay> encounterDisplaysCopy = new ArrayList<>(encounterDisplays);
+        for (LocationEncounterDisplay d : encounterDisplaysCopy) {
+            d.paintComponent(g2);
+        }
+        recruitNotice.paintComponent(g2);
+        bossNotice.paintComponent(g2);
     }
 
     static void clear() {
-        objects.clear();
-        toAdd.clear();
-        toRemove.clear();
-        healthBars.clear();
-        healthBarsToRemove.clear();
+        powerUpsToRemove.addAll(powerUps);
+        powerUpsToAdd.clear();
+        flashesToRemove.addAll(flashes);
+        flashesToAdd.clear();
+        background = null;
+        healthBarsToRemove.addAll(healthBars);
         healthBarsToAdd.clear();
-        enemies.clear();
+        enemiesToRemove.addAll(enemies);
         enemiesToAdd.clear();
-        enemiesToRemove.clear();
-        playerProjectiles.clear();
+        playerProjectilesToRemove.addAll(playerProjectiles);
         playerProjectilesToAdd.clear();
-        playerProjectilesToRemove.clear();
-        enemyProjectiles.clear();
+        enemyProjectilesToRemove.addAll(enemyProjectiles);
         enemyProjectilesToAdd.clear();
-        enemyProjectilesToRemove.clear();
+        player.getTimer().purge();
+        player.getTimer().cancel();
         player = null;
     }
 

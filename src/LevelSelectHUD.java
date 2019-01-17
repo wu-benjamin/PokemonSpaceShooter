@@ -24,7 +24,7 @@ public class LevelSelectHUD extends HUD {
         TimerTask delayTask = new DelayTask();
         timer.schedule(delayTask, ControlPanel.MENU_DELAY_TIME);
         this.possibleEncounters = new ArrayList<>();
-        possibleEncounters.add(Location.values()[level].getBoss());
+        possibleEncounters.add(Location.values()[level].getBoss()); // Boss should get index 0
         possibleEncounters.addAll(Arrays.asList(Location.values()[level].getEnemies()));
         this.nextDisplay = 0;
         DisplayTask displayTask = new DisplayTask();
@@ -46,7 +46,7 @@ public class LevelSelectHUD extends HUD {
         }
         */
         possibleEncounters.clear();
-        possibleEncounters.add(Location.values()[level].getBoss());
+        possibleEncounters.add(Location.values()[level].getBoss()); // Boss should get index 0
         possibleEncounters.addAll(Arrays.asList(Location.values()[level].getEnemies()));
 
         nextDisplay = 0;
@@ -68,7 +68,7 @@ public class LevelSelectHUD extends HUD {
         }
         */
         possibleEncounters.clear();
-        possibleEncounters.add(Location.values()[level].getBoss());
+        possibleEncounters.add(Location.values()[level].getBoss()); // Boss should get index 0
         possibleEncounters.addAll(Arrays.asList(Location.values()[level].getEnemies()));
         nextDisplay = 0;
         ControlPanel.clearLevelEncounterDisplay();
@@ -107,8 +107,6 @@ public class LevelSelectHUD extends HUD {
             boolean changed = true;
             if (ControlPanel.unlockedLocation[level] && (ControlPanel.input.isKeyDown(KeyEvent.VK_SPACE) || ControlPanel.input.isButtonDown(MouseEvent.BUTTON1))) {
                 ControlPanel.location = Location.values()[level];
-                timer.cancel();
-                timer.purge();
                 ControlPanel.clearLevelEncounterDisplay();
                 ControlPanel.menusToAdd.add(new LocationIntroHUD(control));
                 ControlPanel.menusToRemove.add(this);

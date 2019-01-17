@@ -28,11 +28,12 @@ public abstract class Character extends GameObject {
     }
 
     int getHitPoints() {
-        return hitPoints;
+        return this.hitPoints;
     }
 
     void setHitPoints(int newHealth) {
-        hitPoints = newHealth;
+        this.hitPoints = Math.max(0, newHealth);
+        this.hitPoints = Math.min(this.maxHitPoints, this.hitPoints);
     }
 
     int getMaxHitPoints() {
@@ -40,7 +41,8 @@ public abstract class Character extends GameObject {
     }
 
     void setMaxHitPoints(int newHealth) {
-        maxHitPoints = newHealth;
+        this.maxHitPoints = Math.max(1, newHealth);
+        this.hitPoints = Math.min(this.maxHitPoints, this.hitPoints);
     }
 
     Type getType1() {

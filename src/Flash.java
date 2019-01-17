@@ -17,7 +17,7 @@ public abstract class Flash extends GameObject {
         this.duration = duration;
         this.time = 0;
         timer();
-        ControlPanel.toAdd.add(this);
+        ControlPanel.flashesToAdd.add(this);
     }
 
     public Rectangle2D getObj() {
@@ -27,6 +27,10 @@ public abstract class Flash extends GameObject {
     public abstract void update(ControlPanel panel);
 
     public abstract void paintComponent(Graphics2D g2);
+
+    public Timer getTimer() {
+        return timer;
+    }
 
     public void timer() {
         TimerTask opaqueTask = new OpaqueTask();

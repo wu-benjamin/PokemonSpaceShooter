@@ -68,6 +68,9 @@ public class LocationEncounterDisplay extends Character {
         if (encounterTableIndex == 0) {
             g2.drawImage(Attack.HYPERBEAM.getAttackImage(), this.getX() + this.getWidth() / 2 - 10, origY - 20, 20, 20, control);
         }
+        if (p.get) {
+
+        }
     }
 
     public int getHeight() {
@@ -83,6 +86,10 @@ public class LocationEncounterDisplay extends Character {
         TimerTask imageTask = new ImageTask();
         timer.schedule(moveTask, 0, 13);
         timer.schedule(imageTask, 0, 300);
+    }
+
+    public Timer getTimer() {
+        return timer;
     }
 
     // Moves enemies down and moves boss side to side using a parametric function of time

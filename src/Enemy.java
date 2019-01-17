@@ -12,7 +12,7 @@ public class Enemy extends Character {
     Attack attack;
     private final int X_COMPONENT = 0;
     private final int Y_COMPONENT = 3;
-    Timer timer = new Timer();
+    Timer timer;
     Pokemon p;
 
     Enemy(int x, int y, int width, int height, Color color, Pokemon p, ControlPanel control) {
@@ -25,12 +25,12 @@ public class Enemy extends Character {
         this.type1 = p.getType1();
         this.type2 = p.getType2();
         this.p = p;
+        this.setMaxHitPoints(p.getHitPoints());
         this.setHitPoints(p.getHitPoints());
-        this.setMaxHitPoints(this.getHitPoints());
         this.square = new Rectangle2D.Double(x, y, this.width, this.height);
-        toShow = image1;
+        this.toShow = image1;
+        this.timer = new Timer();
         timer();
-        ControlPanel.enemiesToAdd.add(this);
         new HealthBar(x, y + this.getHeight(), this.getWidth(), 15, color, this/*, control*/);
     }
 
@@ -42,8 +42,6 @@ public class Enemy extends Character {
         // De-spawns enemies when they are off screen
         if (x < 0 - width || x > ControlPanel.width || y > ControlPanel.height) {
             ControlPanel.enemiesToRemove.add(this);
-            timer.cancel();
-            timer.purge();
         }
     }
 
@@ -90,22 +88,19 @@ public class Enemy extends Character {
             }
         }
         control.incrementScore(ControlPanel.SCORE_FOR_ENEMY_KILL);
-        timer.cancel();
-        timer.purge();
-        ControlPanel.toRemove.add(e);
         ControlPanel.enemiesToRemove.add(e);
         // Drops power-ups
         if (ControlPanel.rand.nextInt(1000) < ControlPanel.POWER_UP_DROP_RATE) {
-            int random = ControlPanel.rand.nextInt(100);
-            if (random < 25) {
-                new PowerUp(e.getX() + e.getWidth() / 2 - PowerUp.getSize() / 2, e.getY() + e.getHeight() / 2 - PowerUp.getSize() / 2,
-                        PowerUp.getSize(), PowerUp.getSize(), ControlPanel.TRANSPARENT, "Bomb", control);
-            } else if (random < 50 && control.getPower() < 5) {
-                new PowerUp(e.getX() + e.getWidth() / 2 - PowerUp.getSize() / 2, e.getY() + e.getHeight() / 2 - PowerUp.getSize() / 2,
-                        PowerUp.getSize(), PowerUp.getSize(), ControlPanel.TRANSPARENT, "RareCandy", control);
-            } else if (random < 100) {
-                new PowerUp(e.getX() + e.getWidth() / 2 - PowerUp.getSize() / 2, e.getY() + e.getHeight() / 2 - PowerUp.getSize() / 2,
-                        PowerUp.getSize(), PowerUp.getSize(), ControlPanel.TRANSPARENT, "OranBerry", control);
+            int random = ControlPanel.rand.nextInt(PowerUp.BERRY_CHANCE + PowerUp.BOMB_CHANCE + PowerUp.CANDY_CHANCE);
+            if (random < PowerUp.BOMB_CHANCE && control.getBombs() < PowerUp.MAX_BOMB) {
+                new Bomb(e.getX() + e.getWidth() / 2 - PowerUp.getSize() / 2, e.getY() + e.getHeight() / 2 - PowerUp.getSize() / 2,
+                        PowerUp.getSize(), PowerUp.getSize(), control);
+            } else if (random < PowerUp.BOMB_CHANCE + PowerUp.CANDY_CHANCE && control.getPower() < PowerUp.MAX_LEVEL) {
+                new RareCandy(e.getX() + e.getWidth() / 2 - PowerUp.getSize() / 2, e.getY() + e.getHeight() / 2 - PowerUp.getSize() / 2,
+                        PowerUp.getSize(), PowerUp.getSize(), control);
+            } else if (random < PowerUp.BOMB_CHANCE + PowerUp.CANDY_CHANCE + PowerUp.BERRY_CHANCE) {
+                new OranBerry(e.getX() + e.getWidth() / 2 - PowerUp.getSize() / 2, e.getY() + e.getHeight() / 2 - PowerUp.getSize() / 2,
+                        PowerUp.getSize(), PowerUp.getSize(), control);
             }
         }
     }
@@ -124,6 +119,10 @@ public class Enemy extends Character {
 
     public int getWidth() {
         return width;
+    }
+
+    public Timer getTimer() {
+        return timer;
     }
 
     public void timer() {
@@ -152,13 +151,11 @@ public class Enemy extends Character {
     class AttackTask extends TimerTask {
         @Override
         public void run() {
-            if (ControlPanel.numEnemies() < 25) {
-                try {
-                    ControlPanel.enemyProjectilesToAdd.add(new Projectile(x + width / 2 - attack.getProjectileSize() / 2,
-                            y + height, attack.getProjectileSize(), color, attack, control, true, X_COMPONENT, Y_COMPONENT));
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
-                }
+            try {
+                new ProjectileLauncher(x + width / 2 - attack.getProjectileSize() / 2,
+                        y + height, attack.getProjectileSize(), control, X_COMPONENT, Y_COMPONENT, attack, p);
+            } catch (NullPointerException e) {
+                e.printStackTrace();
             }
         }
     }

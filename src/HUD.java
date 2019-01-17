@@ -1,17 +1,37 @@
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.net.URL;
 import java.util.Timer;
 import java.util.TimerTask;
 
 // Handles HUD for the player
-public abstract class HUD extends GameObject {
+public abstract class HUD {
 
-    private Rectangle2D square;
     ControlPanel control;
     static Font font;
     static BufferedImage spaceBackground;
+    static BufferedImage heart;
+    static BufferedImage leftArrow;
+    static BufferedImage rightArrow;
+    static {
+        URL spaceBackgroundResource = HUD.class.getResource("/Resources/Space_Background.png");
+        URL heartResource = HUD.class.getResource("/Resources/Heart.png");
+        URL leftArrowResource = HUD.class.getResource("/Resources/LeftArrow.png");
+        URL rightArrowResource = HUD.class.getResource("/Resources/RightArrow.png");
+        try {
+            spaceBackground = ImageIO.read(new File(spaceBackgroundResource.toURI()));
+            heart = ImageIO.read(new File(heartResource.toURI()));
+            leftArrow = ImageIO.read(new File(leftArrowResource.toURI()));
+            rightArrow = ImageIO.read(new File(rightArrowResource.toURI()));
+            font = Font.createFont(Font.TRUETYPE_FONT, ControlPanel.getFontFile()).deriveFont(50f);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     static final int BIG_DISPLAY_SCALE = 7;
     static final int SMALL_DISPLAY_SCALE = 4;
     private static final int BORDER_WIDTH = 2;
@@ -20,18 +40,16 @@ public abstract class HUD extends GameObject {
     Timer timer = new Timer();
 
     HUD(ControlPanel control) {
-        super(0, 0, 1, 1, new Color(0,0,0,0));
-        square = new Rectangle2D.Double(0, 0, 1, 1);
         this.control = control;
-    }
-
-    public Rectangle2D getObj() {
-        return square;
     }
 
     public abstract void update(ControlPanel panel);
 
     public abstract void paintComponent(Graphics2D g2);
+
+    public Timer getTimer() {
+        return timer;
+    }
 
     public static void drawCenteredString(Graphics g, Rectangle r, String s,
                              Font font, int... alpha) {

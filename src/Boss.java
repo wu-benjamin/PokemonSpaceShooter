@@ -22,7 +22,7 @@ public class Boss extends Enemy {
         control.incrementScore(ControlPanel.SCORE_FOR_BOSS_KILL);
         timer.cancel();
         timer.purge();
-        ControlPanel.toRemove.add(e);
+        ControlPanel.enemiesToRemove.add(e);
         control.setBossFight(false);
         Background.setMove(false);
     }
@@ -33,7 +33,7 @@ public class Boss extends Enemy {
         TimerTask moveTask = new MoveTask();
         TimerTask imageTask = new ImageTask();
         timer.schedule(attackTask, 0, (int) (1.5 * attack.getAttackDelay() * (ControlPanel.rand.nextInt(200) + 300) / 100));
-        timer.schedule(moveTask, 0, 10);
+        timer.schedule(moveTask, 0, (int) (10.0 + p.getMovementSpeed() / 80.0 * 7.0));
         timer.schedule(imageTask, 0, 300);
     }
 

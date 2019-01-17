@@ -15,7 +15,7 @@ public class Player extends Character {
     private BufferedImage image2;
     private BufferedImage toShow;
     private Pokemon p;
-    private Timer timer = new Timer();
+    private Timer timer;
     private static Player player;
     private final int BOMB_DAMAGE = 255;
     private static int bossWall;
@@ -23,15 +23,16 @@ public class Player extends Character {
     Player(int x, int y, int width, int height, Color color, Pokemon p, ControlPanel control) {
         super(x, y, width, height, color, p, control);
         this.speed = p.getMovementSpeed();
-        player = this;
+        this.player = this;
         this.image1 = p.getBack1();
         this.image2 = p.getBack2();
+        this.setMaxHitPoints(p.getHitPoints() * ControlPanel.PLAYER_HEALTH_COEF);
         this.setHitPoints(p.getHitPoints() * ControlPanel.PLAYER_HEALTH_COEF);
-        this.setMaxHitPoints(this.getHitPoints());
         this.p = p;
         this.projectileDelay = p.getAttack().getAttackDelay() / p.getAttackSpeed() * 60;
         toShow = image1;
         new HealthBar(x, y + this.getHeight(), this.getWidth(), 15, color, this/*, control*/);
+        this.timer = new Timer();
         timer();
     }
 
@@ -129,11 +130,10 @@ public class Player extends Character {
 
         // Fires normal projectile based on player Pokemon species
         if ((ControlPanel.input.isKeyDown(KeyEvent.VK_SPACE) || ControlPanel.input.isButtonDown(MouseEvent.BUTTON1)) && !attackDelay) {
-            ControlPanel.playerProjectilesToAdd.add(new Projectile(this.getX() + this.getWidth() / 2 - ((int) (p.getAttack().getProjectileSize() *
-                    ((double) control.getPower() + 7) / 7)) / 2, this.getY(),
+            new ProjectileLauncher(this.getX() + this.getWidth() / 2 - ((int) (p.getAttack().getProjectileSize() * ((double) control.getPower() + 7) / 7)) / 2,
+                    this.getY(),
                     (int) (p.getAttack().getProjectileSize() * ((double) control.getPower() + 7) / 7),
-                    this.getColor(), p.getAttack(), control,
-                    false, xComponent, yComponent));
+                    control, xComponent, yComponent, p.getAttack());
             attackDelay = true;
             TimerTask projectileTask = new MyProjectileTask();
             timer.schedule(projectileTask, (int) projectileDelay);
@@ -142,7 +142,7 @@ public class Player extends Character {
 
     // Prevents player from going too close to the boss
     static void setBossWall(int wall) {
-        bossWall = wall;
+        bossWall = Math.min(wall, 2 * ControlPanel.height / 2);
     }
 
     // Player takes damage and is checked if alive
@@ -157,9 +157,11 @@ public class Player extends Character {
 
     // Game over
     private void death() {
-        timer.cancel();
-        timer.purge();
         ControlPanel.dead = true;
+    }
+
+    public Timer getTimer() {
+        return timer;
     }
 
     public void paintComponent(Graphics2D g2) {
@@ -186,6 +188,10 @@ public class Player extends Character {
                 e.takeDamage((int) (BOMB_DAMAGE * Type.typeEffectiveness(e.getType1(), e.getType2(), p.getType1())), p.getType1());
             }
         }
+    }
+
+    public void incrementSpeed(int increment) {
+        player.speed += increment;
     }
 
     static Player getPlayer() {
@@ -236,18 +242,18 @@ public class Player extends Character {
     class MyImageTask extends TimerTask {
         @Override
         public void run() {
-            double scale = player.getHeight() / player.getToShow().getHeight();
-            int orgHeight = player.getHeight();
-            int orgWidth = player.getWidth();
-            if (player.getToShow().equals(player.getImage1())) {
-                player.setToShow(player.getImage2());
+            double scale = height / toShow.getHeight();
+            int orgHeight = height;
+            int orgWidth = width;
+            if (toShow.equals(image1)) {
+                toShow = image2;
             } else {
-                player.setToShow(player.getImage1());
+                toShow = image1;
             }
-            player.setWidth((int) (player.getToShow().getWidth() * scale));
-            player.setHeight((int) (player.getToShow().getHeight() * scale));
-            player.setX(player.getX() + (orgWidth - player.getWidth()) / 2);
-            player.setY(player.getY() + (orgHeight - player.getHeight()) / 2);
+            width = (int) (player.getToShow().getWidth() * scale);
+            height = (int) (player.getToShow().getHeight() * scale);
+            x += (orgWidth - width) / 2;
+            y += (orgHeight - height) / 2;
         }
     }
 }

@@ -13,7 +13,7 @@ public class PlayerSelectHUD extends HUD {
     int height;
     int x;
     int y;
-    private String level = "Unknown Location";
+    private String level;
 
     PlayerSelectHUD(ControlPanel control) {
         super(control);
@@ -21,22 +21,18 @@ public class PlayerSelectHUD extends HUD {
             for (int i = 0; i < ControlPanel.unlockedPokemon.length; i++) {
                 if (ControlPanel.unlockedPokemon[i]) {
                     this.player = i;
-                    this.toShow = Pokemon.values()[player].getFront1();
-                    this.width = this.toShow.getWidth() * BIG_DISPLAY_SCALE;
-                    this.height = this.toShow.getHeight() * BIG_DISPLAY_SCALE;
-                    this.x = ControlPanel.width / 2 - Pokemon.values()[player].getWidth() * BIG_DISPLAY_SCALE / 2;
-                    this.y = ControlPanel.height / 4 - Pokemon.values()[player].getHeight() * BIG_DISPLAY_SCALE / 2;
                     break;
                 }
             }
         } else {
             this.player = ControlPanel.player.getPokemon().getIndex();
-            this.toShow = Pokemon.values()[player].getFront1();
-            this.width = this.toShow.getWidth() * BIG_DISPLAY_SCALE;
-            this.height = this.toShow.getHeight() * BIG_DISPLAY_SCALE;
-            this.x = ControlPanel.width / 2 - Pokemon.values()[player].getWidth() * BIG_DISPLAY_SCALE / 2;
-            this.y = ControlPanel.height / 3 - Pokemon.values()[player].getHeight() * BIG_DISPLAY_SCALE / 2;
         }
+        this.toShow = Pokemon.values()[player].getFront1();
+        this.width = this.toShow.getWidth() * BIG_DISPLAY_SCALE;
+        this.height = this.toShow.getHeight() * BIG_DISPLAY_SCALE;
+        this.x = ControlPanel.width / 2 - Pokemon.values()[player].getWidth() * BIG_DISPLAY_SCALE / 2;
+        this.y = ControlPanel.height / 4 - Pokemon.values()[player].getHeight() * BIG_DISPLAY_SCALE / 2;
+        this.level = Pokemon.appearsIn(Pokemon.values()[player]);
         this.numberOfPokemon = ControlPanel.unlockedPokemon.length;
         TimerTask imageTask = new MyImageTask();
         timer.schedule(imageTask, 0, 300);
@@ -47,17 +43,13 @@ public class PlayerSelectHUD extends HUD {
     private void incrementPlayer() {
         player++;
         player %= numberOfPokemon;
-        if (!ControlPanel.unlockedPokemon[player]) {
-            level = Pokemon.appearsIn(Pokemon.values()[player]);
-        }
+        level = Pokemon.appearsIn(Pokemon.values()[player]);
     }
 
     private void decrementPlayer() {
         player += numberOfPokemon - 1;
         player %= numberOfPokemon;
-        if (!ControlPanel.unlockedPokemon[player]) {
-            level = Pokemon.appearsIn(Pokemon.values()[player]);
-        }
+        level = Pokemon.appearsIn(Pokemon.values()[player]);
     }
 
     // Animates sprite
@@ -86,6 +78,8 @@ public class PlayerSelectHUD extends HUD {
         g2.drawImage(toShow, x, y, width, height, control);
         if (!ControlPanel.unlockedPokemon[player]) {
             drawBorderedString(g2,"Locked (Find in " + level + ")", 20, ControlPanel.height - 20);
+        } else {
+            drawBorderedString(g2,"Visit me in " + level + "!", 20, ControlPanel.height - 20);
         }
         drawCenteredString(g2, new Rectangle(0,ControlPanel.height  / 4, ControlPanel.width, ControlPanel.height * 3 / 4), Pokemon.values()[player].getName()
         + "\n" + Pokemon.values()[player].getType1() + "\n" + Pokemon.values()[player].getType2(), font);
@@ -111,8 +105,6 @@ public class PlayerSelectHUD extends HUD {
                                 ControlPanel.PLAYER_SCALE / 2, Pokemon.values()[player].getWidth() * ControlPanel.PLAYER_SCALE, Pokemon.values()[player].getHeight() * ControlPanel.PLAYER_SCALE,
                         ControlPanel.TRANSPARENT, Pokemon.values()[player], control);
                 ControlPanel.menusToAdd.add(new PlayingHUD(control));
-                timer.cancel();
-                timer.purge();
                 ControlPanel.menusToRemove.add(this);
                 return;
             } else if (ControlPanel.input.isKeyDown(KeyEvent.VK_LEFT)) {

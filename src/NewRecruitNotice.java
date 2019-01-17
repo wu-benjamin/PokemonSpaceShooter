@@ -15,8 +15,8 @@ public class NewRecruitNotice extends Flash {
         }
     }
 
-    NewRecruitNotice(int x, int y, int width, int height, Color color) {
-        super(x, y, width, height, color, 2000);
+    NewRecruitNotice() {
+        super(0, 0, ControlPanel.width, ControlPanel.height, ControlPanel.TRANSPARENT, 2000);
     }
 
     void addNewRecruit(String newRecruitName) {

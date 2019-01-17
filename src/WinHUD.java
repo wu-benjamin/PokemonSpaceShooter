@@ -13,6 +13,7 @@ public class WinHUD extends HUD {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        ControlPanel.clear();
         ControlPanel.dead = false;
         ControlPanel.win = false;
         TimerTask delayTask = new DelayTask();

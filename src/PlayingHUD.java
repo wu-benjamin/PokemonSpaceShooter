@@ -27,11 +27,10 @@ public class PlayingHUD extends HUD {
             e.printStackTrace();
         }
         */
-        // Add background first so that it is bottom
         ControlPanel.resetItems();
         maxSpawn = ControlPanel.location.getNumberOfEnemies();
-        ControlPanel.toAdd.add(new Background(0, -ControlPanel.height, ControlPanel.width, ControlPanel.height, ControlPanel.TRANSPARENT,ControlPanel.location.getBackground(), control, true));
-        ControlPanel.toAdd.add(new Background(0, 0, ControlPanel.width, ControlPanel.height, ControlPanel.TRANSPARENT, ControlPanel.location.getBackground(), control, true));
+        ControlPanel.background = new Background(0, -ControlPanel.height, ControlPanel.width, ControlPanel.height,
+                ControlPanel.TRANSPARENT,ControlPanel.location.getBackground(), control, true);
         numRemaining = maxSpawn;
         TimerTask delayTask = new DelayTask();
         timer.schedule(delayTask, ControlPanel.MENU_DELAY_TIME);
@@ -61,20 +60,18 @@ public class PlayingHUD extends HUD {
             if (ControlPanel.win && ControlPanel.recruitNotice.size() == 0) {
                 ControlPanel.menusToAdd.add(new WinHUD(control));
                 ControlPanel.menusToRemove.add(this);
-                ControlPanel.clear();
                 return;
             }
             if (ControlPanel.dead && ControlPanel.recruitNotice.size() == 0) {
                 ControlPanel.menusToAdd.add(new DeadHUD(control));
                 ControlPanel.menusToRemove.add(this);
-                ControlPanel.clear();
                 return;
             }
             if (numSpawned < maxSpawn) {
                 if ((ControlPanel.rand.nextInt((int) (ControlPanel.FRAME_RATE / ControlPanel.SPAWN_PER_SECOND)) == 0 || longTimeNoSpawn) && !justSpawned) {
                     if (numSpawned < maxSpawn - 1) {
                         Pokemon enemy = ControlPanel.location.getEnemies()[ControlPanel.rand.nextInt(ControlPanel.location.getEnemies().length)];
-                        ControlPanel.toAdd.add(new Enemy(ControlPanel.rand.nextInt(ControlPanel.width - enemy.getWidth() * ControlPanel.ENEMY_SCALE),
+                        ControlPanel.enemiesToAdd.add(new Enemy(ControlPanel.rand.nextInt(ControlPanel.width - enemy.getWidth() * ControlPanel.ENEMY_SCALE),
                                 -enemy.getHeight() * ControlPanel.ENEMY_SCALE - 5, enemy.getWidth() * ControlPanel.ENEMY_SCALE,
                                 enemy.getHeight() * ControlPanel.ENEMY_SCALE, ControlPanel.TRANSPARENT, enemy, control));
                         numSpawned++;
@@ -88,15 +85,14 @@ public class PlayingHUD extends HUD {
                     spawnTimer.schedule(justSpawnTask, MIN_TIME_NO_SPAWN);
                     longTimeNoSpawn = false;
                     justSpawned = true;
-                }
-                if (ControlPanel.numEnemies() == 0 && numSpawned == maxSpawn - 1) {
+                } else if (ControlPanel.numEnemies() == 0 && numSpawned == maxSpawn - 1) {
                     control.setBossFight(true);
                     Pokemon bossPokemon = ControlPanel.location.getBoss();
                     Player.setBossWall(bossPokemon.getHeight() * ControlPanel.BOSS_SCALE + 40);
                     Boss boss = new Boss(ControlPanel.width / 2 - bossPokemon.getWidth() * ControlPanel.BOSS_SCALE / 2,
                             -bossPokemon.getHeight() * ControlPanel.BOSS_SCALE - 100, bossPokemon.getWidth() * ControlPanel.BOSS_SCALE,
                             bossPokemon.getHeight() * ControlPanel.BOSS_SCALE, ControlPanel.TRANSPARENT, bossPokemon, control);
-                    ControlPanel.toAdd.add(boss);
+                    ControlPanel.enemiesToAdd.add(boss);
                 }
             }
         }

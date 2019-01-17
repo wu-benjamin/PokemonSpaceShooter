@@ -22,9 +22,7 @@ public class HitFlash extends Flash {
         color = new Color(type.getRed(), type.getGreen(), type.getBlue(),
                 (int) Math.max(Math.min((-Math.abs(-maxOpacity + 2 * maxOpacity * (double) time / (double) duration)) + maxOpacity, maxOpacity), 0));
         if (time > duration) {
-            timer.cancel();
-            timer.purge();
-            ControlPanel.toRemove.add(this);
+            ControlPanel.flashesToRemove.add(this);
         }
     }
 
