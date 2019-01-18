@@ -18,10 +18,10 @@ public abstract class HUD {
     static BufferedImage leftArrow;
     static BufferedImage rightArrow;
     static {
-        URL spaceBackgroundResource = HUD.class.getResource("/Resources/Space_Background.png");
-        URL heartResource = HUD.class.getResource("/Resources/Heart.png");
-        URL leftArrowResource = HUD.class.getResource("/Resources/LeftArrow.png");
-        URL rightArrowResource = HUD.class.getResource("/Resources/RightArrow.png");
+        URL spaceBackgroundResource = HUD.class.getResource("/Resources/HUD/Space_Background.png");
+        URL heartResource = HUD.class.getResource("/Resources/HUD/Heart.png");
+        URL leftArrowResource = HUD.class.getResource("/Resources/HUD/LeftArrow.png");
+        URL rightArrowResource = HUD.class.getResource("/Resources/HUD/RightArrow.png");
         try {
             spaceBackground = ImageIO.read(new File(spaceBackgroundResource.toURI()));
             heart = ImageIO.read(new File(heartResource.toURI()));

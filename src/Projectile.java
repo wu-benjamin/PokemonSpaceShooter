@@ -60,12 +60,24 @@ public abstract class Projectile extends GameObject {
                 for (Enemy e : ControlPanel.getEnemies()) {
                     // Checks for hits
                     if (checkCollision(e) && enemyPokemon == null) {
+                        /*
+                        if (Type.typeEffectiveness(e.getType1(), e.getType2(), attackType) > 1.0) {
+                            new HitFlash(0, 0, ControlPanel.width, ControlPanel.height, ControlPanel.TRANSPARENT, Type.FIRE, 200, 25);
+                        } else if (Type.typeEffectiveness(e.getType1(), e.getType2(), attackType) < 1.0) {
+                            new HitFlash(0, 0, ControlPanel.width, ControlPanel.height, ControlPanel.TRANSPARENT, Type.WATER, 200, 25);
+                        }
+                        */
                         if (ControlPanel.rand.nextInt(300) < ControlPanel.player.getPokemon().getCritChance() * ((double) control.getPower() / 5.0)) { // Critical
-                            e.takeDamage((int) (((double) this.getAttack().getAttackDamage() * (Type.typeEffectiveness(e.getType1(),
-                                    e.getType2(), this.getAttack().getType())) + 1.0) * (1.0 + (double) control.getPower() / 5.0) / 5.0 * 2.0), attackType);
+                            // new HitFlash(0, 0, ControlPanel.width, ControlPanel.height, ControlPanel.TRANSPARENT, Type.UNKNOWN, 300, 75);
+                            e.takeDamage((int) (((double) this.getAttack().getAttackDamage()
+                                    * (Type.typeEffectiveness(e.getType1(), e.getType2(), this.getAttack().getType())) + 1.0)
+                                    * (1.0 + (double) control.getPower() / 5.0)
+                                    / 5.0 * ControlPanel.player.getPokemon().getAttackPower() / 70.0 * 2.0), attackType);
                         } else {
-                            e.takeDamage((int) (((double) this.getAttack().getAttackDamage() * (Type.typeEffectiveness(e.getType1(),
-                                    e.getType2(), this.getAttack().getType())) + 1.0) * (1.0 + (double) control.getPower() / 5.0) / 5.0), attackType);
+                            e.takeDamage((int) (((double) this.getAttack().getAttackDamage()
+                                    * (Type.typeEffectiveness(e.getType1(), e.getType2(), this.getAttack().getType())) + 1.0)
+                                    * (1.0 + (double) control.getPower() / 5.0)
+                                    / 5.0 * ControlPanel.player.getPokemon().getAttackPower() / 70.0), attackType);
                         }
                         hit = true;
                     }
@@ -76,11 +88,13 @@ public abstract class Projectile extends GameObject {
                     if (ControlPanel.rand.nextInt(300) < enemyPokemon.getCritChance()) { // Critical
                         Player.getPlayer().takeDamage((int) ((this.getAttack().getAttackDamage() *
                                 (Type.typeEffectiveness(Player.getPlayer().getType1(),
-                                        Player.getPlayer().getType2(), this.getAttack().getType())) + 1.0) / 5.0 * 2.0));
+                                        Player.getPlayer().getType2(), this.getAttack().getType())) + 1.0) / 5.0
+                                * enemyPokemon.getAttackPower() / 70.0 * 2.0));
                     } else {
                         Player.getPlayer().takeDamage((int) ((this.getAttack().getAttackDamage() *
                                 (Type.typeEffectiveness(Player.getPlayer().getType1(),
-                                        Player.getPlayer().getType2(), this.getAttack().getType())) + 1.0) / 5.0));
+                                        Player.getPlayer().getType2(), this.getAttack().getType())) + 1.0) / 5.0
+                                * enemyPokemon.getAttackPower() / 70.0));
                     }
                     hit = true;
                 }

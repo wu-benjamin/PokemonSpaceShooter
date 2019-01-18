@@ -6,8 +6,8 @@ public class Boss extends Enemy {
     public Boss(int x, int y, int width, int height, Color color, Pokemon p, ControlPanel control) {
         super(x, y, width, height, color, p, control);
         // Boss is more powerful
+        this.setMaxHitPoints(p.getHitPoints() * ControlPanel.BOSS_HEALTH_COEF);
         this.setHitPoints(p.getHitPoints() * ControlPanel.BOSS_HEALTH_COEF);
-        this.setMaxHitPoints(this.getHitPoints());
     }
 
     // Ends stage when boss dies

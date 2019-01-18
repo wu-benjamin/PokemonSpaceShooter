@@ -23,7 +23,7 @@ public class HomingProjectile extends Projectile {
                 if (nearestEnemy == null) {
                     for (int i = 0; i < ControlPanel.getEnemies().size(); i++) {
                         if ((double) ControlPanel.getEnemies().get(i).getY() + (double) ControlPanel.getEnemies().get(i).getHeight() / 2.0
-                                <= (double) y + (double) width / 2.0) {
+                                <= (double) y + (double) height / 2.0) {
                             prevNearest = nearest;
                             nearest = Math.min(nearest, Math.sqrt(Math.pow(((double) ControlPanel.getEnemies().get(i).getY() + (double) ControlPanel.getEnemies().get(i).getWidth() / 2.0)
                                     - ((double) y + (double) width / 2.0), 2)
@@ -45,7 +45,7 @@ public class HomingProjectile extends Projectile {
                     }
                 }
             } else {
-                if ((double) ControlPanel.player.getY() + (double) ControlPanel.player.getWidth() / 2.0 >= (double) y + (double) width / 2.0) {
+                if ((double) ControlPanel.player.getY() + (double) ControlPanel.player.getHeight() / 2.0 >= (double) y + (double) height / 2.0) {
                     xComponent = (((double) ControlPanel.player.getX() + (double) ControlPanel.player.getWidth() / 2.0) - ((double) x + (double) width / 2.0));
                     yComponent = (((double) ControlPanel.player.getY() + (double) ControlPanel.player.getHeight() / 2.0) - ((double) y + (double) height / 2.0));
                     xComponent *= (double) attack.getProjectileSpeed() / 2.0 / Math.sqrt(Math.pow(xComponent, 2) + Math.pow(yComponent, 2));

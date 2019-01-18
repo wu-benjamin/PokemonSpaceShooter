@@ -17,7 +17,7 @@ public class Player extends Character {
     private Pokemon p;
     private Timer timer;
     private static Player player;
-    private final int BOMB_DAMAGE = 255;
+    private final int BOMB_DAMAGE = 128;
     private static int bossWall;
 
     Player(int x, int y, int width, int height, Color color, Pokemon p, ControlPanel control) {
@@ -29,7 +29,7 @@ public class Player extends Character {
         this.setMaxHitPoints(p.getHitPoints() * ControlPanel.PLAYER_HEALTH_COEF);
         this.setHitPoints(p.getHitPoints() * ControlPanel.PLAYER_HEALTH_COEF);
         this.p = p;
-        this.projectileDelay = p.getAttack().getAttackDelay() / p.getAttackSpeed() * 60;
+        this.projectileDelay = p.getAttack().getAttackDelay() / p.getAttackSpeed() * 80.0;
         toShow = image1;
         new HealthBar(x, y + this.getHeight(), this.getWidth(), 15, color, this/*, control*/);
         this.timer = new Timer();
@@ -147,6 +147,9 @@ public class Player extends Character {
 
     // Player takes damage and is checked if alive
     void takeDamage(int damage) {
+        if (control.getBossFight()) { // Boss does 3 times the damage
+            damage *= 3;
+        }
         if (!ControlPanel.win && !ControlPanel.dead) {
             this.setHitPoints(this.getHitPoints() - Math.max(ControlPanel.MIN_DAMAGE, damage));
             if (player.getHitPoints() <= 0) {
@@ -175,6 +178,7 @@ public class Player extends Character {
     // Creates special bomb projectile
     private void bomb() {
         new HitFlash(0, 0, ControlPanel.width, ControlPanel.height, ControlPanel.TRANSPARENT, type1, 500, 150);
+        AudioPlayer.playSoundFX(Audio.BOMB.getAudioIn());
         bombDelay = true;
         TimerTask bombTask = new MyBombTask();
         timer.schedule(bombTask, 1000);

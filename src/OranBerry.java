@@ -6,5 +6,6 @@ public class OranBerry extends PowerUp {
 
     public void performEffect(ControlPanel control) {
         Player.getPlayer().setHitPoints(Player.getPlayer().getHitPoints() + BERRY_HEAL_AMOUNT);
+        AudioPlayer.playSoundFX(Audio.HEAL.getAudioIn());
     }
 }

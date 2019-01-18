@@ -83,7 +83,6 @@ public class LevelSelectHUD extends HUD {
 
     public void paintComponent(Graphics2D g2) {
         FontMetrics metrics = g2.getFontMetrics(font);
-        int lineHeight = metrics.getHeight();
         g2.drawImage(Location.values()[level].getBackground(), 0, 0, ControlPanel.width, ControlPanel.height, control);
         g2.setColor(ControlPanel.BACKGROUND_TINT);
         g2.fill3DRect(0, 0, ControlPanel.width, ControlPanel.height, false);
@@ -91,7 +90,7 @@ public class LevelSelectHUD extends HUD {
         g2.setFont(font);
         drawCenteredString(g2, new Rectangle(0,0,ControlPanel.width,ControlPanel.height), Location.values()[level].getLevelName(), font);
         if (!ControlPanel.unlockedLocation[level]) {
-            drawCenteredString(g2, new Rectangle(20, ControlPanel.height - 20 - lineHeight, 200, lineHeight),"Locked", font);
+            drawBorderedString(g2,"Locked", 20, ControlPanel.height - 20);
         } else if (containsNewPokemon) {
             drawBorderedString(g2,"Find New Pokémon Here!", 20, ControlPanel.height - 20);
         } else {

@@ -68,7 +68,7 @@ public class Enemy extends Character {
 
     // Ensures players can at least damage the opponent regardless of type effectiveness
     void takeDamage(int damage, Type type) {
-        if (!ControlPanel.win && !ControlPanel.dead) {
+        if (!ControlPanel.win && !ControlPanel.dead && this.getY() > -this.getHeight()) {
             int hitPointsBefore = this.getHitPoints();
             this.setHitPoints(this.getHitPoints() - Math.max(ControlPanel.MIN_DAMAGE, damage));
             if (this.getHitPoints() <= 0 && hitPointsBefore > 0) {
@@ -151,11 +151,13 @@ public class Enemy extends Character {
     class AttackTask extends TimerTask {
         @Override
         public void run() {
-            try {
-                new ProjectileLauncher(x + width / 2 - attack.getProjectileSize() / 2,
-                        y + height, attack.getProjectileSize(), control, X_COMPONENT, Y_COMPONENT, attack, p);
-            } catch (NullPointerException e) {
-                e.printStackTrace();
+            if (y >= -height) {
+                try {
+                    new ProjectileLauncher(x + width / 2 - attack.getProjectileSize() / 2,
+                            y + height, attack.getProjectileSize(), control, X_COMPONENT, Y_COMPONENT, attack, p);
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

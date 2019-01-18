@@ -4,8 +4,6 @@ import java.util.ArrayList;
 public class NewRecruitNotice extends Flash {
 
     private static ArrayList<String> newRecruitNames = new ArrayList<>();
-    private static ArrayList<String> newRecruitNamesToAdd = new ArrayList<>();
-    private static ArrayList<String> newRecruitNamesToRemove = new ArrayList<>();
     private static Font font;
     static {
         try {
@@ -21,18 +19,17 @@ public class NewRecruitNotice extends Flash {
 
     void addNewRecruit(String newRecruitName) {
         time = 0;
-        newRecruitNamesToAdd.add(newRecruitName);
+        newRecruitNames.add(newRecruitName);
     }
 
     int size() {
-        return Math.max(newRecruitNames.size(), newRecruitNamesToAdd.size());
+        return newRecruitNames.size();
     }
 
     public void update(ControlPanel panel) {
         if (time > duration) {
             if (newRecruitNames.size() > 0) {
-                System.out.print("hi");
-                newRecruitNamesToRemove.add(newRecruitNames.get(0));
+                newRecruitNames.remove(0);
                 time = 0;
             }
         }
@@ -42,9 +39,5 @@ public class NewRecruitNotice extends Flash {
         if (newRecruitNames.size() > 0) {
             HUD.drawCenteredString(g2, new Rectangle(0, 0, ControlPanel.width, ControlPanel.height), "You Befriended\n" + newRecruitNames.get(0) + "!", font);
         }
-        newRecruitNames.removeAll(newRecruitNamesToRemove);
-        newRecruitNames.addAll(newRecruitNamesToAdd);
-        newRecruitNamesToAdd.clear();
-        newRecruitNamesToRemove.clear();
     }
 }

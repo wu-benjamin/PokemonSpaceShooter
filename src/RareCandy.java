@@ -6,5 +6,7 @@ public class RareCandy extends PowerUp {
 
     public void performEffect(ControlPanel control) {
         control.incrementPower();
-        Player.getPlayer().incrementSpeed(1);    }
+        Player.getPlayer().incrementSpeed(1);
+        AudioPlayer.playSoundFX(Audio.LEVEL_UP.getAudioIn());
+    }
 }
