@@ -9,6 +9,7 @@ public class TitleHUD extends HUD {
         super(control);
         TimerTask delayTask = new DelayTask();
         timer.schedule(delayTask, ControlPanel.MENU_DELAY_TIME);
+        BackgroundMusic.WELCOME.play();
     }
     public void paintComponent(Graphics2D g2) {
         g2.drawImage(HUD.spaceBackground, 0, 0, ControlPanel.width, ControlPanel.height, control);
@@ -28,6 +29,7 @@ public class TitleHUD extends HUD {
     public void update(ControlPanel panel) {
         if (!delay) {
             if (ControlPanel.input.isKeyDown(KeyEvent.VK_SPACE) || ControlPanel.input.isButtonDown(MouseEvent.BUTTON1)) {
+                SoundFX.MENU_SELECT.play();
                 if (haveStarter()) {
                     ControlPanel.menusToAdd.add(new LevelSelectHUD(control));
                 } else {

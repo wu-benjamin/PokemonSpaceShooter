@@ -1,3 +1,10 @@
+/*
+    Made by Benjamin Wu
+ */
+
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -19,7 +26,7 @@ public class ControlPanel extends JPanel implements Runnable {
     static final int SCORE_FOR_BOSS_KILL = 200;
     static final int SCORE_FOR_ENEMY_KILL = 200;
     static final int FRAME_RATE = 30;
-    static final int BOSS_SCALE = 7;
+    static final int BOSS_SCALE = 5;
     static final int ENEMY_SCALE = 3;
     static final int PLAYER_SCALE = 4;
     static final int PLAYER_HEALTH_COEF = 3;
@@ -163,6 +170,9 @@ public class ControlPanel extends JPanel implements Runnable {
                 }
                 if (player != null) {
                     player.update(this);
+                }
+                for (Enemy e : enemies) {
+                    e.update(this);
                 }
                 for (HealthBar h : healthBars) {
                     h.update(this);

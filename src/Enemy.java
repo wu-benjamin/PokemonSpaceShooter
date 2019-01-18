@@ -68,7 +68,7 @@ public class Enemy extends Character {
 
     // Ensures players can at least damage the opponent regardless of type effectiveness
     void takeDamage(int damage, Type type) {
-        if (!ControlPanel.win && !ControlPanel.dead && this.getY() > -this.getHeight()) {
+        if (!ControlPanel.win && !ControlPanel.dead && this.getY() > -this.getHeight() && this.getY() < ControlPanel.height) {
             int hitPointsBefore = this.getHitPoints();
             this.setHitPoints(this.getHitPoints() - Math.max(ControlPanel.MIN_DAMAGE, damage));
             if (this.getHitPoints() <= 0 && hitPointsBefore > 0) {

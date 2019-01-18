@@ -38,6 +38,7 @@ public class PlayerSelectHUD extends HUD {
         timer.schedule(imageTask, 0, 300);
         TimerTask delayTask = new DelayTask();
         timer.schedule(delayTask, 500);
+        BackgroundMusic.OAK_LAB.play();
     }
 
     private void incrementPlayer() {
@@ -117,7 +118,6 @@ public class PlayerSelectHUD extends HUD {
                         ControlPanel.TRANSPARENT, Pokemon.values()[player], control);
                 ControlPanel.menusToAdd.add(new PlayingHUD(control));
                 ControlPanel.menusToRemove.add(this);
-                return;
             } else {
                 changed = false;
             }
@@ -127,6 +127,7 @@ public class PlayerSelectHUD extends HUD {
                 timer.schedule(delayTask, ControlPanel.MENU_DELAY_TIME);
                 TimerTask imageTask = new MyImageTask();
                 timer.schedule(imageTask, 0);
+                SoundFX.MENU_SELECT.play();
             }
         }
     }

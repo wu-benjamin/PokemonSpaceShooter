@@ -36,6 +36,7 @@ public class LevelSelectHUD extends HUD {
                 this.containsNewPokemon = true;
             }
         }
+        Location.values()[level].getLevelMusic().play();
     }
 
     private void incrementLevel() {
@@ -58,6 +59,7 @@ public class LevelSelectHUD extends HUD {
                 containsNewPokemon = true;
             }
         }
+        Location.values()[level].getLevelMusic().play();
     }
 
     private void decrementLevel() {
@@ -79,10 +81,10 @@ public class LevelSelectHUD extends HUD {
                 containsNewPokemon = true;
             }
         }
+        Location.values()[level].getLevelMusic().play();
     }
 
     public void paintComponent(Graphics2D g2) {
-        FontMetrics metrics = g2.getFontMetrics(font);
         g2.drawImage(Location.values()[level].getBackground(), 0, 0, ControlPanel.width, ControlPanel.height, control);
         g2.setColor(ControlPanel.BACKGROUND_TINT);
         g2.fill3DRect(0, 0, ControlPanel.width, ControlPanel.height, false);
@@ -121,7 +123,6 @@ public class LevelSelectHUD extends HUD {
                 ControlPanel.clearLevelEncounterDisplay();
                 ControlPanel.menusToAdd.add(new LocationIntroHUD(control));
                 ControlPanel.menusToRemove.add(this);
-                return;
             } else {
                 changed = false;
             }
@@ -129,6 +130,7 @@ public class LevelSelectHUD extends HUD {
                 delay = true;
                 TimerTask delayTask = new DelayTask();
                 timer.schedule(delayTask, ControlPanel.MENU_DELAY_TIME);
+                SoundFX.MENU_SELECT.play();
             }
         }
     }

@@ -9,6 +9,7 @@ public class LocationOutroHUD extends HUD {
         super(control);
         TimerTask delayTask = new DelayTask();
         timer.schedule(delayTask, 500);
+        ControlPanel.location.getOutroMusic().play();
     }
     public void paintComponent(Graphics2D g2) {
         g2.drawImage(HUD.spaceBackground, 0, 0, ControlPanel.width, ControlPanel.height, control);
@@ -22,7 +23,7 @@ public class LocationOutroHUD extends HUD {
             if (ControlPanel.input.isKeyDown(KeyEvent.VK_SPACE) || ControlPanel.input.isButtonDown(MouseEvent.BUTTON1)) {
                 ControlPanel.menusToAdd.add(new LevelSelectHUD(control));
                 ControlPanel.menusToRemove.add(this);
-                return;
+                SoundFX.MENU_SELECT.play();
             }
         }
     }

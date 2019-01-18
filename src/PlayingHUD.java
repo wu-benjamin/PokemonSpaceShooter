@@ -27,6 +27,7 @@ public class PlayingHUD extends HUD {
         spawnTimer.schedule(longNoSpawnTask, MAX_TIME_NO_SPAWN);
         JustSpawnTask justSpawnTask = new JustSpawnTask();
         spawnTimer.schedule(justSpawnTask, MIN_TIME_NO_SPAWN);
+        ControlPanel.location.getLevelMusic().play();
     }
 
     static void decrementNumRemaining(int decrement) {

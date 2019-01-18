@@ -25,6 +25,7 @@ public class StarterSelectHUD extends HUD {
         timer.schedule(imageTask, 0, 300);
         TimerTask delayTask = new HUD.DelayTask();
         timer.schedule(delayTask, 1000);
+        BackgroundMusic.OAK_LAB.play();
     }
 
     // Animates sprite
@@ -118,7 +119,6 @@ public class StarterSelectHUD extends HUD {
                 }
                 ControlPanel.menusToAdd.add(new LevelSelectHUD(control));
                 ControlPanel.menusToRemove.add(this);
-                return;
             } else {
                 changed = false;
             }
@@ -128,6 +128,7 @@ public class StarterSelectHUD extends HUD {
                 timer.schedule(delayTask, ControlPanel.MENU_DELAY_TIME);
                 TimerTask imageTask = new MyImageTask();
                 timer.schedule(imageTask, 0);
+                SoundFX.MENU_SELECT.play();
             }
         }
     }

@@ -18,6 +18,8 @@ public class WinHUD extends HUD {
         ControlPanel.win = false;
         TimerTask delayTask = new DelayTask();
         timer.schedule(delayTask, 500);
+        ControlPanel.location.getOutroMusic().play();
+        SoundFX.LEVEL_UP.play();
     }
     public void paintComponent(Graphics2D g2) {
         g2.drawImage(HUD.spaceBackground, 0, 0, ControlPanel.width, ControlPanel.height, control);
@@ -31,6 +33,7 @@ public class WinHUD extends HUD {
             if (ControlPanel.input.isKeyDown(KeyEvent.VK_SPACE) || ControlPanel.input.isButtonDown(MouseEvent.BUTTON1)) {
                 ControlPanel.menusToAdd.add(new LocationOutroHUD(control));
                 ControlPanel.menusToRemove.add(this);
+                SoundFX.MENU_SELECT.play();
             }
         }
     }

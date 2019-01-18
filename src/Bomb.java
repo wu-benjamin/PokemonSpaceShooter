@@ -6,6 +6,6 @@ public class Bomb extends PowerUp {
 
     public void performEffect(ControlPanel control) {
         control.incrementBombs();
-        AudioPlayer.playSoundFX(Audio.ITEM_FOUND.getAudioIn());
+        SoundFX.BOMB.play();
     }
 }

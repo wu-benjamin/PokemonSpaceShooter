@@ -147,8 +147,8 @@ public class Player extends Character {
 
     // Player takes damage and is checked if alive
     void takeDamage(int damage) {
-        if (control.getBossFight()) { // Boss does 3 times the damage
-            damage *= 3;
+        if (control.getBossFight()) { // Boss does 2 times the damage
+            damage *= 2;
         }
         if (!ControlPanel.win && !ControlPanel.dead) {
             this.setHitPoints(this.getHitPoints() - Math.max(ControlPanel.MIN_DAMAGE, damage));
@@ -178,7 +178,7 @@ public class Player extends Character {
     // Creates special bomb projectile
     private void bomb() {
         new HitFlash(0, 0, ControlPanel.width, ControlPanel.height, ControlPanel.TRANSPARENT, type1, 500, 150);
-        AudioPlayer.playSoundFX(Audio.BOMB.getAudioIn());
+        SoundFX.BOMB.play();
         bombDelay = true;
         TimerTask bombTask = new MyBombTask();
         timer.schedule(bombTask, 1000);

@@ -5,22 +5,22 @@ import java.net.URL;
 
 public enum Attack {
     HYPERBEAM       (Type.UNKNOWN, "HyperBeam", "Radial", 120, 150, 20, 40),
-    QUICKATTACK     (Type.NORMAL, "QuickAttack", "Linear", 30, 100, 15, 40),
-    FLAMETHROWER    (Type.FIRE, "Flamethrower", "Linear", 55, 200, 10, 40),
+    QUICKATTACK     (Type.NORMAL, "QuickAttack", "Linear", 45, 100, 15, 40),
+    FLAMETHROWER    (Type.FIRE, "Flamethrower", "Linear", 70, 200, 10, 40),
     SEISMICTOSS     (Type.FIGHTING, "SeismicToss", "Oscillate", 45, 175, 10, 40),
-    BUBBLEBEAM      (Type.WATER, "BubbleBeam", "Linear", 50, 180, 10, 40),
-    WINGATTACK      (Type.FLYING, "WingAttack", "Boomerang", 10, 100, 15, 30),
-    RAZORLEAF       (Type.GRASS, "RazorLeaf", "Boomerang", 10, 100, 12, 30),
-    POISONGAS       (Type.POISON, "PoisonGas", "Radial", 5, 60, 15, 30),
-    THUNDERBOLT     (Type.ELECTRIC, "Thunderbolt", "Linear", 50, 170, 10, 40),
-    SANDATTACK      (Type.GROUND, "SandAttack", "Linear", 40, 140, 15, 40),
+    BUBBLEBEAM      (Type.WATER, "BubbleBeam", "Linear", 65, 180, 10, 40),
+    WINGATTACK      (Type.FLYING, "WingAttack", "Boomerang", 25, 250, 15, 30),
+    RAZORLEAF       (Type.GRASS, "RazorLeaf", "Boomerang", 25, 250, 12, 30),
+    POISONGAS       (Type.POISON, "PoisonGas", "Radial", 15, 180, 15, 30),
+    THUNDERBOLT     (Type.ELECTRIC, "Thunderbolt", "Linear", 65, 170, 10, 40),
+    SANDATTACK      (Type.GROUND, "SandAttack", "Linear", 50, 140, 15, 40),
     PSYCHIC         (Type.PSYCHIC, "Psychic", "Homing", 70, 450, 5, 30),
-    ROCKTHROW       (Type.ROCK, "RockThrow", "Linear", 60, 230, 10, 40),
-    ICEBEAM         (Type.ICE, "IceBeam", "Linear", 55, 200, 10, 40),
-    STRINGSHOT      (Type.BUG, "StringShot", "Linear", 20, 80, 15, 40),
-    DRAGONRAGE      (Type.DRAGON, "DragonRage", "Linear", 40, 160, 15, 50),
-    NIGHTSHADE      (Type.GHOST, "Nightshade", "Radial", 20, 150, 10, 30),
-    BONEMERANG      (Type.GROUND, "Bonemerang", "Boomerang", 10, 100, 12, 30);
+    ROCKTHROW       (Type.ROCK, "RockThrow", "Linear", 75, 230, 10, 40),
+    ICEBEAM         (Type.ICE, "IceBeam", "Linear", 70, 200, 10, 40),
+    STRINGSHOT      (Type.BUG, "StringShot", "Linear", 30, 80, 15, 40),
+    DRAGONRAGE      (Type.DRAGON, "DragonRage", "Linear", 50, 160, 15, 50),
+    NIGHTSHADE      (Type.GHOST, "Nightshade", "Radial", 30, 200, 10, 30),
+    BONEMERANG      (Type.GROUND, "Bonemerang", "Boomerang", 25, 250, 12, 30);
 
     private String attackPath;
     private int attackDamage;

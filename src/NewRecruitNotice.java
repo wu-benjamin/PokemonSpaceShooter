@@ -19,6 +19,7 @@ public class NewRecruitNotice extends Flash {
 
     void addNewRecruit(String newRecruitName) {
         time = 0;
+        SoundFX.ITEM_FOUND.play();
         newRecruitNames.add(newRecruitName);
     }
 
