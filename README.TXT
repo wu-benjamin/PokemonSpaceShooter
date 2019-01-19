@@ -1,3 +1,5 @@
+Developed with IntelliJ
+
 Keyboard Controls:
 W/A/S/D or Arrow Keys to navigate menu and to move player.
 Space to confirm menu selection and fire projectiles.
