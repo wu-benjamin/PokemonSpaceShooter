@@ -9,9 +9,9 @@ public class Enemy extends Character {
     private BufferedImage image1;
     private BufferedImage image2;
     private BufferedImage toShow;
-    Attack attack;
     private final int X_COMPONENT = 0;
     private final int Y_COMPONENT = 3;
+    Attack attack;
     Timer timer;
     Pokemon p;
 

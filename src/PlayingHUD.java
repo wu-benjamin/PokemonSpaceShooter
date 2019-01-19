@@ -15,12 +15,13 @@ public class PlayingHUD extends HUD {
 
     PlayingHUD(ControlPanel control) {
         super(control);
-        this.numSpawned = 0;
         ControlPanel.resetItems();
-        this.maxSpawn = ControlPanel.location.getNumberOfEnemies();
+        numSpawned = 0;
+        maxSpawn = ControlPanel.location.getNumberOfEnemies();
+        numRemaining = maxSpawn;
+
         ControlPanel.background = new Background(0, -ControlPanel.height, ControlPanel.width, ControlPanel.height,
                 ControlPanel.TRANSPARENT,ControlPanel.location.getBackground(), control, true);
-        this.numRemaining = this.maxSpawn;
         TimerTask delayTask = new DelayTask();
         timer.schedule(delayTask, ControlPanel.MENU_DELAY_TIME);
         LongNoSpawnTask longNoSpawnTask = new LongNoSpawnTask();

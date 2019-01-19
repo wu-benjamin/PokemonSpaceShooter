@@ -7,7 +7,9 @@ public class WinHUD extends HUD {
 
     WinHUD(ControlPanel control) {
         super(control);
-        ControlPanel.unlockedLocation[ControlPanel.location.getLevelIndex() + 1] = true;
+        if (ControlPanel.location.getLevelIndex() < (ControlPanel.unlockedLocation.length - 1)) {
+            ControlPanel.unlockedLocation[ControlPanel.location.getLevelIndex() + 1] = true;
+        }
         try {
             ControlPanel.save();
         } catch (Exception e) {

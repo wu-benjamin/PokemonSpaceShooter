@@ -1,5 +1,4 @@
 import javax.sound.sampled.*;
-import java.io.IOException;
 import java.net.URL;
 
 public enum SoundFX {
@@ -24,17 +23,9 @@ public enum SoundFX {
             clip = AudioSystem.getClip();
             // Open audio clip and load samples from the audio input stream.
             clip.open(audioInputStream);
-        } catch (UnsupportedAudioFileException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (LineUnavailableException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public Clip getClip() {
-        return clip;
     }
 
     // Play sound effect from the beginning

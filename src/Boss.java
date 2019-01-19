@@ -3,7 +3,7 @@ import java.util.TimerTask;
 
 public class Boss extends Enemy {
 
-    public Boss(int x, int y, int width, int height, Color color, Pokemon p, ControlPanel control) {
+    Boss(int x, int y, int width, int height, Color color, Pokemon p, ControlPanel control) {
         super(x, y, width, height, color, p, control);
         // Boss is more powerful
         this.setMaxHitPoints(p.getHitPoints() * ControlPanel.BOSS_HEALTH_COEF);
@@ -15,8 +15,10 @@ public class Boss extends Enemy {
     public void enemyDeath(Enemy e, Type type) {
         new HitFlash(0, 0, ControlPanel.width, ControlPanel.height, ControlPanel.TRANSPARENT, type, 500, 100);
         if (ControlPanel.rand.nextInt(1000) < ControlPanel.RECRUIT_RATE) {
-            ControlPanel.unlockedPokemon[e.p.getIndex()] = true;
-            ControlPanel.recruitNotice.addNewRecruit(e.getPokemon().getName());
+            if (!ControlPanel.unlockedPokemon[e.p.getIndex()]) {
+                ControlPanel.unlockedPokemon[e.p.getIndex()] = true;
+                ControlPanel.recruitNotice.addNewRecruit(e.getPokemon().getName());
+            }
         }
         ControlPanel.win = true;
         control.incrementScore(ControlPanel.SCORE_FOR_BOSS_KILL);
@@ -44,14 +46,14 @@ public class Boss extends Enemy {
         public void run() {
             try {
                 if (y < 0) {
-                    y += 1;
+                    y++;
                 } else {
                     if (Math.abs(Player.getPlayer().getX() + Player.getPlayer().getWidth() / 2 - (x + width / 2)) > 5) {
                         if (Player.getPlayer().getX() + Player.getPlayer().getWidth() / 2 < x + width / 2) {
-                            x -= 1;
+                            x -= 1 + (int) (p.getMovementSpeed() / 15.0);
                         }
                         if (Player.getPlayer().getX() + Player.getPlayer().getWidth() / 2 > x + width / 2) {
-                            x += 1;
+                            x += 1 + (int) (p.getMovementSpeed() / 15.0);
                         }
                     }
                 }

@@ -1,5 +1,3 @@
-// Hit points and speed are the only NUMERICAL stats implemented so far
-
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;

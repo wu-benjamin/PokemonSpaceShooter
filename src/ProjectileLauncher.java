@@ -1,15 +1,8 @@
-import java.awt.geom.Rectangle2D;
-import java.util.Timer;
-
-public class ProjectileLauncher {
+class ProjectileLauncher {
     ProjectileLauncher(int x, int y, int size, ControlPanel control, int xComponent, int yComponent, Attack attack, Pokemon... enemyPokemon) {
         String attackPath = attack.getAttackPath();
         boolean isEnemyAttack;
-        if (enemyPokemon.length > 0) {
-            isEnemyAttack = true;
-        } else {
-            isEnemyAttack = false;
-        }
+        isEnemyAttack = enemyPokemon.length > 0;
         switch(attackPath) {
             case "Linear":
                 if (isEnemyAttack) {

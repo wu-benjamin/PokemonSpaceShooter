@@ -1,10 +1,5 @@
-/*
-    Made by Benjamin Wu
- */
+//Made by Benjamin Wu
 
-
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -12,7 +7,6 @@ import java.io.*;
 import java.net.URL;
 import java.util.*;
 
-// Currently ~ 2840 lines of code
 public class ControlPanel extends JPanel implements Runnable {
 
     // CONSTANTS
@@ -59,7 +53,7 @@ public class ControlPanel extends JPanel implements Runnable {
     static ArrayList<HUD> menusToAdd = new ArrayList<>();
     static ArrayList<HUD> menusToRemove = new ArrayList<>();
     static NewRecruitNotice recruitNotice;
-    static BossApproachNotice bossNotice;
+    private static BossApproachNotice bossNotice;
 
     private static boolean run = false;
 
@@ -385,8 +379,8 @@ public class ControlPanel extends JPanel implements Runnable {
                 highScores[i] = Integer.parseInt(line[i]);
             }
         } catch (Exception e) {
-            // Creates new save file if no save file currently exists or is corrupted
-            e.printStackTrace();
+            unlockedLocation[0] = true;
+            save();
         } finally {
             unlockedLocation[0] = true;
             save();

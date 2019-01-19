@@ -1,10 +1,9 @@
-import java.awt.*;
 import java.util.TimerTask;
 
-public class BoomerangProjectile extends Projectile {
+class BoomerangProjectile extends Projectile {
 
-    int boomerangIndex;
-    int time = 0;
+    private int boomerangIndex;
+    private int time = 0;
 
     BoomerangProjectile(int x, int y, int size, Attack attack, ControlPanel control, int boomerangIndex, Pokemon... enemyPokemon) {
         super(x, y, size, attack, control, enemyPokemon);

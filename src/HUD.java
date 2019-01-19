@@ -35,7 +35,7 @@ public abstract class HUD {
     static final int BIG_DISPLAY_SCALE = 7;
     static final int SMALL_DISPLAY_SCALE = 4;
     private static final int BORDER_WIDTH = 2;
-    public static final int ATTACK_IMAGE_SIZE = 100;
+    static final int ATTACK_IMAGE_SIZE = 100;
     boolean delay = true;
     Timer timer = new Timer();
 
@@ -51,7 +51,7 @@ public abstract class HUD {
         return timer;
     }
 
-    public static void drawCenteredString(Graphics g, Rectangle r, String s,
+    static void drawCenteredString(Graphics g, Rectangle r, String s,
                              Font font, int... alpha) {
         FontRenderContext frc =
                 new FontRenderContext(null, true, true);
@@ -74,10 +74,6 @@ public abstract class HUD {
     }
 
     static void drawBorderedString(Graphics g, String s, int x, int y, int... alpha) {
-        /*
-        g.setColor(ControlPanel.TEXT_BACKGROUND);
-        g.fill3DRect(x - 15, y - height, width + 30, height + 35, false);
-        */
         g.setColor(ControlPanel.TEXT_BORDER);
         if (alpha.length > 0) {
             g.setColor(new Color(ControlPanel.TEXT_BORDER.getRed(), ControlPanel.TEXT_BORDER.getGreen(),

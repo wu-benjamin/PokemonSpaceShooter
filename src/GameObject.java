@@ -9,9 +9,8 @@ public abstract class GameObject {
     protected int width;
     protected int height;
     protected Color color;
-    private final int MINIMUM_BULLET_SPEED = 3;
 
-    public GameObject(int x, int y, int width, int height, Color color) {
+    GameObject(int x, int y, int width, int height, Color color) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -49,10 +48,6 @@ public abstract class GameObject {
 
     public int getHeight() {
         return height;
-    }
-
-    public int getMinimumBulletSpeed() {
-        return MINIMUM_BULLET_SPEED;
     }
 
     public Color getColor() {

@@ -11,7 +11,7 @@ public abstract class Flash extends GameObject {
     Timer timer = new Timer();
     int duration;
 
-    public Flash(int x, int y, int width, int height, Color color, int duration) {
+    Flash(int x, int y, int width, int height, Color color, int duration) {
         super(x, y, width, height, color);
         square = new Rectangle2D.Double(0, 0, ControlPanel.width, ControlPanel.height);
         this.duration = duration;

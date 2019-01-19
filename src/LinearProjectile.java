@@ -1,6 +1,6 @@
 import java.util.TimerTask;
 
-public class LinearProjectile extends Projectile {
+class LinearProjectile extends Projectile {
     LinearProjectile(int x, int y, int size, ControlPanel control, int xComponent, int yComponent, Attack attack, Pokemon... enemyPokemon) {
         super(x, y, size, attack, control, enemyPokemon);
         this.yComponent = Math.max(attack.getProjectileSpeed() + Math.abs(yComponent / 3.0), 1);

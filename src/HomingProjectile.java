@@ -1,8 +1,8 @@
 import java.util.TimerTask;
 
-public class HomingProjectile extends Projectile {
+class HomingProjectile extends Projectile {
 
-    Enemy nearestEnemy = null;
+    private Enemy nearestEnemy = null;
 
     HomingProjectile (int x, int y, int size, Attack attack, ControlPanel control, Pokemon... enemyPokemon) {
         super(x, y, size, attack, control, enemyPokemon);
@@ -52,11 +52,11 @@ public class HomingProjectile extends Projectile {
                     yComponent *= (double) attack.getProjectileSpeed() / 2.0 / Math.sqrt(Math.pow(xComponent, 2) + Math.pow(yComponent, 2));
                 }
             }
-            if ((int) xComponent == 0 && (int) yComponent == 0) {
+            if ((int) yComponent == 0) {
                 if (enemyPokemon == null) {
-                    yComponent = -attack.getProjectileSpeed();
+                    yComponent--;
                 } else {
-                    yComponent = attack.getProjectileSpeed();
+                    yComponent++;
                 }
             }
             rawX += xComponent;

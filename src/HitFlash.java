@@ -4,7 +4,7 @@ public class HitFlash extends Flash {
     private int maxOpacity;
     private Type type;
 
-    public HitFlash (int x, int y, int width, int height, Color color, Type type, int duration, int maxOpacity) {
+    HitFlash (int x, int y, int width, int height, Color color, Type type, int duration, int maxOpacity) {
         super(x, y, width, height, color, duration);
         this.type = type;
         if (maxOpacity > 255 || maxOpacity < 0) {

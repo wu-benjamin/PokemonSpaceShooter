@@ -1,8 +1,8 @@
 import java.util.TimerTask;
 
-public class OscillatingProjectile extends Projectile {
+class OscillatingProjectile extends Projectile {
 
-    int time = 0;
+    private int time = 0;
 
     OscillatingProjectile (int x, int y, int size, Attack attack, ControlPanel control, Pokemon... enemyPokemon) {
         super(x, y, size, attack, control, enemyPokemon);

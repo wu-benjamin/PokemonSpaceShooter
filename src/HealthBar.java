@@ -36,7 +36,7 @@ public class HealthBar extends GameObject {
     public void update(ControlPanel panel) {
         this.setX(c.getX());
         this.setY(c.getY());
-        if (this.getX() < 0 || this.getX() > ControlPanel.width || this.getY() > ControlPanel.height || c.getHitPoints() <= 0) {
+        if (this.getY() > ControlPanel.height || c.getHitPoints() <= 0) {
             ControlPanel.healthBarsToRemove.add(this);
         }
     }

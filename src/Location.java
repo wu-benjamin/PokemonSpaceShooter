@@ -125,9 +125,11 @@ public enum Location {
     public BackgroundMusic getIntroMusic() {
         return introMusic;
     }
+
     public BackgroundMusic getLevelMusic() {
         return levelMusic;
     }
+
     public BackgroundMusic getOutroMusic() {
         return outroMusic;
     }

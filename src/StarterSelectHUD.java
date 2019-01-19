@@ -9,10 +9,10 @@ public class StarterSelectHUD extends HUD {
     private int currentStarterDexNumIndex = 0;
     private int[] starterDexNums = {1,4,7};
     private BufferedImage toShow;
-    int width;
-    int height;
-    int x;
-    int y;
+    private int width;
+    private int height;
+    private int x;
+    private int y;
 
     StarterSelectHUD(ControlPanel control) {
         super(control);

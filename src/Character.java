@@ -5,8 +5,8 @@ import java.awt.image.BufferedImage;
 // Abstract Pokemon Character for methods shared by player and enemies such as health checks
 public abstract class Character extends GameObject {
 
-    Rectangle2D square;
     ControlPanel control;
+    Rectangle2D square;
     Type type1;
     Type type2;
     private int hitPoints;

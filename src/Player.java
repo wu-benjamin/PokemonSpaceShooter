@@ -75,18 +75,12 @@ public class Player extends Character {
             if (ControlPanel.input.isButtonDown(MouseEvent.BUTTON3) && !bombDelay && control.getBombs() > 0) {
                 bomb();
             }
-            // Prevents movement and flashing when mouse is on player
-            if (ControlPanel.input.isMouseOn() && (this.getX() + this.width / 2 == ControlPanel.input.x && this.getY() + this.height / 2 == ControlPanel.input.y)) {
-                xComponent = 0;
-                yComponent = 0;
-            }
         }
         // Handles no input
         if (theta == -100) {
             xComponent = 0;
             yComponent = 0;
-        }
-        else {
+        } else {
             // Determines how much to move a Pokemon
             if (ControlPanel.input.keyUsed()) {
                 xComponent = (int) (speed * Math.cos(theta));
@@ -194,7 +188,7 @@ public class Player extends Character {
         }
     }
 
-    public void incrementSpeed(int increment) {
+    void incrementSpeed(int increment) {
         player.speed += increment;
     }
 
@@ -215,10 +209,6 @@ public class Player extends Character {
     @Override
     public BufferedImage getImage2() {
         return image2;
-    }
-
-    private void setToShow(BufferedImage toShow) {
-        this.toShow = toShow;
     }
 
     private void timer() {

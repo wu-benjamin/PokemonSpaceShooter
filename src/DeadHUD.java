@@ -5,7 +5,7 @@ import java.util.TimerTask;
 
 public class DeadHUD extends HUD {
 
-    public DeadHUD(ControlPanel control) {
+    DeadHUD(ControlPanel control) {
         super(control);
         try {
             ControlPanel.save();

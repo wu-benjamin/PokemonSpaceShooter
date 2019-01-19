@@ -6,14 +6,13 @@ import java.util.TimerTask;
 
 public class Background extends GameObject {
 
-    private Color color;
     private Rectangle2D square;
     private BufferedImage image;
     private ControlPanel control;
     private static boolean move;
     private Timer timer;
 
-    public Background(int x, int y, int width, int height, Color color, BufferedImage image, ControlPanel control, boolean move) {
+    Background(int x, int y, int width, int height, Color color, BufferedImage image, ControlPanel control, boolean move) {
         super(x, y, width, height, color);
         square = new Rectangle2D.Double(x, y, width, height);
         this.image = image;
@@ -29,7 +28,7 @@ public class Background extends GameObject {
         return square;
     }
 
-    public static void setMove(boolean canMove) {
+    static void setMove(boolean canMove) {
         move = canMove;
     }
 

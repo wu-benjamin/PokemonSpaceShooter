@@ -5,7 +5,7 @@ import java.util.TimerTask;
 
 public class LocationIntroHUD extends HUD {
 
-    public LocationIntroHUD(ControlPanel control) {
+    LocationIntroHUD(ControlPanel control) {
         super(control);
         TimerTask delayTask = new DelayTask();
         timer.schedule(delayTask, 500);
